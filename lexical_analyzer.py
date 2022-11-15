@@ -66,12 +66,20 @@ def findLexemes(lines):
             else:
                 symbolTable['keyword'][tldrKeyword[0]] = [1]
         
-        iHasAKeyword = re.findall("^(I\ HAS\ A)", i)                        # I HAS A
+        iHasAKeyword = re.findall("^(I\ HAS\ A)", i)                  # I HAS A
         if (len(iHasAKeyword) != 0):
             if (symbolTable['keyword'].get(iHasAKeyword[0])):
                 symbolTable['keyword']["I HAS A"][0] += len(iHasAKeyword)
             else:
                 symbolTable['keyword'][iHasAKeyword[0]] = [1]
+
+        itzKeyword = re.findall("^(ITZ)", i)                          # ITZ
+        if (len(itzKeyword) != 0):
+            if (symbolTable['keyword'].get(itzKeyword[0])):
+                symbolTable['keyword']["ITZ"][0] += len(itzKeyword)
+            else:
+                symbolTable['keyword'][itzKeyword[0]] = [1]
+        
 
         #add other cases here
     
