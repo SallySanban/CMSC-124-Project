@@ -30,7 +30,7 @@ def findLexemes(lines):
     tempList = []
     for i in lines:
         haiKeyword = re.findall("^(HAI)", i)                        # HAI
-        if (haiKeyword):
+        if (len(haiKeyword) != 0):
             if (symbolTable['keyword'].get(haiKeyword[0])):
                 symbolTable['keyword'][haiKeyword[0]][0] += len(haiKeyword)
             else:
@@ -38,7 +38,7 @@ def findLexemes(lines):
 
 
         kThxByeKeyword = re.findall("^(KTHXBYE)$", i)               # KTHXBYE
-        if (kThxByeKeyword):
+        if (len(kThxByeKeyword) != 0):
             if (symbolTable['keyword'].get(kThxByeKeyword[0])):
                 symbolTable['keyword'][kThxByeKeyword[0]][0] += len(kThxByeKeyword)
             else:
@@ -46,11 +46,25 @@ def findLexemes(lines):
 
 
         btwKeyword = re.findall("[^O](BTW)", i)                        # BTW
-        if (btwKeyword):
+        if (len(btwKeyword) != 0):
             if (symbolTable['keyword'].get(btwKeyword[0])):
                 symbolTable['keyword'][btwKeyword[0]][0] += len(btwKeyword)
             else:
                 symbolTable['keyword'][btwKeyword[0]] = [1]
+
+        obtwKeyword = re.findall("^(OBTW)", i)                        # OBTW
+        if (len(obtwKeyword) != 0):
+            if (symbolTable['keyword'].get(obtwKeyword[0])):
+                symbolTable['keyword'][obtwKeyword[0]][0] += len(btwKeyword)
+            else:
+                symbolTable['keyword'][obtwKeyword[0]] = [1]
+
+        tldrKeyword = re.findall("^(TLDR)", i)                        # OBTW
+        if (len(tldrKeyword) != 0):
+            if (symbolTable['keyword'].get(tldrKeyword[0])):
+                symbolTable['keyword']["TLDR"][0] += len(tldrKeyword)
+            else:
+                symbolTable['keyword'][tldrKeyword[0]] = [1]
 
 
         # obtwKeyword = re.findall("^(OBTW)", i)               # OBTW
