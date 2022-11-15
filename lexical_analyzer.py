@@ -27,19 +27,30 @@ def readFile(filename):
 
 #finds lexemes in code and groups them 
 def findLexemes(lines):
+    tempList = []
     for i in lines:
         haiKeyword = re.findall("^(HAI)", i)                        # HAI
         if (haiKeyword):
-            symbolTable['keyword'][haiKeyword[0]] = [len(haiKeyword)]
+            if (symbolTable['keyword'].get(haiKeyword[0])):
+                symbolTable['keyword'][haiKeyword[0]][0] += len(haiKeyword)
+            else:
+                symbolTable['keyword'][haiKeyword[0]] = [0]
+
 
         kThxByeKeyword = re.findall("^(KTHXBYE)$", i)               # KTHXBYE
         if (kThxByeKeyword):
-            symbolTable['keyword'][kThxByeKeyword[0]] = [len(kThxByeKeyword)]
+            if (symbolTable['keyword'].get(kThxByeKeyword[0])):
+                symbolTable['keyword'][kThxByeKeyword[0]][0] += len(kThxByeKeyword)
+            else:
+                symbolTable['keyword'][kThxByeKeyword[0]] = [0]
 
-        btwKeyword = re.findall("^(BTW)", i)               # KTHXBYE
-        if (len(btwKeyword) != 0):
-            # print(len(btwKeyword))
-            symbolTable['keyword'][btwKeyword[0]] = [len(btwKeyword)]
+
+        btwKeyword = re.findall("^(BTW)", i)                        # BTW
+        if (btwKeyword):
+            if (symbolTable['keyword'].get(btwKeyword[0])):
+                symbolTable['keyword'][btwKeyword[0]][0] += len(btwKeyword)
+            else:
+                symbolTable['keyword'][btwKeyword[0]] = [0]
 
 
         # obtwKeyword = re.findall("^(OBTW)", i)               # OBTW
