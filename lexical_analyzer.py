@@ -192,9 +192,17 @@ symbolTable = {
                 "keyword": {}, #i think pwede pa iseparate yung mga keywords?
             }
 
-lines = readFile(filename)
+def printSymbolTable():
+    for typeTemp in symbolTable.keys():
+        for lexeme in symbolTable[typeTemp].keys():
+            lexString = "{:<20}".format(lexeme)
+            typeString = "{:<20}".format(typeTemp)
+            cntString = "{:<20}".format(symbolTable[typeTemp][lexeme][0])
 
-print(lines)
+            print(f"Lexeme: {lexString} Type: {typeString} Count: {cntString}")
+
+
+lines = readFile(filename)
 findLexemes(lines)
 
-print(symbolTable)
+printSymbolTable()
