@@ -34,7 +34,7 @@ def findLexemes(lines):
                 "HAS",
                 "A",
                 "ITZ",
-                "R"
+                "R",
                 "SUM",
                 "OF",
                 "DIFF",
@@ -93,18 +93,17 @@ def findLexemes(lines):
     stringFound = False
 
     for i in lines:
+        #catches identifiers
         words = i.split()
         for j in range(0, len(words)):
             if('\"' in words[j]):
                 stringFound = True
 
-            while(stringFound == True):
+            if(stringFound == True):
                 words[j] = ""
 
                 if('\"' in words[j] or j == len(words)-1):
                     stringFound = False
-
-                break
                 
         for j in range(0, len(words)):
             if(words[j] in keywords):
@@ -118,23 +117,44 @@ def findLexemes(lines):
                 else:
                     symbolTable['identifier'][k] = [1]
                     
-        #catches NUMBR literal
-        numbrLiteral = re.findall("[^\.][-]?\d+$", i)
-        if(numbrLiteral):
-            for j in numbrLiteral:
-                if (symbolTable['NUMBR literal'].get(j.strip())):
-                    symbolTable['NUMBR literal'][j.strip()][0] += 1
-                else:
-                    symbolTable['NUMBR literal'][j.strip()] = [1]
+        #catches literals
+        literals = i.split()
+        for j in literals:
+            numbrLiteral = re.findall("^[-]?\d+$", j)
+            if(numbrLiteral):
+                for j in numbrLiteral:
+                    if (symbolTable['NUMBR literal'].get(j)):
+                        symbolTable['NUMBR literal'][j][0] += 1
+                    else:
+                        symbolTable['NUMBR literal'][j] = [1]
 
-        numbarLiteral = re.findall("[-]?\d+[.]\d+$", i)
-        if(numbarLiteral):
-            for j in numbarLiteral:
-                if (symbolTable['NUMBAR literal'].get(j.strip())):
-                    symbolTable['NUMBAR literal'][j.strip()][0] += 1
-                else:
-                    symbolTable['NUMBAR literal'][j.strip()] = [1]
+            numbarLiteral = re.findall("^[-]?\d+[.]\d+$", j)
+            if(numbarLiteral):
+                for j in numbarLiteral:
+                    if (symbolTable['NUMBAR literal'].get(j)):
+                        symbolTable['NUMBAR literal'][j][0] += 1
+                    else:
+                        symbolTable['NUMBAR literal'][j] = [1]
+            
+            troofLiteral = re.findall("^(WIN)$|^(FAIL)$", j)
+            troofLiteral = [tuple(l for l in k if l)[-1] for k in troofLiteral] #[1]
+            if(troofLiteral):
+                for j in troofLiteral:
+                    if (symbolTable['TROOF literal'].get(j)):
+                        symbolTable['TROOF literal'][j][0] += 1
+                    else:
+                        symbolTable['TROOF literal'][j] = [1]
 
+            typeLiteral = re.findall("^(TROOF)$|^(NOOB)$|^(NUMBR)$|^(NUMBAR)$|^(YARN)$|^(TYPE)$", j)
+            typeLiteral = [tuple(l for l in k if l)[-1] for k in typeLiteral]
+            if(typeLiteral):
+                for j in typeLiteral:
+                    if (symbolTable['TYPE literal'].get(j)):
+                        symbolTable['TYPE literal'][j][0] += 1
+                    else:
+                        symbolTable['TYPE literal'][j] = [1]
+
+        #catches yarn and string delimiter
         yarnLiteral = re.findall("\"[^\"]*\"", i)
         if(yarnLiteral):
             for j in yarnLiteral:
@@ -144,28 +164,10 @@ def findLexemes(lines):
                     symbolTable['YARN literal'][j.strip()[1:len(j.strip())-1]] = [1]
                 
                 if (symbolTable['string delimiter'].get('\"')):
-                    symbolTable['string delimiter']['\"'][0] += 1
+                    symbolTable['string delimiter']['\"'][0] += 2
                 else:
-                    symbolTable['string delimiter']['\"'] = [1]
+                    symbolTable['string delimiter']['\"'] = [2]
         
-        troofLiteral = re.findall("(WIN)$|(FAIL)$", i)
-        troofLiteral = [tuple(k for k in j if k)[-1] for j in troofLiteral] #[1]
-        if(troofLiteral):
-            for j in troofLiteral:
-                if (symbolTable['TROOF literal'].get(j.strip())):
-                    symbolTable['TROOF literal'][j.strip()][0] += 1
-                else:
-                    symbolTable['TROOF literal'][j.strip()] = [1]
-        
-        typeLiteral = re.findall("(TROOF)$|(NOOB)$|(NUMBR)$|(NUMBAR)$|(YARN)$|(TYPE)$", i)
-        typeLiteral = [tuple(k for k in j if k)[-1] for j in typeLiteral]
-        if(typeLiteral):
-            for j in typeLiteral:
-                if (symbolTable['TYPE literal'].get(j.strip())):
-                    symbolTable['TYPE literal'][j.strip()][0] += 1
-                else:
-                    symbolTable['TYPE literal'][j.strip()] = [1]
-
         haiKeyword = re.findall("^(HAI)", i)                        # HAI
         if (len(haiKeyword) != 0):
             if (symbolTable['keyword'].get(haiKeyword[0])):
