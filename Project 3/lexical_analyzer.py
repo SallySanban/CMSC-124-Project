@@ -52,7 +52,8 @@ def findLexemes(lines):
         #         else:
         #             symbolTable['NUMBAR literal'][j.strip()] = [1]
 
-        yarnLiteral = re.findall("\".*\"$", i)
+        yarnLiteral = re.findall("\"[^\"]*\"", i)
+        print(yarnLiteral)
         if(yarnLiteral):
             for j in yarnLiteral:
                 if (symbolTable['YARN literal'].get(j.strip()[1:len(j.strip())-1])):
