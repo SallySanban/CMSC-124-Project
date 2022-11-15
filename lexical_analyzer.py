@@ -34,7 +34,7 @@ def findLexemes(lines):
             if (symbolTable['keyword'].get(haiKeyword[0])):
                 symbolTable['keyword'][haiKeyword[0]][0] += len(haiKeyword)
             else:
-                symbolTable['keyword'][haiKeyword[0]] = [0]
+                symbolTable['keyword'][haiKeyword[0]] = [1]
 
 
         kThxByeKeyword = re.findall("^(KTHXBYE)$", i)               # KTHXBYE
@@ -42,15 +42,15 @@ def findLexemes(lines):
             if (symbolTable['keyword'].get(kThxByeKeyword[0])):
                 symbolTable['keyword'][kThxByeKeyword[0]][0] += len(kThxByeKeyword)
             else:
-                symbolTable['keyword'][kThxByeKeyword[0]] = [0]
+                symbolTable['keyword'][kThxByeKeyword[0]] = [1]
 
 
-        btwKeyword = re.findall("^(BTW)", i)                        # BTW
+        btwKeyword = re.findall("[^O](BTW)", i)                        # BTW
         if (btwKeyword):
             if (symbolTable['keyword'].get(btwKeyword[0])):
                 symbolTable['keyword'][btwKeyword[0]][0] += len(btwKeyword)
             else:
-                symbolTable['keyword'][btwKeyword[0]] = [0]
+                symbolTable['keyword'][btwKeyword[0]] = [1]
 
 
         # obtwKeyword = re.findall("^(OBTW)", i)               # OBTW
