@@ -1,4 +1,5 @@
 HAI
-    I HAS A var ITZ 2
-    VISIBLE var
+    I HAS A x ITZ 2.5
+    I HAS A y ITZ 3
+    VISIBLE x
 KTHXBYE

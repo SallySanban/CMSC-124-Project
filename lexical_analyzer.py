@@ -28,10 +28,10 @@ def findLexemes(lines):
     for i in lines:
         print(i)
         #catches NUMBR literal
-        numbrLiteral = re.findall("[-]?\d+", i)
+        numbrLiteral = re.findall("[^.][-]?\d+$", i)
         if(numbrLiteral):
             for j in numbrLiteral:
-                symbolTable['NUMBR literal'].append(j)
+                symbolTable['NUMBR literal'].append(j.strip())
 
         #catches NUMBAR literal
         numbarLiteral = re.findall("[-]?\d+[.]\d+$", i)
