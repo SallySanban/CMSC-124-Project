@@ -94,47 +94,89 @@ def findLexemes(lines):
             else:
                 symbolTable['keyword'][sumOfKeyword[0]] = [1]
 
-        diffOfKeyword = re.findall("^(DIFF\ OF)", i)                          # SUM OF
+        diffOfKeyword = re.findall("^(DIFF\ OF)", i)                          # DIFF OF
         if (len(diffOfKeyword) != 0):
             if (symbolTable['keyword'].get(diffOfKeyword[0])):           
-                symbolTable['keyword']["SUM OF"][0] += len(diffOfKeyword)
+                symbolTable['keyword']["DIFF OF"][0] += len(diffOfKeyword)
             else:
                 symbolTable['keyword'][diffOfKeyword[0]] = [1]
         
         produktOfKeyword = re.findall("^(PRODUKT\ OF)", i)                          # PRODUKT OF
         if (len(produktOfKeyword) != 0):
             if (symbolTable['keyword'].get(produktOfKeyword[0])):           
-                symbolTable['keyword']["SUM OF"][0] += len(produktOfKeyword)
+                symbolTable['keyword']["PRODUKT OF"][0] += len(produktOfKeyword)
             else:
                 symbolTable['keyword'][produktOfKeyword[0]] = [1]
         
         quoshuntOfKeyword = re.findall("^(QUOSHUNT\ OF)", i)                          # QUOSHUNT OF
         if (len(quoshuntOfKeyword) != 0):
             if (symbolTable['keyword'].get(quoshuntOfKeyword[0])):           
-                symbolTable['keyword']["SUM OF"][0] += len(quoshuntOfKeyword)
+                symbolTable['keyword']["QUOSHUNT OF"][0] += len(quoshuntOfKeyword)
             else:
                 symbolTable['keyword'][quoshuntOfKeyword[0]] = [1]
 
         modOfKeyword = re.findall("^(MOD\ OF)", i)                          # MOD OF
         if (len(modOfKeyword) != 0):
             if (symbolTable['keyword'].get(modOfKeyword[0])):           
-                symbolTable['keyword']["SUM OF"][0] += len(modOfKeyword)
+                symbolTable['keyword']["MOD OF"][0] += len(modOfKeyword)
             else:
                 symbolTable['keyword'][modOfKeyword[0]] = [1]
         
         biggrOfKeyword = re.findall("^(BIGGR\ OF)", i)                          # BIGGR OF
         if (len(biggrOfKeyword) != 0):
             if (symbolTable['keyword'].get(biggrOfKeyword[0])):           
-                symbolTable['keyword']["SUM OF"][0] += len(biggrOfKeyword)
+                symbolTable['keyword']["BIGGR OF"][0] += len(biggrOfKeyword)
             else:
                 symbolTable['keyword'][biggrOfKeyword[0]] = [1]
         
         smallrOfKeyword = re.findall("^(SMALLR\ OF)", i)                          # SMALLR OF
         if (len(smallrOfKeyword) != 0):
             if (symbolTable['keyword'].get(smallrOfKeyword[0])):           
-                symbolTable['keyword']["SUM OF"][0] += len(smallrOfKeyword)
+                symbolTable['keyword']["SMALLR OF"][0] += len(smallrOfKeyword)
             else:
                 symbolTable['keyword'][smallrOfKeyword[0]] = [1]
+        
+        bothOfKeyword = re.findall("^(BOTH\ OF)", i)                          # BOTH OF
+        if (len(bothOfKeyword) != 0):
+            if (symbolTable['keyword'].get(bothOfKeyword[0])):           
+                symbolTable['keyword']["BOTH OF"][0] += len(bothOfKeyword)
+            else:
+                symbolTable['keyword'][bothOfKeyword[0]] = [1]
+        
+        eitherOfKeyword = re.findall("^(EITHER\ OF)", i)                          # EITHER OF
+        if (len(eitherOfKeyword) != 0):
+            if (symbolTable['keyword'].get(eitherOfKeyword[0])):           
+                symbolTable['keyword']["EITHER OF"][0] += len(eitherOfKeyword)
+            else:
+                symbolTable['keyword'][eitherOfKeyword[0]] = [1]
+        
+        wonOfKeyword = re.findall("^(WON\ OF)", i)                          # WON OF
+        if (len(wonOfKeyword) != 0):
+            if (symbolTable['keyword'].get(wonOfKeyword[0])):           
+                symbolTable['keyword']["WON OF"][0] += len(wonOfKeyword)
+            else:
+                symbolTable['keyword'][wonOfKeyword[0]] = [1]
+        
+        notKeyword = re.findall("^(NOT)", i)                          # NOT
+        if (len(notKeyword) != 0):
+            if (symbolTable['keyword'].get(notKeyword[0])):           
+                symbolTable['keyword']["NOT"][0] += len(notKeyword)
+            else:
+                symbolTable['keyword'][notKeyword[0]] = [1]
+        
+        anyOfKeyword = re.findall("^(ANY\ OF)", i)                          # ANY OF
+        if (len(anyOfKeyword) != 0):
+            if (symbolTable['keyword'].get(anyOfKeyword[0])):           
+                symbolTable['keyword']["ANY OF"][0] += len(anyOfKeyword)
+            else:
+                symbolTable['keyword'][anyOfKeyword[0]] = [1]
+        
+        allOfKeyword = re.findall("^(ALL\ OF)", i)                          # ALL OF
+        if (len(allOfKeyword) != 0):
+            if (symbolTable['keyword'].get(allOfKeyword[0])):           
+                symbolTable['keyword']["ALL OF"][0] += len(allOfKeyword)
+            else:
+                symbolTable['keyword'][allOfKeyword[0]] = [1]
         #add other cases here
     
 #MAIN CODE
