@@ -177,6 +177,13 @@ def findLexemes(lines):
                 symbolTable['keyword']["ALL OF"][0] += len(allOfKeyword)
             else:
                 symbolTable['keyword'][allOfKeyword[0]] = [1]
+
+        bothSaemKeyword = re.findall("^(BOTH\ SAEM)", i)                          # BOTH SAEM
+        if (len(bothSaemKeyword) != 0):
+            if (symbolTable['keyword'].get(bothSaemKeyword[0])):           
+                symbolTable['keyword']["ALL OF"][0] += len(bothSaemKeyword)
+            else:
+                symbolTable['keyword'][bothSaemKeyword[0]] = [1]
         #add other cases here
     
 #MAIN CODE
