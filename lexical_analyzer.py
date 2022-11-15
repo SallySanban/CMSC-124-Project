@@ -1,3 +1,5 @@
+# TASKS RIO (HAI -> BOTH SAEM)
+
 import re
 
 filename = "samplecode.txt"
@@ -26,31 +28,43 @@ def readFile(filename):
 #finds lexemes in code and groups them 
 def findLexemes(lines):
     for i in lines:
-        print(i)
-        #catches NUMBR literal
-        numbrLiteral = re.findall("[^.][-]?\d+$", i)
-        if(numbrLiteral):
-            for j in numbrLiteral:
-                symbolTable['NUMBR literal'].append(j.strip())
+        haiKeyword = re.findall("^(HAI)", i)                        # HAI
+        if (haiKeyword):
+            symbolTable['keyword'][haiKeyword[0]] = [len(haiKeyword)]
 
-        #catches NUMBAR literal
-        numbarLiteral = re.findall("[-]?\d+[.]\d+$", i)
-        if(numbarLiteral):
-            for j in numbarLiteral:
-                symbolTable['NUMBAR literal'].append(j)
+        kThxByeKeyword = re.findall("^(KTHXBYE)$", i)               # KTHXBYE
+        if (kThxByeKeyword):
+            symbolTable['keyword'][kThxByeKeyword[0]] = [len(kThxByeKeyword)]
+
+        btwKeyword = re.findall("^(BTW)", i)               # KTHXBYE
+        if (len(btwKeyword) != 0):
+            # print(len(btwKeyword))
+            symbolTable['keyword'][btwKeyword[0]] = [len(btwKeyword)]
+
+
+        # obtwKeyword = re.findall("^(OBTW)", i)               # OBTW
+        # if (obtwKeyword):
+        #     for j in obtwKeyword:
+        #         symbolTable['keyword'].append(j)
+
+        # tldrKeyword = re.findall("^(TLDR)", i)               # TLDR
+        # if (tldrKeyword):
+        #     for j in tldrKeyword:
+        #         symbolTable['keyword'].append(j)
         #add other cases here
     
 #MAIN CODE
-symbolTable = {"function identifier": [],
-                "variable identifier": [],
-                "loop identifier": [],
-                "NUMBR literal": [],
-                "NUMBAR literal": [],
-                "YARN literal": [],
-                "TROOF literal": [],
-                "TYPE literal": [],
-                "keyword": [] #i think pwede pa iseparate yung mga keywords?
-                }
+symbolTable = {
+                "function identifier": {},
+                "variable identifier": {},
+                "loop identifier": {},
+                "NUMBR literal": {},
+                "NUMBAR literal": {},
+                "YARN literal": {},
+                "TROOF literal": {},
+                "TYPE literal": {},
+                "keyword": {}, #i think pwede pa iseparate yung mga keywords?
+            }
 
 lines = readFile(filename)
 
