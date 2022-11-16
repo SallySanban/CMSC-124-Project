@@ -494,6 +494,55 @@ def findLexemes(lines):
                 symbolTable['keyword']["YR"][0] += len(yrKeyword)
             else:
                 symbolTable['keyword'][yrKeyword[0]] = [1]
+
+        tilKeyword = re.findall("(TIL)", lines[i])                                # TIL
+        if (len(tilKeyword) != 0):
+            if (symbolTable['keyword'].get(tilKeyword[0])):
+                symbolTable['keyword']["TIL"][0] += len(tilKeyword)
+            else:
+                symbolTable['keyword'][tilKeyword[0]] = [1]
+
+        wileKeyword = re.findall("(WILE)", lines[i])                                # WILE
+        if (len(wileKeyword) != 0):
+            if (symbolTable['keyword'].get(wileKeyword[0])):
+                symbolTable['keyword']["WILE"][0] += len(wileKeyword)
+            else:
+                symbolTable['keyword'][wileKeyword[0]] = [1]
+
+        imOuttaYrKeyword = re.findall("^(IM\ OUTTA\ YR)", lines[i])                   # IM OUTTA YR
+        if (len(imOuttaYrKeyword) != 0):
+            if (symbolTable['keyword'].get(imOuttaYrKeyword[0])):
+                symbolTable['keyword']["IM OUTTA YR"][0] += len(imOuttaYrKeyword)
+            else:
+                symbolTable['keyword'][imOuttaYrKeyword[0]] = [1]
+
+        gtfoKeyword = re.findall("^(GTFO)", lines[i])                               # GTFO
+        if (len(gtfoKeyword) != 0):
+            if (symbolTable['keyword'].get(gtfoKeyword[0])):
+                symbolTable['keyword']["GTFO"][0] += len(gtfoKeyword)
+            else:
+                symbolTable['keyword'][gtfoKeyword[0]] = [1]
+
+        mkayKeyword = re.findall("(MKAY)", lines[i])                               # MKAY
+        if (len(mkayKeyword) != 0):
+            if (symbolTable['keyword'].get(mkayKeyword[0])):
+                symbolTable['keyword']["MKAY"][0] += len(mkayKeyword)
+            else:
+                symbolTable['keyword'][mkayKeyword[0]] = [1]
+
+        aKeyword = re.findall("(A)", lines[i])                               # MKAY
+        if (len(aKeyword) != 0):
+            if (symbolTable['keyword'].get(aKeyword[0])):
+                symbolTable['keyword']["A"][0] += len(aKeyword)
+            else:
+                symbolTable['keyword'][aKeyword[0]] = [1]
+
+        anKeyword = re.findall("(AN)", lines[i])                               # MKAY
+        if (len(anKeyword) != 0):
+            if (symbolTable['keyword'].get(anKeyword[0])):
+                symbolTable['keyword']["AN"][0] += len(anKeyword)
+            else:
+                symbolTable['keyword'][anKeyword[0]] = [1]
         #add other cases here
 
 def printSymbolTable():
