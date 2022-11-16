@@ -383,12 +383,19 @@ def findLexemes(lines):
             else:
                 symbolTable['keyword'][diffrintKeyword[0]] = [1]
         
-        smooshKeyword = re.findall("^(SMOOSH)", lines[i])                          # SMOOSH
+        smooshKeyword = re.findall("^(SMOOSH)", lines[i])                              # SMOOSH
         if (len(smooshKeyword) != 0):
             if (symbolTable['keyword'].get(smooshKeyword[0])):           
                 symbolTable['keyword']["SMOOSH"][0] += len(smooshKeyword)
             else:
                 symbolTable['keyword'][smooshKeyword[0]] = [1]
+
+        isNowAKeyword = re.findall("(IS\ NOW\ A)", lines[i])                          # IS NOW A
+        if (len(isNowAKeyword) != 0):
+            if (symbolTable['keyword'].get(isNowAKeyword[0])):           
+                symbolTable['keyword']["IS NOW A"][0] += len(isNowAKeyword)
+            else:
+                symbolTable['keyword'][isNowAKeyword[0]] = [1]
         #add other cases here
 
 def printSymbolTable():
