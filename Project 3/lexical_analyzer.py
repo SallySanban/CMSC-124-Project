@@ -1,6 +1,6 @@
 import re
 
-filename = "Project 3/samplecodecomments.txt"
+filename = "F:\Documents\CMSC 124\Project\CMSC-124-Project\Project 3\samplecodecomments.txt"
 
 #reads file and cleans each line in the file
 def readFile(filename):
@@ -372,10 +372,16 @@ def findLexemes(lines):
         bothSaemKeyword = re.findall("^(BOTH\ SAEM)", lines[i])                          # BOTH SAEM
         if (len(bothSaemKeyword) != 0):
             if (symbolTable['keyword'].get(bothSaemKeyword[0])):           
-                symbolTable['keyword']["ALL OF"][0] += len(bothSaemKeyword)
+                symbolTable['keyword']["BOTH SAEM"][0] += len(bothSaemKeyword)
             else:
                 symbolTable['keyword'][bothSaemKeyword[0]] = [1]
 
+        diffrintKeyword = re.findall("^(DIFFRINT)", lines[i])                          # DIFFRINT
+        if (len(diffrintKeyword) != 0):
+            if (symbolTable['keyword'].get(diffrintKeyword[0])):           
+                symbolTable['keyword']["DIFFRINT"][0] += len(diffrintKeyword)
+            else:
+                symbolTable['keyword'][diffrintKeyword[0]] = [1]
         #add other cases here
 
 def printSymbolTable():
