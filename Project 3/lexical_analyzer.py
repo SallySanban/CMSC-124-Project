@@ -390,12 +390,26 @@ def findLexemes(lines):
             else:
                 symbolTable['keyword'][smooshKeyword[0]] = [1]
 
-        isNowAKeyword = re.findall("(IS\ NOW\ A)", lines[i])                          # IS NOW A
+        isNowAKeyword = re.findall("(IS\ NOW\ A)", lines[i])                          # IS NOW A (changed regex here to catch in betweens)
         if (len(isNowAKeyword) != 0):
             if (symbolTable['keyword'].get(isNowAKeyword[0])):           
                 symbolTable['keyword']["IS NOW A"][0] += len(isNowAKeyword)
             else:
                 symbolTable['keyword'][isNowAKeyword[0]] = [1]
+
+        visibleKeyword = re.findall("^(VISIBLE)", lines[i])                          # VISIBLE
+        if (len(visibleKeyword) != 0):
+            if (symbolTable['keyword'].get(visibleKeyword[0])):
+                symbolTable['keyword']["VISIBLE"][0] += len(visibleKeyword)
+            else:
+                symbolTable['keyword'][visibleKeyword[0]] = [1]
+
+        gimmehKeyword = re.findall("^(GIMMEH)", lines[i])                            # GIMMEH
+        if (len(gimmehKeyword) != 0):
+            if (symbolTable['keyword'].get(gimmehKeyword[0])):
+                symbolTable['keyword']["GIMMEH"][0] += len(gimmehKeyword)
+            else:
+                symbolTable['keyword'][gimmehKeyword[0]] = [1]
         #add other cases here
 
 def printSymbolTable():
