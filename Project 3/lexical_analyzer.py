@@ -54,7 +54,6 @@ def findLexemes(lines):
                 "DIFFRINT",
                 "SMOOSH",
                 "MAEK",
-                "A",
                 "AN",
                 "IS",
                 "NOW",
