@@ -431,6 +431,27 @@ def findLexemes(lines):
                 symbolTable['keyword']["MEBBE"][0] += len(mebbeKeyword)
             else:
                 symbolTable['keyword'][mebbeKeyword[0]] = [1]
+
+        noWaiKeyword = re.findall("^(NO\ WAI)", lines[i])                           # NO WAI
+        if (len(noWaiKeyword) != 0):
+            if (symbolTable['keyword'].get(noWaiKeyword[0])):
+                symbolTable['keyword']["NO WAI"][0] += len(noWaiKeyword)
+            else:
+                symbolTable['keyword'][noWaiKeyword[0]] = [1]
+
+        oicKeyword = re.findall("^(OIC)", lines[i])                                  # OIC
+        if (len(oicKeyword) != 0):
+            if (symbolTable['keyword'].get(oicKeyword[0])):
+                symbolTable['keyword']["OIC"][0] += len(oicKeyword)
+            else:
+                symbolTable['keyword'][oicKeyword[0]] = [1]
+        
+        wtfKeyword = re.findall("^(WTF\?)", lines[i])                                  # WTF?
+        if (len(wtfKeyword) != 0):
+            if (symbolTable['keyword'].get(wtfKeyword[0])):
+                symbolTable['keyword']["WTF"][0] += len(wtfKeyword)
+            else:
+                symbolTable['keyword'][wtfKeyword[0]] = [1]
         #add other cases here
 
 def printSymbolTable():
