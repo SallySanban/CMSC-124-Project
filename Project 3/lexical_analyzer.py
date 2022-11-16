@@ -446,12 +446,33 @@ def findLexemes(lines):
             else:
                 symbolTable['keyword'][oicKeyword[0]] = [1]
         
-        wtfKeyword = re.findall("^(WTF\?)", lines[i])                                  # WTF?
+        wtfKeyword = re.findall("^(WTF\?)", lines[i])                                # WTF?
         if (len(wtfKeyword) != 0):
             if (symbolTable['keyword'].get(wtfKeyword[0])):
                 symbolTable['keyword']["WTF"][0] += len(wtfKeyword)
             else:
                 symbolTable['keyword'][wtfKeyword[0]] = [1]
+
+        omgKeyword = re.findall("^(OMG)", lines[i])                                  # OMG
+        if (len(omgKeyword) != 0):
+            if (symbolTable['keyword'].get(omgKeyword[0])):
+                symbolTable['keyword']["OMG"][0] += len(omgKeyword)
+            else:
+                symbolTable['keyword'][omgKeyword[0]] = [1]
+        
+        omgwtfKeyword = re.findall("^(OMGWTF)", lines[i])                            # OMGWTF
+        if (len(omgwtfKeyword) != 0):
+            if (symbolTable['keyword'].get(omgwtfKeyword[0])):
+                symbolTable['keyword']["OMGWTF"][0] += len(omgwtfKeyword)
+            else:
+                symbolTable['keyword'][omgwtfKeyword[0]] = [1]
+
+        imInYrKeyword = re.findall("^(IM\ IN\ YR)", lines[i])                            # IM IN YR
+        if (len(imInYrKeyword) != 0):
+            if (symbolTable['keyword'].get(imInYrKeyword[0])):
+                symbolTable['keyword']["IM IN YR"][0] += len(imInYrKeyword)
+            else:
+                symbolTable['keyword'][imInYrKeyword[0]] = [1]
         #add other cases here
 
 def printSymbolTable():
