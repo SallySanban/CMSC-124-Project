@@ -530,14 +530,14 @@ def findLexemes(lines):
             else:
                 symbolTable['keyword'][mkayKeyword[0]] = [1]
 
-        aKeyword = re.findall("(A)", lines[i])                               # MKAY
+        aKeyword = re.findall("(A)", lines[i])                               # A
         if (len(aKeyword) != 0):
             if (symbolTable['keyword'].get(aKeyword[0])):
                 symbolTable['keyword']["A"][0] += len(aKeyword)
             else:
                 symbolTable['keyword'][aKeyword[0]] = [1]
 
-        anKeyword = re.findall("(AN)", lines[i])                               # MKAY
+        anKeyword = re.findall("(AN)", lines[i])                               # AN
         if (len(anKeyword) != 0):
             if (symbolTable['keyword'].get(anKeyword[0])):
                 symbolTable['keyword']["AN"][0] += len(anKeyword)
