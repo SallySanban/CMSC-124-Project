@@ -410,6 +410,27 @@ def findLexemes(lines):
                 symbolTable['keyword']["GIMMEH"][0] += len(gimmehKeyword)
             else:
                 symbolTable['keyword'][gimmehKeyword[0]] = [1]
+
+        oRlyKeyword = re.findall("(O\ RLY\?)", lines[i])                            # O RLY?
+        if (len(oRlyKeyword) != 0):
+            if (symbolTable['keyword'].get(oRlyKeyword[0])):
+                symbolTable['keyword']["O RLY ?"][0] += len(oRlyKeyword)
+            else:
+                symbolTable['keyword'][oRlyKeyword[0]] = [1]
+
+        yaRlyKeyword = re.findall("^(YA\ RLY)", lines[i])                           # YA RLY
+        if (len(yaRlyKeyword) != 0):
+            if (symbolTable['keyword'].get(yaRlyKeyword[0])):
+                symbolTable['keyword']["YA RLY"][0] += len(yaRlyKeyword)
+            else:
+                symbolTable['keyword'][yaRlyKeyword[0]] = [1]
+
+        mebbeKeyword = re.findall("^(MEBBE)", lines[i])                             # MEBBE
+        if (len(mebbeKeyword) != 0):
+            if (symbolTable['keyword'].get(mebbeKeyword[0])):
+                symbolTable['keyword']["MEBBE"][0] += len(mebbeKeyword)
+            else:
+                symbolTable['keyword'][mebbeKeyword[0]] = [1]
         #add other cases here
 
 def printSymbolTable():
