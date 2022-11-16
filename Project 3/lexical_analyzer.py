@@ -467,12 +467,33 @@ def findLexemes(lines):
             else:
                 symbolTable['keyword'][omgwtfKeyword[0]] = [1]
 
-        imInYrKeyword = re.findall("^(IM\ IN\ YR)", lines[i])                            # IM IN YR
+        imInYrKeyword = re.findall("^(IM\ IN\ YR)", lines[i])                        # IM IN YR
         if (len(imInYrKeyword) != 0):
             if (symbolTable['keyword'].get(imInYrKeyword[0])):
                 symbolTable['keyword']["IM IN YR"][0] += len(imInYrKeyword)
             else:
                 symbolTable['keyword'][imInYrKeyword[0]] = [1]
+
+        uppinKeyword = re.findall("(UPPIN)", lines[i])                        # UPPIN
+        if (len( uppinKeyword) != 0):
+            if (symbolTable['keyword'].get( uppinKeyword[0])):
+                symbolTable['keyword']["UPPIN"][0] += len( uppinKeyword)
+            else:
+                symbolTable['keyword'][ uppinKeyword[0]] = [1]
+
+        nerfinKeyword = re.findall("(NERFIN)", lines[i])                       # NERFIN
+        if (len(nerfinKeyword) != 0):
+            if (symbolTable['keyword'].get(nerfinKeyword[0])):
+                symbolTable['keyword']["NERFIN"][0] += len(nerfinKeyword)
+            else:
+                symbolTable['keyword'][nerfinKeyword[0]] = [1]
+
+        yrKeyword = re.findall("(YR)", lines[i])                                # YR
+        if (len(yrKeyword) != 0):
+            if (symbolTable['keyword'].get(yrKeyword[0])):
+                symbolTable['keyword']["YR"][0] += len(yrKeyword)
+            else:
+                symbolTable['keyword'][yrKeyword[0]] = [1]
         #add other cases here
 
 def printSymbolTable():
