@@ -382,6 +382,13 @@ def findLexemes(lines):
                 symbolTable['keyword']["DIFFRINT"][0] += len(diffrintKeyword)
             else:
                 symbolTable['keyword'][diffrintKeyword[0]] = [1]
+        
+        smooshKeyword = re.findall("^(SMOOSH)", lines[i])                          # SMOOSH
+        if (len(smooshKeyword) != 0):
+            if (symbolTable['keyword'].get(smooshKeyword[0])):           
+                symbolTable['keyword']["SMOOSH"][0] += len(smooshKeyword)
+            else:
+                symbolTable['keyword'][smooshKeyword[0]] = [1]
         #add other cases here
 
 def printSymbolTable():
