@@ -389,6 +389,13 @@ def findLexemes(lines):
             else:
                 symbolTable['concatenation keyword'][smooshKeyword[0]] = [len(smooshKeyword)]
 
+        maekKeyword = re.findall("(MAEK)", lines[i])                              # MAEK
+        if (len(smooshKeyword) != 0):
+            if (symbolTable['explicit cast keyword'].get(maekKeyword[0])):           
+                symbolTable['explicit cast keyword']["MAEK"][0] += len(maekKeyword)
+            else:
+                symbolTable['explicit cast keyword'][maekKeyword[0]] = [len(maekKeyword)]
+
         isNowAKeyword = re.findall("(IS\ NOW\ A)", lines[i])                          # IS NOW A (changed regex here to catch in betweens)
         if (len(isNowAKeyword) != 0):
             if (symbolTable['typecasting keyword'].get(isNowAKeyword[0])):           
@@ -591,6 +598,7 @@ symbolTable = {
                 "not equal comparison": {},
                 "concatenation keyword":{},
                 "typecasting keyword":{},
+                "explicit cast keyword":{},
                 "print keyword":{},
                 "input keyword":{},
                 "ifthen keyword":{},
