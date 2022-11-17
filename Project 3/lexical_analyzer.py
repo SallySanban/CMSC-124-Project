@@ -1,6 +1,6 @@
 import re
 
-filename = "F:\Documents\CMSC 124\Project\CMSC-124-Project\Project 3\samplecodecomments.txt"
+filename = "Project 3/samplecode.txt"
 
 #reads file and cleans each line in the file
 def readFile(filename):
@@ -531,10 +531,10 @@ def findLexemes(lines):
 
         aKeyword = re.findall("(A)", lines[i])                               # A
         if (len(aKeyword) != 0):
-            if (symbolTable['keyword'].get(aKeyword[0])):
-                symbolTable['keyword']["A"][0] += len(aKeyword)
+            if (symbolTable['type keyword'].get(aKeyword[0])):
+                symbolTable['type keyword']["A"][0] += len(aKeyword)
             else:
-                symbolTable['keyword'][aKeyword[0]] = [len(aKeyword)]
+                symbolTable['type keyword'][aKeyword[0]] = [len(aKeyword)]
 
         anKeyword = re.findall("(AN)", lines[i])                               # AN
         if (len(anKeyword) != 0):
@@ -611,7 +611,7 @@ symbolTable = {
                 "loop break keyword": {},
                 "infinite arity keyword": {},
                 "argument separator keyword": {},
-                "keyword": {},
+                "type keyword": {},
             }
 
 lines = readFile(filename)
