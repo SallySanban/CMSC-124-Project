@@ -389,6 +389,14 @@ def findLexemes(lines):
             else:
                 symbolTable['keyword'][smooshKeyword[0]] = [1]
 
+        maekKeyword = re.findall("(MAEK)", lines[i])                              # MAEK
+        if (len(maekKeyword) != 0):
+            if (symbolTable['keyword'].get(maekKeyword[0])):           
+                symbolTable['keyword']["MAEK"][0] += len(maekKeyword)
+            else:
+                symbolTable['keyword'][maekKeyword[0]] = [1]
+        
+
         isNowAKeyword = re.findall("(IS\ NOW\ A)", lines[i])                          # IS NOW A (changed regex here to catch in betweens)
         if (len(isNowAKeyword) != 0):
             if (symbolTable['keyword'].get(isNowAKeyword[0])):           
