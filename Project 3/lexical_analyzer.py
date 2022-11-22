@@ -579,12 +579,14 @@ def printSymbolTable():
         print("Type: " + types[i], end=(" " * (space2 - len(types[i]))))
         print("")
 
+def getLines():
+    return lines
+
 def getLexemes():
     return lexemes
 
 def getType():
     return types
-
     
 #MAIN CODE
 symbolTable = {
