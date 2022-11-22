@@ -1065,6 +1065,24 @@ def findLexemes(lines):
             #     else:
             #         symbolTable['switch case keyword'][wtfKeyword[0]] = [len(wtfKeyword)]
 
+            wtfKeyword = re.search("^(WTF\?)$", splitWords[j])
+            if(wtfKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("ifthen delimiter")
+                else:
+                    types[i+1].append("ifthen delimiter")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
+                    
             omgKeyword = re.search("^(OMG)$", splitWords[j])
             if(omgKeyword):
                 if(i+1 not in lexemes):
