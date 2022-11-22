@@ -1,6 +1,6 @@
 import re
 
-filename = "Project 3/samplecode.txt"
+filename = "Project 3/samplecodecomments.txt"
 
 #reads file and cleans each line in the file
 def readFile(filename):
@@ -49,7 +49,6 @@ def findLexemes(lines):
                 "NOT",
                 "ANY",
                 "ALL",
-                "BOTH",
                 "SAEM",
                 "DIFFRINT",
                 "SMOOSH",
@@ -92,477 +91,493 @@ def findLexemes(lines):
     stringFound = False
     singleCommentFound = False
     multiCommentFound = False
+    string = ""
     singleComment = ""
     multiComment = ""
 
     for i in range(0, len(lines)):
-        #catches single comments
-        singleCommentWords = lines[i].split()
-        for j in range(0, len(singleCommentWords)):
-            if(singleCommentWords[j] == "BTW"):
+        splitWords = lines[i].split()
+        for j in range(0, len(splitWords)):
+            #catches single comments
+            if(splitWords[j] == "BTW"):
                 singleCommentFound = True
                 continue
             
             if(singleCommentFound == True):
-                singleComment = singleComment + singleCommentWords[j] + " "
-                singleCommentWords[j] = ""
+                singleComment = singleComment + splitWords[j] + " "
                 
-                if(j == len(singleCommentWords)-1):
+                if(j == len(splitWords)-1):
                     singleCommentFound = False
 
                     if(singleComment != ""):
-                        if (symbolTable['comment'].get(singleComment)):
-                                symbolTable['comment'][singleComment][0] += 1
-                        else:
-                            symbolTable['comment'][singleComment] = [1]
+                        lexemes.append(singleComment.strip())
+                        types.append("comment")
                     
                     singleComment = ""
-        
-        lines[i] = (" ").join(singleCommentWords) #[2]
+                
+                continue
 
-        #catches multi comments
-        multiCommentWords = lines[i].split()
-        for j in range(0, len(multiCommentWords)):
-            if(multiCommentWords[j] == "OBTW"):
+            #catches multi comments
+            if(splitWords[j] == "OBTW"):
                 multiCommentFound = True
                 continue
             
             if(multiCommentFound == True):
-                if(multiCommentWords[j] == "TLDR"):
+                if(splitWords[j] == "TLDR"):
                     multiCommentFound = False
 
                     if(multiComment != ""):
-                        if (symbolTable['comment'].get(multiComment)):
-                                symbolTable['comment'][multiComment][0] += 1
-                        else:
-                            symbolTable['comment'][multiComment] = [1]
+                        lexemes.append(multiComment.strip())
+                        types.append("comment")
                     
                     multiComment = ""
 
-                    break
+                    continue
 
-                multiComment = multiComment + multiCommentWords[j] + " "
-                multiCommentWords[j] = ""
-        
-        lines[i] = (" ").join(multiCommentWords)
+                multiComment = multiComment + splitWords[j] + " "
+                continue
 
-        #catches identifiers
-        words = lines[i].split()
-        for j in range(0, len(words)):
-            if('\"' in words[j]):
+            #catches yarn and string delimiter
+            if('\"' == splitWords[j][0]):
                 stringFound = True
 
             if(stringFound == True):
-                words[j] = ""
+                string = string + splitWords[j] + " "
 
-                if('\"' in words[j] or j == len(words)-1):
+                if('\"' == splitWords[j][len(splitWords[j])-1] or j == len(splitWords)-1):
                     stringFound = False
-                
-        for j in range(0, len(words)):
-            if(words[j] in keywords):
-                words[j] = ""
-        
-        for k in words:
-            identifier = re.search("^[a-zA-Z][a-zA-Z0-9_]*$", k)
-            if(identifier):
-                if (symbolTable['identifier'].get(k)):
-                        symbolTable['identifier'][k][0] += 1
-                else:
-                    symbolTable['identifier'][k] = [1]
+
+                    if(string != ""):
+                        lexemes.append("\"")
+                        types.append("string delimiter")
+
+                        lexemes.append(string.strip()[1:len(string.strip())-1])
+                        types.append("YARN literal")
+
+                        lexemes.append("\"")
+                        types.append("string delimiter")
                     
-        #catches literals
-        literals = lines[i].split()
-        for j in literals:
-            numbrLiteral = re.findall("^[-]?\d+$", j)
+                    string = ""
+
+                continue
+
+            #catches literals
+            numbrLiteral = re.search("^[-]?\d+$", splitWords[j])
             if(numbrLiteral):
-                for j in numbrLiteral:
-                    if (symbolTable['NUMBR literal'].get(j)):
-                        symbolTable['NUMBR literal'][j][0] += 1
-                    else:
-                        symbolTable['NUMBR literal'][j] = [1]
+                lexemes.append(splitWords[j])
+                types.append("NUMBR literal")
+                continue
 
-            numbarLiteral = re.findall("^[-]?\d+[.]\d+$", j)
+            numbarLiteral = re.search("^[-]?\d+[.]\d+$", splitWords[j])
             if(numbarLiteral):
-                for j in numbarLiteral:
-                    if (symbolTable['NUMBAR literal'].get(j)):
-                        symbolTable['NUMBAR literal'][j][0] += 1
-                    else:
-                        symbolTable['NUMBAR literal'][j] = [1]
+                lexemes.append(splitWords[j])
+                types.append("NUMBAR literal")
+                continue
             
-            troofLiteral = re.findall("^(WIN)$|^(FAIL)$", j)
-            troofLiteral = [tuple(l for l in k if l)[-1] for k in troofLiteral] #[1]
-            if(troofLiteral):
-                for j in troofLiteral:
-                    if (symbolTable['TROOF literal'].get(j)):
-                        symbolTable['TROOF literal'][j][0] += 1
-                    else:
-                        symbolTable['TROOF literal'][j] = [1]
+            troofLiteralWin = re.search("^(WIN)$", splitWords[j])
+            if(troofLiteralWin):
+                lexemes.append(splitWords[j])
+                types.append("TROOF literal")
+                continue
 
-            typeLiteral = re.findall("^(TROOF)$|^(NOOB)$|^(NUMBR)$|^(NUMBAR)$|^(YARN)$|^(TYPE)$", j)
-            typeLiteral = [tuple(l for l in k if l)[-1] for k in typeLiteral]
-            if(typeLiteral):
-                for j in typeLiteral:
-                    if (symbolTable['TYPE literal'].get(j)):
-                        symbolTable['TYPE literal'][j][0] += 1
-                    else:
-                        symbolTable['TYPE literal'][j] = [1]
+            troofLiteralFail = re.search("^(FAIL)$", splitWords[j])
+            if(troofLiteralFail):
+                lexemes.append(splitWords[j])
+                types.append("TROOF literal")
+                continue
 
-        #catches yarn and string delimiter
-        yarnLiteral = re.findall("\"[^\"]*\"", lines[i])
-        if(yarnLiteral):
-            for j in yarnLiteral:
-                if (symbolTable['YARN literal'].get(j.strip()[1:len(j.strip())-1])):
-                    symbolTable['YARN literal'][j.strip()[1:len(j.strip())-1]][0] += 1
-                else:
-                    symbolTable['YARN literal'][j.strip()[1:len(j.strip())-1]] = [1]
-                
-                if (symbolTable['string delimiter'].get('\"')):
-                    symbolTable['string delimiter']['\"'][0] += 2
-                else:
-                    symbolTable['string delimiter']['\"'] = [2]
-        
-        haiKeyword = re.findall("^(HAI)", lines[i])                        # HAI
-        if (len(haiKeyword) != 0):
-            if (symbolTable['code delimiter'].get(haiKeyword[0])):
-                symbolTable['code delimiter'][haiKeyword[0]][0] += len(haiKeyword)
-            else:
-                symbolTable['code delimiter'][haiKeyword[0]] = [len(haiKeyword)]
+            typeLiteralTroof = re.search("^(TROOF)$", splitWords[j])
+            if(typeLiteralTroof):
+                lexemes.append(splitWords[j])
+                types.append("TYPE literal")
+                continue
+            
+            typeLiteralNoob = re.search("^(NOOB)$", splitWords[j])
+            if(typeLiteralNoob):
+                lexemes.append(splitWords[j])
+                types.append("TYPE literal")
+                continue
 
-        kThxByeKeyword = re.findall("^(KTHXBYE)$", lines[i])               # KTHXBYE
-        if (len(kThxByeKeyword) != 0):
-            if (symbolTable['code delimiter'].get(kThxByeKeyword[0])):
-                symbolTable['code delimiter'][kThxByeKeyword[0]][0] += len(kThxByeKeyword)
-            else:
-                symbolTable['code delimiter'][kThxByeKeyword[0]] = [len(kThxByeKeyword)]
+            typeLiteralNumbr = re.search("^(NUMBR)$", splitWords[j])
+            if(typeLiteralNumbr):
+                lexemes.append(splitWords[j])
+                types.append("TYPE literal")
+                continue
 
-        btwKeyword = re.findall("[^O](BTW)", lines[i])                        # BTW (be able to coexist with others)
-        if (len(btwKeyword) != 0):
-            if (symbolTable['single comment delimiter'].get(btwKeyword[0])):
-                symbolTable['single comment delimiter'][btwKeyword[0]][0] += len(btwKeyword)
-            else:
-                symbolTable['single comment delimiter'][btwKeyword[0]] = [len(btwKeyword)]
+            typeLiteralNumbar = re.search("^(NUMBAR)$", splitWords[j])
+            if(typeLiteralNumbar):
+                lexemes.append(splitWords[j])
+                types.append("TYPE literal")
+                continue
 
-        obtwKeyword = re.findall("^(OBTW)", lines[i])                        # OBTW (own line & first)
-        if (len(obtwKeyword) != 0):
-            if (symbolTable['multi comment delimiter'].get(obtwKeyword[0])):
-                symbolTable['multi comment delimiter'][obtwKeyword[0]][0] += len(obtwKeyword)
-            else:
-                symbolTable['multi comment delimiter'][obtwKeyword[0]] = [len(obtwKeyword)]
+            typeLiteralYarn = re.search("^(YARN)$", splitWords[j])
+            if(typeLiteralYarn):
+                lexemes.append(splitWords[j])
+                types.append("TYPE literal")
+                continue
 
-        tldrKeyword = re.findall("^(TLDR)", lines[i])                        # TLDR (own line & only first)
-        if (len(tldrKeyword) != 0):
-            if (symbolTable['multi comment delimiter'].get(tldrKeyword[0])):
-                symbolTable['multi comment delimiter']["TLDR"][0] += len(tldrKeyword)
-            else:
-                symbolTable['multi comment delimiter'][tldrKeyword[0]] = [len(tldrKeyword)]
-        
-        iHasAKeyword = re.findall("^(I\ HAS\ A)", lines[i])                  # I HAS A (first)
-        if (len(iHasAKeyword) != 0):
-            if (symbolTable['variable declaration'].get(iHasAKeyword[0])):
-                symbolTable['variable declaration']["I HAS A"][0] += len(iHasAKeyword)
-            else:
-                symbolTable['variable declaration'][iHasAKeyword[0]] = [len(iHasAKeyword)]
+            typeLiteralType = re.search("^(TYPE)$", splitWords[j])
+            if(typeLiteralType):
+                lexemes.append(splitWords[j])
+                types.append("TYPE literal")
+                continue
 
-        itzKeyword = re.findall("( ITZ )", lines[i])                          # ITZ
-        if (len(itzKeyword) != 0):
-            if (symbolTable['variable initialization'].get(itzKeyword[0].strip())):
-                symbolTable['variable initialization']["ITZ"][0] += len(itzKeyword)
-            else:
-                symbolTable['variable initialization'][itzKeyword[0].strip()] = [len(itzKeyword)]
-        
-        rKeyword = re.findall("( R )", lines[i])                          # R
-        if (len(rKeyword) != 0):
-            if (symbolTable['assignment operator'].get(rKeyword[0].strip())):           # Used the strip to remove leading and trailing whitespaces         (To catch only the letter)
-                symbolTable['assignment operator']["R"][0] += len(rKeyword)
-            else:
-                symbolTable['assignment operator'][rKeyword[0].strip()] = [len(rKeyword)]
+            #PLACE KEYWORDS HERE (make sure identifier is last)
+            # haiKeyword = re.findall("^(HAI)", lines[i])                        # HAI
+            # if (len(haiKeyword) != 0):
+            #     if (symbolTable['code delimiter'].get(haiKeyword[0])):
+            #         symbolTable['code delimiter'][haiKeyword[0]][0] += len(haiKeyword)
+            #     else:
+            #         symbolTable['code delimiter'][haiKeyword[0]] = [len(haiKeyword)]
 
-        sumOfKeyword = re.findall("(SUM\ OF)", lines[i])                          # SUM OF (between)
-        if (len(sumOfKeyword) != 0):
-          if (symbolTable['add operator'].get(sumOfKeyword[0])):           
-              symbolTable['add operator']["SUM OF"][0] += len(sumOfKeyword)
-          else:
-              symbolTable['add operator'][sumOfKeyword[0]] = [len(sumOfKeyword)]
+            # kThxByeKeyword = re.findall("^(KTHXBYE)$", lines[i])               # KTHXBYE
+            # if (len(kThxByeKeyword) != 0):
+            #     if (symbolTable['code delimiter'].get(kThxByeKeyword[0])):
+            #         symbolTable['code delimiter'][kThxByeKeyword[0]][0] += len(kThxByeKeyword)
+            #     else:
+            #         symbolTable['code delimiter'][kThxByeKeyword[0]] = [len(kThxByeKeyword)]
 
-        diffOfKeyword = re.findall("(DIFF\ OF)", lines[i])                          # DIFF OF (between)
-        if (len(diffOfKeyword) != 0):
-            if (symbolTable['subtract operator'].get(diffOfKeyword[0])):           
-                symbolTable['subtract operator']["DIFF OF"][0] += len(diffOfKeyword)
-            else:
-                symbolTable['subtract operator'][diffOfKeyword[0]] = [len(diffOfKeyword)]
-        
-        produktOfKeyword = re.findall("(PRODUKT\ OF)", lines[i])                          # PRODUKT OF (between)
-        if (len(produktOfKeyword) != 0):
-            if (symbolTable['multiply operator'].get(produktOfKeyword[0])):           
-                symbolTable['multiply operator']["PRODUKT OF"][0] += len(produktOfKeyword)
-            else:
-                symbolTable['multiply operator'][produktOfKeyword[0]] = [len(produktOfKeyword)]
-        
-        quoshuntOfKeyword = re.findall("(QUOSHUNT\ OF)", lines[i])                          # QUOSHUNT OF (between)
-        if (len(quoshuntOfKeyword) != 0):
-            if (symbolTable['divide operator'].get(quoshuntOfKeyword[0])):           
-                symbolTable['divide operator']["QUOSHUNT OF"][0] += len(quoshuntOfKeyword)
-            else:
-                symbolTable['divide operator'][quoshuntOfKeyword[0]] = [len(quoshuntOfKeyword)]
+            # btwKeyword = re.findall("[^O](BTW)", lines[i])                        # BTW (be able to coexist with others)
+            # if (len(btwKeyword) != 0):
+            #     if (symbolTable['single comment delimiter'].get(btwKeyword[0])):
+            #         symbolTable['single comment delimiter'][btwKeyword[0]][0] += len(btwKeyword)
+            #     else:
+            #         symbolTable['single comment delimiter'][btwKeyword[0]] = [len(btwKeyword)]
 
-        modOfKeyword = re.findall("(MOD\ OF)", lines[i])                          # MOD OF (between)
-        if (len(modOfKeyword) != 0):
-            if (symbolTable['modulo operator'].get(modOfKeyword[0])):           
-                symbolTable['modulo operator']["MOD OF"][0] += len(modOfKeyword)
-            else:
-                symbolTable['modulo operator'][modOfKeyword[0]] = [len(modOfKeyword)]
-        
-        biggrOfKeyword = re.findall("(BIGGR\ OF)", lines[i])                          # BIGGR OF (between)
-        if (len(biggrOfKeyword) != 0):
-            if (symbolTable['max operator'].get(biggrOfKeyword[0])):           
-                symbolTable['max operator']["BIGGR OF"][0] += len(biggrOfKeyword)
-            else:
-                symbolTable['max operator'][biggrOfKeyword[0]] = [len(biggrOfKeyword)]
-        
-        smallrOfKeyword = re.findall("(SMALLR\ OF)", lines[i])                          # SMALLR OF (between)
-        if (len(smallrOfKeyword) != 0):
-            if (symbolTable['min operator'].get(smallrOfKeyword[0])):           
-                symbolTable['min operator']["SMALLR OF"][0] += len(smallrOfKeyword)
-            else:
-                symbolTable['min operator'][smallrOfKeyword[0]] = [len(smallrOfKeyword)]
-        
-        bothOfKeyword = re.findall("(BOTH\ OF)", lines[i])                          # BOTH OF (between)
-        if (len(bothOfKeyword) != 0):
-            if (symbolTable['and operator'].get(bothOfKeyword[0])):           
-                symbolTable['and operator']["BOTH OF"][0] += len(bothOfKeyword)
-            else:
-                symbolTable['and operator'][bothOfKeyword[0]] = [len(bothOfKeyword)]
-        
-        eitherOfKeyword = re.findall("(EITHER\ OF)", lines[i])                          # EITHER OF (between)
-        if (len(eitherOfKeyword) != 0):
-            if (symbolTable['or operator'].get(eitherOfKeyword[0])):           
-                symbolTable['or operator']["EITHER OF"][0] += len(eitherOfKeyword)
-            else:
-                symbolTable['or operator'][eitherOfKeyword[0]] = [len(eitherOfKeyword)]
-        
-        wonOfKeyword = re.findall("(WON\ OF)", lines[i])                          # WON OF (between)
-        if (len(wonOfKeyword) != 0):
-            if (symbolTable['xor operator'].get(wonOfKeyword[0])):           
-                symbolTable['xor operator']["WON OF"][0] += len(wonOfKeyword)
-            else:
-                symbolTable['xor operator'][wonOfKeyword[0]] = [len(wonOfKeyword)]
-        
-        notKeyword = re.findall("(NOT)", lines[i])                          # NOT (between)
-        if (len(notKeyword) != 0):
-            if (symbolTable['not operator'].get(notKeyword[0])):           
-                symbolTable['not operator']["NOT"][0] += len(notKeyword)
-            else:
-                symbolTable['not operator'][notKeyword[0]] = [len(notKeyword)]
-        
-        anyOfKeyword = re.findall("^(ANY\ OF)", lines[i])                          # ANY OF (first)
-        if (len(anyOfKeyword) != 0):
-            if (symbolTable['infinite arity OR operator'].get(anyOfKeyword[0])):           
-                symbolTable['infinite arity OR operator']["ANY OF"][0] += len(anyOfKeyword)
-            else:
-                symbolTable['infinite arity OR operator'][anyOfKeyword[0]] = [len(anyOfKeyword)]
-        
-        allOfKeyword = re.findall("^(ALL\ OF)", lines[i])                          # ALL OF (first)
-        if (len(allOfKeyword) != 0):
-            if (symbolTable['infinite arity AND operator'].get(allOfKeyword[0])):           
-                symbolTable['infinite arity AND operator']["ALL OF"][0] += len(allOfKeyword)
-            else:
-                symbolTable['infinite arity AND operator'][allOfKeyword[0]] = [len(allOfKeyword)]
+            # obtwKeyword = re.findall("^(OBTW)", lines[i])                        # OBTW (own line & first)
+            # if (len(obtwKeyword) != 0):
+            #     if (symbolTable['multi comment delimiter'].get(obtwKeyword[0])):
+            #         symbolTable['multi comment delimiter'][obtwKeyword[0]][0] += len(obtwKeyword)
+            #     else:
+            #         symbolTable['multi comment delimiter'][obtwKeyword[0]] = [len(obtwKeyword)]
 
-        bothSaemKeyword = re.findall("^(BOTH\ SAEM)", lines[i])                          # BOTH SAEM (first)
-        if (len(bothSaemKeyword) != 0):
-            if (symbolTable['is equal comparison'].get(bothSaemKeyword[0])):           
-                symbolTable['is equal comparison']["BOTH SAEM"][0] += len(bothSaemKeyword)
-            else:
-                symbolTable['is equal comparison'][bothSaemKeyword[0]] = [len(bothSaemKeyword)]
+            # tldrKeyword = re.findall("^(TLDR)", lines[i])                        # TLDR (own line & only first)
+            # if (len(tldrKeyword) != 0):
+            #     if (symbolTable['multi comment delimiter'].get(tldrKeyword[0])):
+            #         symbolTable['multi comment delimiter']["TLDR"][0] += len(tldrKeyword)
+            #     else:
+            #         symbolTable['multi comment delimiter'][tldrKeyword[0]] = [len(tldrKeyword)]
+            
+            # iHasAKeyword = re.findall("^(I\ HAS\ A)", lines[i])                  # I HAS A (first)
+            # if (len(iHasAKeyword) != 0):
+            #     if (symbolTable['variable declaration'].get(iHasAKeyword[0])):
+            #         symbolTable['variable declaration']["I HAS A"][0] += len(iHasAKeyword)
+            #     else:
+            #         symbolTable['variable declaration'][iHasAKeyword[0]] = [len(iHasAKeyword)]
 
-        diffrintKeyword = re.findall("^(DIFFRINT)", lines[i])                          # DIFFRINT
-        if (len(diffrintKeyword) != 0):
-            if (symbolTable['not equal comparison'].get(diffrintKeyword[0])):           
-                symbolTable['not equal comparison']["DIFFRINT"][0] += len(diffrintKeyword)
-            else:
-                symbolTable['not equal comparison'][diffrintKeyword[0]] = [len(diffrintKeyword)]
-        
-        smooshKeyword = re.findall("^(SMOOSH)", lines[i])                              # SMOOSH
-        if (len(smooshKeyword) != 0):
-            if (symbolTable['concatenation keyword'].get(smooshKeyword[0])):           
-                symbolTable['concatenation keyword']["SMOOSH"][0] += len(smooshKeyword)
-            else:
-                symbolTable['concatenation keyword'][smooshKeyword[0]] = [len(smooshKeyword)]
+            # itzKeyword = re.findall("( ITZ )", lines[i])                          # ITZ
+            # if (len(itzKeyword) != 0):
+            #     if (symbolTable['variable initialization'].get(itzKeyword[0].strip())):
+            #         symbolTable['variable initialization']["ITZ"][0] += len(itzKeyword)
+            #     else:
+            #         symbolTable['variable initialization'][itzKeyword[0].strip()] = [len(itzKeyword)]
+            
+            # rKeyword = re.findall("( R )", lines[i])                          # R
+            # if (len(rKeyword) != 0):
+            #     if (symbolTable['assignment operator'].get(rKeyword[0].strip())):           # Used the strip to remove leading and trailing whitespaces         (To catch only the letter)
+            #         symbolTable['assignment operator']["R"][0] += len(rKeyword)
+            #     else:
+            #         symbolTable['assignment operator'][rKeyword[0].strip()] = [len(rKeyword)]
 
-        maekKeyword = re.findall("(MAEK)", lines[i])                              # MAEK
-        if (len(smooshKeyword) != 0):
-            if (symbolTable['explicit cast keyword'].get(maekKeyword[0])):           
-                symbolTable['explicit cast keyword']["MAEK"][0] += len(maekKeyword)
-            else:
-                symbolTable['explicit cast keyword'][maekKeyword[0]] = [len(maekKeyword)]
+            # sumOfKeyword = re.findall("(SUM\ OF)", lines[i])                          # SUM OF (between)
+            # if (len(sumOfKeyword) != 0):
+            #   if (symbolTable['add operator'].get(sumOfKeyword[0])):           
+            #       symbolTable['add operator']["SUM OF"][0] += len(sumOfKeyword)
+            #   else:
+            #       symbolTable['add operator'][sumOfKeyword[0]] = [len(sumOfKeyword)]
 
-        isNowAKeyword = re.findall("(IS\ NOW\ A)", lines[i])                          # IS NOW A (changed regex here to catch in betweens)
-        if (len(isNowAKeyword) != 0):
-            if (symbolTable['typecasting keyword'].get(isNowAKeyword[0])):           
-                symbolTable['typecasting keyword']["IS NOW A"][0] += len(isNowAKeyword)
-            else:
-                symbolTable['typecasting keyword'][isNowAKeyword[0]] = [len(isNowAKeyword)]
+            # diffOfKeyword = re.findall("(DIFF\ OF)", lines[i])                          # DIFF OF (between)
+            # if (len(diffOfKeyword) != 0):
+            #     if (symbolTable['subtract operator'].get(diffOfKeyword[0])):           
+            #         symbolTable['subtract operator']["DIFF OF"][0] += len(diffOfKeyword)
+            #     else:
+            #         symbolTable['subtract operator'][diffOfKeyword[0]] = [len(diffOfKeyword)]
+            
+            # produktOfKeyword = re.findall("(PRODUKT\ OF)", lines[i])                          # PRODUKT OF (between)
+            # if (len(produktOfKeyword) != 0):
+            #     if (symbolTable['multiply operator'].get(produktOfKeyword[0])):           
+            #         symbolTable['multiply operator']["PRODUKT OF"][0] += len(produktOfKeyword)
+            #     else:
+            #         symbolTable['multiply operator'][produktOfKeyword[0]] = [len(produktOfKeyword)]
+            
+            # quoshuntOfKeyword = re.findall("(QUOSHUNT\ OF)", lines[i])                          # QUOSHUNT OF (between)
+            # if (len(quoshuntOfKeyword) != 0):
+            #     if (symbolTable['divide operator'].get(quoshuntOfKeyword[0])):           
+            #         symbolTable['divide operator']["QUOSHUNT OF"][0] += len(quoshuntOfKeyword)
+            #     else:
+            #         symbolTable['divide operator'][quoshuntOfKeyword[0]] = [len(quoshuntOfKeyword)]
 
-        visibleKeyword = re.findall("^(VISIBLE)", lines[i])                          # VISIBLE
-        if (len(visibleKeyword) != 0):
-            if (symbolTable['print keyword'].get(visibleKeyword[0])):
-                symbolTable['print keyword']["VISIBLE"][0] += len(visibleKeyword)
-            else:
-                symbolTable['print keyword'][visibleKeyword[0]] = [len(visibleKeyword)]
+            # modOfKeyword = re.findall("(MOD\ OF)", lines[i])                          # MOD OF (between)
+            # if (len(modOfKeyword) != 0):
+            #     if (symbolTable['modulo operator'].get(modOfKeyword[0])):           
+            #         symbolTable['modulo operator']["MOD OF"][0] += len(modOfKeyword)
+            #     else:
+            #         symbolTable['modulo operator'][modOfKeyword[0]] = [len(modOfKeyword)]
+            
+            # biggrOfKeyword = re.findall("(BIGGR\ OF)", lines[i])                          # BIGGR OF (between)
+            # if (len(biggrOfKeyword) != 0):
+            #     if (symbolTable['max operator'].get(biggrOfKeyword[0])):           
+            #         symbolTable['max operator']["BIGGR OF"][0] += len(biggrOfKeyword)
+            #     else:
+            #         symbolTable['max operator'][biggrOfKeyword[0]] = [len(biggrOfKeyword)]
+            
+            # smallrOfKeyword = re.findall("(SMALLR\ OF)", lines[i])                          # SMALLR OF (between)
+            # if (len(smallrOfKeyword) != 0):
+            #     if (symbolTable['min operator'].get(smallrOfKeyword[0])):           
+            #         symbolTable['min operator']["SMALLR OF"][0] += len(smallrOfKeyword)
+            #     else:
+            #         symbolTable['min operator'][smallrOfKeyword[0]] = [len(smallrOfKeyword)]
+            
+            # bothOfKeyword = re.findall("(BOTH\ OF)", lines[i])                          # BOTH OF (between)
+            # if (len(bothOfKeyword) != 0):
+            #     if (symbolTable['and operator'].get(bothOfKeyword[0])):           
+            #         symbolTable['and operator']["BOTH OF"][0] += len(bothOfKeyword)
+            #     else:
+            #         symbolTable['and operator'][bothOfKeyword[0]] = [len(bothOfKeyword)]
+            
+            # eitherOfKeyword = re.findall("(EITHER\ OF)", lines[i])                          # EITHER OF (between)
+            # if (len(eitherOfKeyword) != 0):
+            #     if (symbolTable['or operator'].get(eitherOfKeyword[0])):           
+            #         symbolTable['or operator']["EITHER OF"][0] += len(eitherOfKeyword)
+            #     else:
+            #         symbolTable['or operator'][eitherOfKeyword[0]] = [len(eitherOfKeyword)]
+            
+            # wonOfKeyword = re.findall("(WON\ OF)", lines[i])                          # WON OF (between)
+            # if (len(wonOfKeyword) != 0):
+            #     if (symbolTable['xor operator'].get(wonOfKeyword[0])):           
+            #         symbolTable['xor operator']["WON OF"][0] += len(wonOfKeyword)
+            #     else:
+            #         symbolTable['xor operator'][wonOfKeyword[0]] = [len(wonOfKeyword)]
+            
+            # notKeyword = re.findall("(NOT)", lines[i])                          # NOT (between)
+            # if (len(notKeyword) != 0):
+            #     if (symbolTable['not operator'].get(notKeyword[0])):           
+            #         symbolTable['not operator']["NOT"][0] += len(notKeyword)
+            #     else:
+            #         symbolTable['not operator'][notKeyword[0]] = [len(notKeyword)]
+            
+            # anyOfKeyword = re.findall("^(ANY\ OF)", lines[i])                          # ANY OF (first)
+            # if (len(anyOfKeyword) != 0):
+            #     if (symbolTable['infinite arity OR operator'].get(anyOfKeyword[0])):           
+            #         symbolTable['infinite arity OR operator']["ANY OF"][0] += len(anyOfKeyword)
+            #     else:
+            #         symbolTable['infinite arity OR operator'][anyOfKeyword[0]] = [len(anyOfKeyword)]
+            
+            # allOfKeyword = re.findall("^(ALL\ OF)", lines[i])                          # ALL OF (first)
+            # if (len(allOfKeyword) != 0):
+            #     if (symbolTable['infinite arity AND operator'].get(allOfKeyword[0])):           
+            #         symbolTable['infinite arity AND operator']["ALL OF"][0] += len(allOfKeyword)
+            #     else:
+            #         symbolTable['infinite arity AND operator'][allOfKeyword[0]] = [len(allOfKeyword)]
 
-        gimmehKeyword = re.findall("^(GIMMEH)", lines[i])                            # GIMMEH
-        if (len(gimmehKeyword) != 0):
-            if (symbolTable['input keyword'].get(gimmehKeyword[0])):
-                symbolTable['input keyword']["GIMMEH"][0] += len(gimmehKeyword)
-            else:
-                symbolTable['input keyword'][gimmehKeyword[0]] = [len(gimmehKeyword)]
+            # bothSaemKeyword = re.findall("^(BOTH\ SAEM)", lines[i])                          # BOTH SAEM (first)
+            # if (len(bothSaemKeyword) != 0):
+            #     if (symbolTable['is equal comparison'].get(bothSaemKeyword[0])):           
+            #         symbolTable['is equal comparison']["BOTH SAEM"][0] += len(bothSaemKeyword)
+            #     else:
+            #         symbolTable['is equal comparison'][bothSaemKeyword[0]] = [len(bothSaemKeyword)]
 
-        oRlyKeyword = re.findall("(O\ RLY\?)", lines[i])                            # O RLY?
-        if (len(oRlyKeyword) != 0):
-            if (symbolTable['ifthen keyword'].get(oRlyKeyword[0])):
-                symbolTable['ifthen keyword']["O RLY ?"][0] += len(oRlyKeyword)
-            else:
-                symbolTable['ifthen keyword'][oRlyKeyword[0]] = [len(oRlyKeyword)]
+            # diffrintKeyword = re.findall("^(DIFFRINT)", lines[i])                          # DIFFRINT
+            # if (len(diffrintKeyword) != 0):
+            #     if (symbolTable['not equal comparison'].get(diffrintKeyword[0])):           
+            #         symbolTable['not equal comparison']["DIFFRINT"][0] += len(diffrintKeyword)
+            #     else:
+            #         symbolTable['not equal comparison'][diffrintKeyword[0]] = [len(diffrintKeyword)]
+            
+            # smooshKeyword = re.findall("^(SMOOSH)", lines[i])                              # SMOOSH
+            # if (len(smooshKeyword) != 0):
+            #     if (symbolTable['concatenation keyword'].get(smooshKeyword[0])):           
+            #         symbolTable['concatenation keyword']["SMOOSH"][0] += len(smooshKeyword)
+            #     else:
+            #         symbolTable['concatenation keyword'][smooshKeyword[0]] = [len(smooshKeyword)]
 
-        yaRlyKeyword = re.findall("^(YA\ RLY)", lines[i])                           # YA RLY
-        if (len(yaRlyKeyword) != 0):
-            if (symbolTable['ifthen win keyword'].get(yaRlyKeyword[0])):
-                symbolTable['ifthen win keyword']["YA RLY"][0] += len(yaRlyKeyword)
-            else:
-                symbolTable['ifthen win keyword'][yaRlyKeyword[0]] = [len(yaRlyKeyword)]
+            # maekKeyword = re.findall("(MAEK)", lines[i])                              # MAEK
+            # if (len(smooshKeyword) != 0):
+            #     if (symbolTable['explicit cast keyword'].get(maekKeyword[0])):           
+            #         symbolTable['explicit cast keyword']["MAEK"][0] += len(maekKeyword)
+            #     else:
+            #         symbolTable['explicit cast keyword'][maekKeyword[0]] = [len(maekKeyword)]
 
-        mebbeKeyword = re.findall("^(MEBBE)", lines[i])                             # MEBBE
-        if (len(mebbeKeyword) != 0):
-            if (symbolTable['elseif keyword'].get(mebbeKeyword[0])):
-                symbolTable['elseif keyword']["MEBBE"][0] += len(mebbeKeyword)
-            else:
-                symbolTable['elseif keyword'][mebbeKeyword[0]] = [len(mebbeKeyword)]
+            # isNowAKeyword = re.findall("(IS\ NOW\ A)", lines[i])                          # IS NOW A (changed regex here to catch in betweens)
+            # if (len(isNowAKeyword) != 0):
+            #     if (symbolTable['typecasting keyword'].get(isNowAKeyword[0])):           
+            #         symbolTable['typecasting keyword']["IS NOW A"][0] += len(isNowAKeyword)
+            #     else:
+            #         symbolTable['typecasting keyword'][isNowAKeyword[0]] = [len(isNowAKeyword)]
 
-        noWaiKeyword = re.findall("^(NO\ WAI)", lines[i])                           # NO WAI
-        if (len(noWaiKeyword) != 0):
-            if (symbolTable['ifthen fail keyword'].get(noWaiKeyword[0])):
-                symbolTable['ifthen fail keyword']["NO WAI"][0] += len(noWaiKeyword)
-            else:
-                symbolTable['ifthen fail keyword'][noWaiKeyword[0]] = [len(noWaiKeyword)]
+            # visibleKeyword = re.findall("^(VISIBLE)", lines[i])                          # VISIBLE
+            # if (len(visibleKeyword) != 0):
+            #     if (symbolTable['print keyword'].get(visibleKeyword[0])):
+            #         symbolTable['print keyword']["VISIBLE"][0] += len(visibleKeyword)
+            #     else:
+            #         symbolTable['print keyword'][visibleKeyword[0]] = [len(visibleKeyword)]
 
-        oicKeyword = re.findall("^(OIC)", lines[i])                                  # OIC
-        if (len(oicKeyword) != 0):
-            if (symbolTable['ifthen exit keyword'].get(oicKeyword[0])):
-                symbolTable['ifthen exit keyword']["OIC"][0] += len(oicKeyword)
-            else:
-                symbolTable['ifthen exit keyword'][oicKeyword[0]] = [len(oicKeyword)]
-        
-        wtfKeyword = re.findall("^(WTF\?)", lines[i])                                # WTF?
-        if (len(wtfKeyword) != 0):
-            if (symbolTable['switch case keyword'].get(wtfKeyword[0])):
-                symbolTable['switch case keyword']["WTF"][0] += len(wtfKeyword)
-            else:
-                symbolTable['switch case keyword'][wtfKeyword[0]] = [len(wtfKeyword)]
+            # gimmehKeyword = re.findall("^(GIMMEH)", lines[i])                            # GIMMEH
+            # if (len(gimmehKeyword) != 0):
+            #     if (symbolTable['input keyword'].get(gimmehKeyword[0])):
+            #         symbolTable['input keyword']["GIMMEH"][0] += len(gimmehKeyword)
+            #     else:
+            #         symbolTable['input keyword'][gimmehKeyword[0]] = [len(gimmehKeyword)]
 
-        omgKeyword = re.findall("^(OMG)", lines[i])                                  # OMG
-        if (len(omgKeyword) != 0):
-            if (symbolTable['comparison start keyword'].get(omgKeyword[0])):
-                symbolTable['comparison start keyword']["OMG"][0] += len(omgKeyword)
-            else:
-                symbolTable['comparison start keyword'][omgKeyword[0]] = [len(omgKeyword)]
-        
-        omgwtfKeyword = re.findall("^(OMGWTF)", lines[i])                            # OMGWTF
-        if (len(omgwtfKeyword) != 0):
-            if (symbolTable['default case keyword'].get(omgwtfKeyword[0])):
-                symbolTable['default case keyword']["OMGWTF"][0] += len(omgwtfKeyword)
-            else:
-                symbolTable['default case keyword'][omgwtfKeyword[0]] = [len(omgwtfKeyword)]
+            # oRlyKeyword = re.findall("(O\ RLY\?)", lines[i])                            # O RLY?
+            # if (len(oRlyKeyword) != 0):
+            #     if (symbolTable['ifthen keyword'].get(oRlyKeyword[0])):
+            #         symbolTable['ifthen keyword']["O RLY ?"][0] += len(oRlyKeyword)
+            #     else:
+            #         symbolTable['ifthen keyword'][oRlyKeyword[0]] = [len(oRlyKeyword)]
 
-        imInYrKeyword = re.findall("^(IM\ IN\ YR)", lines[i])                        # IM IN YR
-        if (len(imInYrKeyword) != 0):
-            if (symbolTable['loop keyword'].get(imInYrKeyword[0])):
-                symbolTable['loop keyword']["IM IN YR"][0] += len(imInYrKeyword)
-            else:
-                symbolTable['loop keyword'][imInYrKeyword[0]] = [len(imInYrKeyword)]
+            # yaRlyKeyword = re.findall("^(YA\ RLY)", lines[i])                           # YA RLY
+            # if (len(yaRlyKeyword) != 0):
+            #     if (symbolTable['ifthen win keyword'].get(yaRlyKeyword[0])):
+            #         symbolTable['ifthen win keyword']["YA RLY"][0] += len(yaRlyKeyword)
+            #     else:
+            #         symbolTable['ifthen win keyword'][yaRlyKeyword[0]] = [len(yaRlyKeyword)]
 
-        uppinKeyword = re.findall("(UPPIN)", lines[i])                        # UPPIN
-        if (len( uppinKeyword) != 0):
-            if (symbolTable['increment operator'].get( uppinKeyword[0])):
-                symbolTable['increment operator']["UPPIN"][0] += len(uppinKeyword)
-            else:
-                symbolTable['increment operator'][ uppinKeyword[0]] = [len(uppinKeyword)]
+            # mebbeKeyword = re.findall("^(MEBBE)", lines[i])                             # MEBBE
+            # if (len(mebbeKeyword) != 0):
+            #     if (symbolTable['elseif keyword'].get(mebbeKeyword[0])):
+            #         symbolTable['elseif keyword']["MEBBE"][0] += len(mebbeKeyword)
+            #     else:
+            #         symbolTable['elseif keyword'][mebbeKeyword[0]] = [len(mebbeKeyword)]
 
-        nerfinKeyword = re.findall("(NERFIN)", lines[i])                       # NERFIN
-        if (len(nerfinKeyword) != 0):
-            if (symbolTable['decrement operator'].get(nerfinKeyword[0])):
-                symbolTable['decrement operator']["NERFIN"][0] += len(nerfinKeyword)
-            else:
-                symbolTable['decrement operator'][nerfinKeyword[0]] = [len(nerfinKeyword)]
+            # noWaiKeyword = re.findall("^(NO\ WAI)", lines[i])                           # NO WAI
+            # if (len(noWaiKeyword) != 0):
+            #     if (symbolTable['ifthen fail keyword'].get(noWaiKeyword[0])):
+            #         symbolTable['ifthen fail keyword']["NO WAI"][0] += len(noWaiKeyword)
+            #     else:
+            #         symbolTable['ifthen fail keyword'][noWaiKeyword[0]] = [len(noWaiKeyword)]
 
-        yrKeyword = re.findall("(YR)", lines[i])                                # YR
-        if (len(yrKeyword) != 0):
-            if (symbolTable['iterator keyword'].get(yrKeyword[0])):
-                symbolTable['iterator keyword']["YR"][0] += len(yrKeyword)
-            else:
-                symbolTable['iterator keyword'][yrKeyword[0]] = [len(yrKeyword)]
+            # oicKeyword = re.findall("^(OIC)", lines[i])                                  # OIC
+            # if (len(oicKeyword) != 0):
+            #     if (symbolTable['ifthen exit keyword'].get(oicKeyword[0])):
+            #         symbolTable['ifthen exit keyword']["OIC"][0] += len(oicKeyword)
+            #     else:
+            #         symbolTable['ifthen exit keyword'][oicKeyword[0]] = [len(oicKeyword)]
+            
+            # wtfKeyword = re.findall("^(WTF\?)", lines[i])                                # WTF?
+            # if (len(wtfKeyword) != 0):
+            #     if (symbolTable['switch case keyword'].get(wtfKeyword[0])):
+            #         symbolTable['switch case keyword']["WTF"][0] += len(wtfKeyword)
+            #     else:
+            #         symbolTable['switch case keyword'][wtfKeyword[0]] = [len(wtfKeyword)]
 
-        tilKeyword = re.findall("(TIL)", lines[i])                                # TIL
-        if (len(tilKeyword) != 0):
-            if (symbolTable['loop until operator'].get(tilKeyword[0])):
-                symbolTable['loop until operator']["TIL"][0] += len(tilKeyword)
-            else:
-                symbolTable['loop until operator'][tilKeyword[0]] = [len(tilKeyword)]
+            # omgKeyword = re.findall("^(OMG)", lines[i])                                  # OMG
+            # if (len(omgKeyword) != 0):
+            #     if (symbolTable['comparison start keyword'].get(omgKeyword[0])):
+            #         symbolTable['comparison start keyword']["OMG"][0] += len(omgKeyword)
+            #     else:
+            #         symbolTable['comparison start keyword'][omgKeyword[0]] = [len(omgKeyword)]
+            
+            # omgwtfKeyword = re.findall("^(OMGWTF)", lines[i])                            # OMGWTF
+            # if (len(omgwtfKeyword) != 0):
+            #     if (symbolTable['default case keyword'].get(omgwtfKeyword[0])):
+            #         symbolTable['default case keyword']["OMGWTF"][0] += len(omgwtfKeyword)
+            #     else:
+            #         symbolTable['default case keyword'][omgwtfKeyword[0]] = [len(omgwtfKeyword)]
 
-        wileKeyword = re.findall("(WILE)", lines[i])                                # WILE
-        if (len(wileKeyword) != 0):
-            if (symbolTable['loop while operator'].get(wileKeyword[0])):
-                symbolTable['loop while operator']["WILE"][0] += len(wileKeyword)
-            else:
-                symbolTable['loop while operator'][wileKeyword[0]] = [len(wileKeyword)]
+            # imInYrKeyword = re.findall("^(IM\ IN\ YR)", lines[i])                        # IM IN YR
+            # if (len(imInYrKeyword) != 0):
+            #     if (symbolTable['loop keyword'].get(imInYrKeyword[0])):
+            #         symbolTable['loop keyword']["IM IN YR"][0] += len(imInYrKeyword)
+            #     else:
+            #         symbolTable['loop keyword'][imInYrKeyword[0]] = [len(imInYrKeyword)]
 
-        imOuttaYrKeyword = re.findall("^(IM\ OUTTA\ YR)", lines[i])                   # IM OUTTA YR
-        if (len(imOuttaYrKeyword) != 0):
-            if (symbolTable['loop exit keyword'].get(imOuttaYrKeyword[0])):
-                symbolTable['loop exit keyword']["IM OUTTA YR"][0] += len(imOuttaYrKeyword)
-            else:
-                symbolTable['loop exit keyword'][imOuttaYrKeyword[0]] = [len(imOuttaYrKeyword)]
+            # uppinKeyword = re.findall("(UPPIN)", lines[i])                        # UPPIN
+            # if (len( uppinKeyword) != 0):
+            #     if (symbolTable['increment operator'].get( uppinKeyword[0])):
+            #         symbolTable['increment operator']["UPPIN"][0] += len(uppinKeyword)
+            #     else:
+            #         symbolTable['increment operator'][ uppinKeyword[0]] = [len(uppinKeyword)]
 
-        gtfoKeyword = re.findall("^(GTFO)", lines[i])                               # GTFO
-        if (len(gtfoKeyword) != 0):
-            if (symbolTable['loop break keyword'].get(gtfoKeyword[0])):
-                symbolTable['loop break keyword']["GTFO"][0] += len(gtfoKeyword)
-            else:
-                symbolTable['loop break keyword'][gtfoKeyword[0]] = [len(gtfoKeyword)]
+            # nerfinKeyword = re.findall("(NERFIN)", lines[i])                       # NERFIN
+            # if (len(nerfinKeyword) != 0):
+            #     if (symbolTable['decrement operator'].get(nerfinKeyword[0])):
+            #         symbolTable['decrement operator']["NERFIN"][0] += len(nerfinKeyword)
+            #     else:
+            #         symbolTable['decrement operator'][nerfinKeyword[0]] = [len(nerfinKeyword)]
 
-        mkayKeyword = re.findall("(MKAY)", lines[i])                               # MKAY
-        if (len(mkayKeyword) != 0):
-            if (symbolTable['infinite arity keyword'].get(mkayKeyword[0])):
-                symbolTable['infinite arity keyword']["MKAY"][0] += len(mkayKeyword)
-            else:
-                symbolTable['infinite arity keyword'][mkayKeyword[0]] = [len(mkayKeyword)]
+            # yrKeyword = re.findall("(YR)", lines[i])                                # YR
+            # if (len(yrKeyword) != 0):
+            #     if (symbolTable['iterator keyword'].get(yrKeyword[0])):
+            #         symbolTable['iterator keyword']["YR"][0] += len(yrKeyword)
+            #     else:
+            #         symbolTable['iterator keyword'][yrKeyword[0]] = [len(yrKeyword)]
 
-        aKeyword = re.findall("(A)", lines[i])                               # A
-        if (len(aKeyword) != 0):
-            if (symbolTable['type keyword'].get(aKeyword[0])):
-                symbolTable['type keyword']["A"][0] += len(aKeyword)
-            else:
-                symbolTable['type keyword'][aKeyword[0]] = [len(aKeyword)]
+            # tilKeyword = re.findall("(TIL)", lines[i])                                # TIL
+            # if (len(tilKeyword) != 0):
+            #     if (symbolTable['loop until operator'].get(tilKeyword[0])):
+            #         symbolTable['loop until operator']["TIL"][0] += len(tilKeyword)
+            #     else:
+            #         symbolTable['loop until operator'][tilKeyword[0]] = [len(tilKeyword)]
 
-        anKeyword = re.findall("(AN)", lines[i])                               # AN
-        if (len(anKeyword) != 0):
-            if (symbolTable['argument separator keyword'].get(anKeyword[0])):
-                symbolTable['argument separator keyword']["AN"][0] += len(anKeyword)
-            else:
-                symbolTable['argument separator keyword'][anKeyword[0]] = [len(anKeyword)]
-        
-        #add other cases here
+            # wileKeyword = re.findall("(WILE)", lines[i])                                # WILE
+            # if (len(wileKeyword) != 0):
+            #     if (symbolTable['loop while operator'].get(wileKeyword[0])):
+            #         symbolTable['loop while operator']["WILE"][0] += len(wileKeyword)
+            #     else:
+            #         symbolTable['loop while operator'][wileKeyword[0]] = [len(wileKeyword)]
+
+            # imOuttaYrKeyword = re.findall("^(IM\ OUTTA\ YR)", lines[i])                   # IM OUTTA YR
+            # if (len(imOuttaYrKeyword) != 0):
+            #     if (symbolTable['loop exit keyword'].get(imOuttaYrKeyword[0])):
+            #         symbolTable['loop exit keyword']["IM OUTTA YR"][0] += len(imOuttaYrKeyword)
+            #     else:
+            #         symbolTable['loop exit keyword'][imOuttaYrKeyword[0]] = [len(imOuttaYrKeyword)]
+
+            # gtfoKeyword = re.findall("^(GTFO)", lines[i])                               # GTFO
+            # if (len(gtfoKeyword) != 0):
+            #     if (symbolTable['loop break keyword'].get(gtfoKeyword[0])):
+            #         symbolTable['loop break keyword']["GTFO"][0] += len(gtfoKeyword)
+            #     else:
+            #         symbolTable['loop break keyword'][gtfoKeyword[0]] = [len(gtfoKeyword)]
+
+            # mkayKeyword = re.findall("(MKAY)", lines[i])                               # MKAY
+            # if (len(mkayKeyword) != 0):
+            #     if (symbolTable['infinite arity keyword'].get(mkayKeyword[0])):
+            #         symbolTable['infinite arity keyword']["MKAY"][0] += len(mkayKeyword)
+            #     else:
+            #         symbolTable['infinite arity keyword'][mkayKeyword[0]] = [len(mkayKeyword)]
+
+            # aKeyword = re.findall("(A)", lines[i])                               # A
+            # if (len(aKeyword) != 0):
+            #     if (symbolTable['type keyword'].get(aKeyword[0])):
+            #         symbolTable['type keyword']["A"][0] += len(aKeyword)
+            #     else:
+            #         symbolTable['type keyword'][aKeyword[0]] = [len(aKeyword)]
+
+            # anKeyword = re.findall("(AN)", lines[i])                               # AN
+            # if (len(anKeyword) != 0):
+            #     if (symbolTable['argument separator keyword'].get(anKeyword[0])):
+            #         symbolTable['argument separator keyword']["AN"][0] += len(anKeyword)
+            #     else:
+            #         symbolTable['argument separator keyword'][anKeyword[0]] = [len(anKeyword)]
+            
+            #catches identifiers
+            if(splitWords[j] in keywords): #will delete this block when keywords are added above (not neccesary anymore)
+                continue
+
+            identifier = re.search("^[a-zA-Z][a-zA-Z0-9_]*$", splitWords[j])
+            if(identifier):
+                lexemes.append(splitWords[j])
+                types.append("identifier")
+                continue
 
 def printSymbolTable():
     space1 = 40
     space2 = 40
     space3 = 10
 
-    for typeTemp in symbolTable.keys():
-        for lexeme in symbolTable[typeTemp].keys():
-            print("Lexeme: " + lexeme, end=(" " * (space1 - len(lexeme))))
-            print("Type: " + typeTemp, end=(" " * (space2 - len(typeTemp))))
-            print("Count: " + str(symbolTable[typeTemp][lexeme][0]), end=(" " * (space3 - len(str(symbolTable[typeTemp][lexeme][0])))))
-            print("")
+    # for typeTemp in symbolTable.keys():
+    #     for lexeme in symbolTable[typeTemp].keys():
+    #         print("Lexeme: " + lexeme, end=(" " * (space1 - len(lexeme))))
+    #         print("Type: " + typeTemp, end=(" " * (space2 - len(typeTemp))))
+    #         print("Count: " + str(symbolTable[typeTemp][lexeme][0]), end=(" " * (space3 - len(str(symbolTable[typeTemp][lexeme][0])))))
+    #         print("")
+
+    for i in range(0, len(lexemes)):
+        print("Lexeme: " + lexemes[i], end=(" " * (space1 - len(lexemes[i]))))
+        print("Type: " + types[i], end=(" " * (space2 - len(types[i]))))
+        print("")
 
     
 #MAIN CODE
@@ -621,15 +636,16 @@ symbolTable = {
                 "argument separator keyword": {},
                 "type keyword": {},
             }
+lexemes = []
+types = []
 
 lines = readFile(filename)
 findLexemes(lines)
 
-# for i in symbolTable:
-#     print(i + " = " + str(symbolTable[i]))
+# for i in range(0, len(lexemes)):
+#     print("[" + str(i) + "] " + lexemes[i])
+# print("")
+# for i in range(0, len(types)):
+#     print("[" + str(i) + "] " + types[i])
 
 printSymbolTable()
-
-#REFERENCES
-# [1] https://stackoverflow.com/questions/24593824/why-does-re-findall-return-a-list-of-tuples-when-my-pattern-only-contains-one-gr
-# [2] https://www.geeksforgeeks.org/python-program-to-convert-a-list-to-string/
