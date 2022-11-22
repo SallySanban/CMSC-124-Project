@@ -1,3 +1,68 @@
+BTW This is an inline comment
+BTW All code must begin with `HAI <language version>` and end with `KTHXBYE`
+
+HAI
+
+OBTW
+     ==========================================================================
+     ================================= BASICS =================================
+     ==========================================================================
+TLDR
+
+BTW Displaying text:
+
+BTW Declaring variables:
 I HAS A MESSAGE ITZ "CATZ ARE GOOD"
-I HAS A MESSAGE
-I HAS A
+
+OBTW
+    (This is a codeblock.) Variables are dynamically typed so you don't need to
+    declare their type. A variable's type matches its content. These are the
+    types:
+TLDR
+
+I HAS A STRING  ITZ "DOGZ ARE GOOOD" BTW type is YARN
+I HAS A INTEGER ITZ 42               BTW type is NUMBR
+I HAS A FLOAT   ITZ 3.1415           BTW type is NUMBAR
+I HAS A BOOLEAN ITZ WIN              BTW type is TROOF
+I HAS A UNTYPED                      BTW type is NOOB
+
+BTW Accepting user input:
+I HAS A AGE
+BTW The variable is stored as a YARN. To convert it into NUMBR:
+
+OBTW
+     ==========================================================================
+     ================================== MATH ==================================
+     ==========================================================================
+TLDR
+
+BTW LOLCODE uses polish notation style math.
+
+BTW Basic mathematical notation:
+
+BTW Binary notation:
+
+BTW Comparison:
+
+OBTW
+     ==========================================================================
+     ============================== FLOW CONTROL ==============================
+     ==========================================================================
+TLDR
+
+BTW If/then statement:
+I HAS A ANIMAL
+
+BTW Case statement:
+I HAS A COLOR
+        BTW Since there is no `GTFO` the next statements will also be tested
+
+
+BTW For loop:
+I HAS A TEMPERATURE
+
+BTW While loop:
+
+KTHXBYE BTW GOODBYE
+OBTW yeahh goodbye
+TLDR
