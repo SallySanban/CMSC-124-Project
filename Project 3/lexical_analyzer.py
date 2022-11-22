@@ -7,19 +7,21 @@ def readFile(filename):
     file = open(filename)
     lines = []
 
+    #print(file.readlines())
+
     #reads the file and places each line in a list
     for line in file.readlines():
-        words = line.split("\n")
-        for i in words:
-            lines.append(i)
+        if(line != "\n"):
+            if(line[len(line)-1] == "\n"):
+                lines.append(line[0:len(line)-1])
+            else:
+                lines.append(line)
+        else:
+           lines.append("")
 
     #gets rid of leading whitespaces in each line
     for i in range(0, len(lines)):
         lines[i] = lines[i].strip()
-
-    for i in lines:
-        if(i == ""):
-            lines.remove(i)
         
     return lines
 
@@ -110,8 +112,17 @@ def findLexemes(lines):
                     singleCommentFound = False
 
                     if(singleComment != ""):
-                        lexemes.append(singleComment.strip())
-                        types.append("comment")
+                        if(i+1 not in lexemes):
+                            lexemes[i+1] = []
+                            lexemes[i+1].append(singleComment.strip())
+                        else:
+                            lexemes[i+1].append(singleComment.strip())
+
+                        if(i+1 not in types):
+                            types[i+1] = []
+                            types[i+1].append("comment")
+                        else:
+                            types[i+1].append("comment")
                     
                     singleComment = ""
                 
@@ -125,16 +136,27 @@ def findLexemes(lines):
             if(multiCommentFound == True):
                 if(splitWords[j] == "TLDR"):
                     multiCommentFound = False
+                else:
+                    multiComment = multiComment + splitWords[j] + " "
 
+                if(j == len(splitWords)-1 or multiCommentFound == False):
                     if(multiComment != ""):
-                        lexemes.append(multiComment.strip())
-                        types.append("comment")
+                        if(i+1 not in lexemes):
+                            lexemes[i+1] = []
+                            lexemes[i+1].append(multiComment.strip())
+                        else:
+                            lexemes[i+1].append(multiComment.strip())
+
+                        if(i+1 not in types):
+                            types[i+1] = []
+                            types[i+1].append("comment")
+                        else:
+                            types[i+1].append("comment")
                     
                     multiComment = ""
 
                     continue
-
-                multiComment = multiComment + splitWords[j] + " "
+                
                 continue
 
             #catches yarn and string delimiter
@@ -148,14 +170,25 @@ def findLexemes(lines):
                     stringFound = False
 
                     if(string != ""):
-                        lexemes.append("\"")
-                        types.append("string delimiter")
+                        if(i+1 not in lexemes):
+                            lexemes[i+1] = []
+                            lexemes[i+1].append("\"")
+                            lexemes[i+1].append(string.strip()[1:len(string.strip())-1])
+                            lexemes[i+1].append("\"")
+                        else:
+                            lexemes[i+1].append("\"")
+                            lexemes[i+1].append(string.strip()[1:len(string.strip())-1])
+                            lexemes[i+1].append("\"")
 
-                        lexemes.append(string.strip()[1:len(string.strip())-1])
-                        types.append("YARN literal")
-
-                        lexemes.append("\"")
-                        types.append("string delimiter")
+                        if(i+1 not in types):
+                            types[i+1] = []
+                            types[i+1].append("string delimiter")
+                            types[i+1].append("YARN literal")
+                            types[i+1].append("string delimiter")
+                        else:
+                            types[i+1].append("string delimiter")
+                            types[i+1].append("YARN literal")
+                            types[i+1].append("string delimiter")
                     
                     string = ""
 
@@ -164,62 +197,162 @@ def findLexemes(lines):
             #catches literals
             numbrLiteral = re.search("^[-]?\d+$", splitWords[j])
             if(numbrLiteral):
-                lexemes.append(splitWords[j])
-                types.append("NUMBR literal")
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("NUMBR literal")
+                else:
+                    types[i+1].append("NUMBR literal")
+
                 continue
 
             numbarLiteral = re.search("^[-]?\d+[.]\d+$", splitWords[j])
             if(numbarLiteral):
-                lexemes.append(splitWords[j])
-                types.append("NUMBAR literal")
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+                
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("NUMBAR literal")
+                else:
+                    types[i+1].append("NUMBAR literal")
+
                 continue
             
             troofLiteralWin = re.search("^(WIN)$", splitWords[j])
             if(troofLiteralWin):
-                lexemes.append(splitWords[j])
-                types.append("TROOF literal")
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+                
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("TROOF literal")
+                else:
+                    types[i+1].append("TROOF literal")
+                
                 continue
 
             troofLiteralFail = re.search("^(FAIL)$", splitWords[j])
             if(troofLiteralFail):
-                lexemes.append(splitWords[j])
-                types.append("TROOF literal")
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("TROOF literal")
+                else:
+                    types[i+1].append("TROOF literal")
+
                 continue
 
             typeLiteralTroof = re.search("^(TROOF)$", splitWords[j])
             if(typeLiteralTroof):
-                lexemes.append(splitWords[j])
-                types.append("TYPE literal")
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+                
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("TYPE literal")
+                else:
+                    types[i+1].append("TYPE literal")
+
                 continue
             
             typeLiteralNoob = re.search("^(NOOB)$", splitWords[j])
             if(typeLiteralNoob):
-                lexemes.append(splitWords[j])
-                types.append("TYPE literal")
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+                
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("TYPE literal")
+                else:
+                    types[i+1].append("TYPE literal")
+
                 continue
 
             typeLiteralNumbr = re.search("^(NUMBR)$", splitWords[j])
             if(typeLiteralNumbr):
-                lexemes.append(splitWords[j])
-                types.append("TYPE literal")
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("TYPE literal")
+                else:
+                    types[i+1].append("TYPE literal")
+
                 continue
 
             typeLiteralNumbar = re.search("^(NUMBAR)$", splitWords[j])
             if(typeLiteralNumbar):
-                lexemes.append(splitWords[j])
-                types.append("TYPE literal")
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("TYPE literal")
+                else:
+                    types[i+1].append("TYPE literal")
+
                 continue
 
             typeLiteralYarn = re.search("^(YARN)$", splitWords[j])
             if(typeLiteralYarn):
-                lexemes.append(splitWords[j])
-                types.append("TYPE literal")
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+                
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("TYPE literal")
+                else:
+                    types[i+1].append("TYPE literal")
+
                 continue
 
             typeLiteralType = re.search("^(TYPE)$", splitWords[j])
             if(typeLiteralType):
-                lexemes.append(splitWords[j])
-                types.append("TYPE literal")
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("TYPE literal")
+                else:
+                    types[i+1].append("TYPE literal")
+
                 continue
 
             #PLACE KEYWORDS HERE (make sure identifier is last)
@@ -558,8 +691,18 @@ def findLexemes(lines):
 
             identifier = re.search("^[a-zA-Z][a-zA-Z0-9_]*$", splitWords[j])
             if(identifier):
-                lexemes.append(splitWords[j])
-                types.append("identifier")
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("identifier")
+                else:
+                    types[i+1].append("identifier")
+
                 continue
 
 def printSymbolTable():
@@ -574,9 +717,12 @@ def printSymbolTable():
     #         print("Count: " + str(symbolTable[typeTemp][lexeme][0]), end=(" " * (space3 - len(str(symbolTable[typeTemp][lexeme][0])))))
     #         print("")
 
-    for i in range(0, len(lexemes)):
-        print("Lexeme: " + lexemes[i], end=(" " * (space1 - len(lexemes[i]))))
-        print("Type: " + types[i], end=(" " * (space2 - len(types[i]))))
+    for i in lexemes.keys():
+        for j in range(0, len(lexemes[i])):
+            print("Line " + str(i))
+            print("Lexeme: " + lexemes[i][j], end=(" " * (space1 - len(lexemes[i][j]))))
+            print("Type: " + types[i][j], end=(" " * (space2 - len(types[i][j]))))
+            print("")
         print("")
 
 def getLines():
@@ -587,73 +733,75 @@ def getLexemes():
 
 def getType():
     return types
-    
+
 #MAIN CODE
-symbolTable = {
-                "comment": {},
-                "identifier": {},
-                "NUMBR literal": {},
-                "NUMBAR literal": {},
-                "YARN literal": {},
-                "string delimiter": {},
-                "TROOF literal": {},
-                "TYPE literal": {},
-                "code delimiter": {},
-                "single comment delimiter": {},
-                "multi comment delimiter": {},
-                "variable declaration": {},
-                "variable initialization": {},
-                "assignment operator": {},
-                "add operator": {},
-                "subtract operator": {},
-                "multiply operator": {},
-                "divide operator": {},
-                "modulo operator": {},
-                "max operator": {},
-                "min operator": {},
-                "and operator": {},
-                "or operator": {},
-                "xor operator": {},
-                "not operator": {},
-                "infinite arity OR operator": {},
-                "infinite arity AND operator": {},
-                "is equal comparison": {},
-                "not equal comparison": {},
-                "concatenation keyword":{},
-                "typecasting keyword":{},
-                "explicit cast keyword":{},
-                "print keyword":{},
-                "input keyword":{},
-                "ifthen keyword":{},
-                "ifthen win keyword":{},
-                "ifthen fail keyword": {},
-                "elseif keyword": {},
-                "ifthen exit keyword": {},
-                "switch case keyword": {},
-                "comparison start keyword": {},
-                "default case keyword": {},
-                "loop keyword": {},
-                "increment operator": {},
-                "decrement operator": {},
-                "iterator keyword": {},
-                "loop until operator": {},
-                "loop while operator": {},
-                "loop exit keyword": {},
-                "loop break keyword": {},
-                "infinite arity keyword": {},
-                "argument separator keyword": {},
-                "type keyword": {},
-            }
-lexemes = []
-types = []
+#cinomment ko lang para may reference kayo sa types na iaappend niyo pero idedelete ko rin mamaya
+# symbolTable = {
+#                 "comment": {},
+#                 "identifier": {},
+#                 "NUMBR literal": {},
+#                 "NUMBAR literal": {},
+#                 "YARN literal": {},
+#                 "string delimiter": {},
+#                 "TROOF literal": {},
+#                 "TYPE literal": {},
+#                 "code delimiter": {},
+#                 "single comment delimiter": {},
+#                 "multi comment delimiter": {},
+#                 "variable declaration": {},
+#                 "variable initialization": {},
+#                 "assignment operator": {},
+#                 "add operator": {},
+#                 "subtract operator": {},
+#                 "multiply operator": {},
+#                 "divide operator": {},
+#                 "modulo operator": {},
+#                 "max operator": {},
+#                 "min operator": {},
+#                 "and operator": {},
+#                 "or operator": {},
+#                 "xor operator": {},
+#                 "not operator": {},
+#                 "infinite arity OR operator": {},
+#                 "infinite arity AND operator": {},
+#                 "is equal comparison": {},
+#                 "not equal comparison": {},
+#                 "concatenation keyword":{},
+#                 "typecasting keyword":{},
+#                 "explicit cast keyword":{},
+#                 "print keyword":{},
+#                 "input keyword":{},
+#                 "ifthen keyword":{},
+#                 "ifthen win keyword":{},
+#                 "ifthen fail keyword": {},
+#                 "elseif keyword": {},
+#                 "ifthen exit keyword": {},
+#                 "switch case keyword": {},
+#                 "comparison start keyword": {},
+#                 "default case keyword": {},
+#                 "loop keyword": {},
+#                 "increment operator": {},
+#                 "decrement operator": {},
+#                 "iterator keyword": {},
+#                 "loop until operator": {},
+#                 "loop while operator": {},
+#                 "loop exit keyword": {},
+#                 "loop break keyword": {},
+#                 "infinite arity keyword": {},
+#                 "argument separator keyword": {},
+#                 "type keyword": {},
+#             }
+
+lexemes = {}
+types = {}
 
 lines = readFile(filename)
 findLexemes(lines)
 
-# for i in range(0, len(lexemes)):
-#     print("[" + str(i) + "] " + lexemes[i])
+# for i in lexemes.keys():
+#     print("[" + str(i) + "] " + str(lexemes[i]))
 # print("")
-# for i in range(0, len(types)):
-#     print("[" + str(i) + "] " + types[i])
+# for i in types.keys():
+#     print("[" + str(i) + "] " + str(types[i]))
 
-#printSymbolTable()
+printSymbolTable()
