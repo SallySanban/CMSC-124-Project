@@ -1027,12 +1027,6 @@ def findLexemes(lines):
             else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
                     keyword = ""
-            # mebbeKeyword = re.findall("^(MEBBE)", lines[i])                             # MEBBE
-            # if (len(mebbeKeyword) != 0):
-            #     if (symbolTable['elseif keyword'].get(mebbeKeyword[0])):
-            #         symbolTable['elseif keyword']["MEBBE"][0] += len(mebbeKeyword)
-            #     else:
-            #         symbolTable['elseif keyword'][mebbeKeyword[0]] = [len(mebbeKeyword)]
 
             # noWaiKeyword = re.findall("^(NO\ WAI)", lines[i])                           # NO WAI
             # if (len(noWaiKeyword) != 0):
@@ -1058,12 +1052,6 @@ def findLexemes(lines):
             else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
                     keyword = ""
-            # wtfKeyword = re.findall("^(WTF\?)", lines[i])                                # WTF?
-            # if (len(wtfKeyword) != 0):
-            #     if (symbolTable['switch case keyword'].get(wtfKeyword[0])):
-            #         symbolTable['switch case keyword']["WTF"][0] += len(wtfKeyword)
-            #     else:
-            #         symbolTable['switch case keyword'][wtfKeyword[0]] = [len(wtfKeyword)]
 
             wtfKeyword = re.search("^(WTF\?)$", splitWords[j])
             if(wtfKeyword):
@@ -1082,7 +1070,6 @@ def findLexemes(lines):
             else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
                     keyword = ""
-                    
             omgKeyword = re.search("^(OMG)$", splitWords[j])
             if(omgKeyword):
                 if(i+1 not in lexemes):
