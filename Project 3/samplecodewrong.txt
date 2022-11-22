@@ -1,0 +1,4 @@
+BTW All code must begin with `HAI <language version>` and end with `KTHXBYE`
+
+OBTW
+TLDR
