@@ -863,13 +863,60 @@ def findLexemes(lines):
             else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
                     keyword = ""
-            # smooshKeyword = re.findall("^(SMOOSH)", lines[i])                              # SMOOSH
-            # if (len(smooshKeyword) != 0):
-            #     if (symbolTable['concatenation keyword'].get(smooshKeyword[0])):           
-            #         symbolTable['concatenation keyword']["SMOOSH"][0] += len(smooshKeyword)
-            #     else:
-            #         symbolTable['concatenation keyword'][smooshKeyword[0]] = [len(smooshKeyword)]
 
+            smooshKeyword = re.search("^(SMOOSH)$", splitWords[j])                              # SMOOSH
+            if(smooshKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("concatenation delimiter")
+                else:
+                    types[i+1].append("concatenation delimiter")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
+            
+            smooshKeyword = re.search("^(SMOOSH)$", splitWords[j])                              # SMOOSH
+            if(smooshKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("concatenation delimiter")
+                else:
+                    types[i+1].append("concatenation delimiter")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
+            
+            mkayKeyword = re.search("^(MKAY)$", splitWords[j])                              # SMOOSH
+            if(mkayKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("concatenation delimiter")
+                else:
+                    types[i+1].append("concatenation delimiter")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
             # maekKeyword = re.findall("(MAEK)", lines[i])                              # MAEK
             # if (len(smooshKeyword) != 0):
             #     if (symbolTable['explicit cast keyword'].get(maekKeyword[0])):           
@@ -884,7 +931,7 @@ def findLexemes(lines):
             #     else:
             #         symbolTable['typecasting keyword'][isNowAKeyword[0]] = [len(isNowAKeyword)]
 
-            # visibleKeyword = re.findall("^(VISIBLE)", lines[i])                          # VISIBLE
+            # visibleKeyword = re.findall("^(VISIBLE)$", lines[i])                          # VISIBLE
             # if (len(visibleKeyword) != 0):
             #     if (symbolTable['print keyword'].get(visibleKeyword[0])):
             #         symbolTable['print keyword']["VISIBLE"][0] += len(visibleKeyword)
