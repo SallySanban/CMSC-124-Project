@@ -1,6 +1,6 @@
 import re
 
-filename = "Project 3/samplecodecomments.txt"
+filename = "Project 3/samplecodewrong.txt"
 
 #reads file and cleans each line in the file
 def readFile(filename):
@@ -141,7 +141,7 @@ def findLexemes(lines):
                     singleComment = ""
                 
                 continue
-
+            
             #catches multi comments
             if(splitWords[j] == "OBTW"):
                 if(i+1 not in lexemes):
@@ -161,6 +161,19 @@ def findLexemes(lines):
             
             if(multiCommentFound == True):
                 if (splitWords[j] == "TLDR"):
+                    if(multiComment != ""):
+                        if(i+1 not in lexemes):
+                            lexemes[i+1] = []
+                            lexemes[i+1].append(multiComment.strip())
+                        else:
+                            lexemes[i+1].append(multiComment.strip())
+
+                        if(i+1 not in types):
+                            types[i+1] = []
+                            types[i+1].append("comment")
+                        else:
+                            types[i+1].append("comment")
+                            
                     if(i+1 not in lexemes):
                         lexemes[i+1] = []
                         lexemes[i+1].append(splitWords[j])
@@ -174,10 +187,12 @@ def findLexemes(lines):
                         types[i+1].append("comment delimiter")
 
                     multiCommentFound = False
+                    multiComment = ""
+                    continue
                 else:
                     multiComment = multiComment + splitWords[j] + " "
 
-                if(j == len(splitWords)-1 or multiCommentFound == False):
+                if(j == len(splitWords)-1):
                     if(multiComment != ""):
                         if(i+1 not in lexemes):
                             lexemes[i+1] = []
@@ -1135,4 +1150,4 @@ findLexemes(lines)
 # for i in types.keys():
 #     print("[" + str(i) + "] " + str(types[i]))
 
-printSymbolTable()
+#printSymbolTable()
