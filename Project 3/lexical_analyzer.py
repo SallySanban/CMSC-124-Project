@@ -1010,6 +1010,23 @@ def findLexemes(lines):
             #     else:
             #         symbolTable['ifthen win keyword'][yaRlyKeyword[0]] = [len(yaRlyKeyword)]
 
+            mebbeKeyword = re.search("^(MEBBE)$", splitWords[j])
+            if(mebbeKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("then operator")
+                else:
+                    types[i+1].append("then operator")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
             # mebbeKeyword = re.findall("^(MEBBE)", lines[i])                             # MEBBE
             # if (len(mebbeKeyword) != 0):
             #     if (symbolTable['elseif keyword'].get(mebbeKeyword[0])):
