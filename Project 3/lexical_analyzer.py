@@ -917,7 +917,42 @@ def findLexemes(lines):
             else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
                     keyword = ""
-            # maekKeyword = re.findall("(MAEK)", lines[i])                              # MAEK
+            
+            maekKeyword = re.search("^(MAEK)$", splitWords[j])
+            if(maekKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("typecasting operator")
+                else:
+                    types[i+1].append("typecasting operator")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
+            
+            aKeyword = re.search("^(A)$", splitWords[j])
+            if(aKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("type separator operator")
+                else:
+                    types[i+1].append("type separator operator")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
             # if (len(smooshKeyword) != 0):
             #     if (symbolTable['explicit cast keyword'].get(maekKeyword[0])):           
             #         symbolTable['explicit cast keyword']["MAEK"][0] += len(maekKeyword)
@@ -1056,13 +1091,6 @@ def findLexemes(lines):
             #         symbolTable['loop break keyword']["GTFO"][0] += len(gtfoKeyword)
             #     else:
             #         symbolTable['loop break keyword'][gtfoKeyword[0]] = [len(gtfoKeyword)]
-
-            # mkayKeyword = re.findall("(MKAY)", lines[i])                               # MKAY
-            # if (len(mkayKeyword) != 0):
-            #     if (symbolTable['infinite arity keyword'].get(mkayKeyword[0])):
-            #         symbolTable['infinite arity keyword']["MKAY"][0] += len(mkayKeyword)
-            #     else:
-            #         symbolTable['infinite arity keyword'][mkayKeyword[0]] = [len(mkayKeyword)]
 
             # aKeyword = re.findall("(A)", lines[i])                               # A
             # if (len(aKeyword) != 0):
