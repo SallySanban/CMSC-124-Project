@@ -953,11 +953,6 @@ def findLexemes(lines):
             else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
                     keyword = ""
-            # if (len(smooshKeyword) != 0):
-            #     if (symbolTable['explicit cast keyword'].get(maekKeyword[0])):           
-            #         symbolTable['explicit cast keyword']["MAEK"][0] += len(maekKeyword)
-            #     else:
-            #         symbolTable['explicit cast keyword'][maekKeyword[0]] = [len(maekKeyword)]
 
             # isNowAKeyword = re.findall("(IS\ NOW\ A)", lines[i])                          # IS NOW A (changed regex here to catch in betweens)
             # if (len(isNowAKeyword) != 0):
@@ -966,20 +961,41 @@ def findLexemes(lines):
             #     else:
             #         symbolTable['typecasting keyword'][isNowAKeyword[0]] = [len(isNowAKeyword)]
 
-            # visibleKeyword = re.findall("^(VISIBLE)$", lines[i])                          # VISIBLE
-            # if (len(visibleKeyword) != 0):
-            #     if (symbolTable['print keyword'].get(visibleKeyword[0])):
-            #         symbolTable['print keyword']["VISIBLE"][0] += len(visibleKeyword)
-            #     else:
-            #         symbolTable['print keyword'][visibleKeyword[0]] = [len(visibleKeyword)]
+            visibleKeyword = re.search("^(VISIBLE)$", splitWords[j])
+            if(visibleKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("print keyword")
+                else:
+                    types[i+1].append("print keyword")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
 
-            # gimmehKeyword = re.findall("^(GIMMEH)", lines[i])                            # GIMMEH
-            # if (len(gimmehKeyword) != 0):
-            #     if (symbolTable['input keyword'].get(gimmehKeyword[0])):
-            #         symbolTable['input keyword']["GIMMEH"][0] += len(gimmehKeyword)
-            #     else:
-            #         symbolTable['input keyword'][gimmehKeyword[0]] = [len(gimmehKeyword)]
-
+            gimmehKeyword = re.search("^(GIMMEH)$", splitWords[j])
+            if(gimmehKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("input keyword")
+                else:
+                    types[i+1].append("input keyword")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
             # oRlyKeyword = re.findall("(O\ RLY\?)", lines[i])                            # O RLY?
             # if (len(oRlyKeyword) != 0):
             #     if (symbolTable['ifthen keyword'].get(oRlyKeyword[0])):
@@ -1008,13 +1024,23 @@ def findLexemes(lines):
             #     else:
             #         symbolTable['ifthen fail keyword'][noWaiKeyword[0]] = [len(noWaiKeyword)]
 
-            # oicKeyword = re.findall("^(OIC)", lines[i])                                  # OIC
-            # if (len(oicKeyword) != 0):
-            #     if (symbolTable['ifthen exit keyword'].get(oicKeyword[0])):
-            #         symbolTable['ifthen exit keyword']["OIC"][0] += len(oicKeyword)
-            #     else:
-            #         symbolTable['ifthen exit keyword'][oicKeyword[0]] = [len(oicKeyword)]
+            oicKeyword = re.search("^(OIC)$", splitWords[j])
+            if(oicKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
             
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("ifthen delimiter")
+                else:
+                    types[i+1].append("ifthen delimiter")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
             # wtfKeyword = re.findall("^(WTF\?)", lines[i])                                # WTF?
             # if (len(wtfKeyword) != 0):
             #     if (symbolTable['switch case keyword'].get(wtfKeyword[0])):
