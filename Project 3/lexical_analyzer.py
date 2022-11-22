@@ -579,6 +579,12 @@ def printSymbolTable():
         print("Type: " + types[i], end=(" " * (space2 - len(types[i]))))
         print("")
 
+def getLexemes():
+    return lexemes
+
+def getType():
+    return types
+
     
 #MAIN CODE
 symbolTable = {
@@ -648,4 +654,4 @@ findLexemes(lines)
 # for i in range(0, len(types)):
 #     print("[" + str(i) + "] " + types[i])
 
-printSymbolTable()
+#printSymbolTable()
