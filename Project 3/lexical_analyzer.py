@@ -845,13 +845,24 @@ def findLexemes(lines):
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
                     keyword = ""
             
-            # diffrintKeyword = re.findall("^(DIFFRINT)", lines[i])                          # DIFFRINT
-            # if (len(diffrintKeyword) != 0):
-            #     if (symbolTable['not equal comparison'].get(diffrintKeyword[0])):           
-            #         symbolTable['not equal comparison']["DIFFRINT"][0] += len(diffrintKeyword)
-            #     else:
-            #         symbolTable['not equal comparison'][diffrintKeyword[0]] = [len(diffrintKeyword)]
+            # DIFFRINT KEYWORD
+            diffrintKeyword = re.search("^(DIFFRINT)$", splitWords[j])
+            if(diffrintKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
             
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("not equal comparison operator")
+                else:
+                    types[i+1].append("not equal comparison operator")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
             # smooshKeyword = re.findall("^(SMOOSH)", lines[i])                              # SMOOSH
             # if (len(smooshKeyword) != 0):
             #     if (symbolTable['concatenation keyword'].get(smooshKeyword[0])):           
@@ -1139,4 +1150,4 @@ findLexemes(lines)
 # for i in types.keys():
 #     print("[" + str(i) + "] " + str(types[i]))
 
-#printSymbolTable()
+printSymbolTable()
