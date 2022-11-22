@@ -102,21 +102,20 @@ def findLexemes(lines):
     for i in range(0, len(lines)):
         splitWords = lines[i].split()
         for j in range(0, len(splitWords)):
-            # Comment keywords
-            btwKeyword = re.search("^(KTHXBYE)$", splitWords[j])              # BTW (be able to coexist with others)
-            if (btwKeyword):
-                lexemes.append(splitWords[j])
-                types.append("code delimiter")
-                continue
-
-            obtwKeyword = re.search("^(OBTW)$", splitWords[j])                        # OBTW (own line & first)
-            if (obtwKeyword):
-                lexemes.append(splitWords[j])
-                types.append("code delimiter")
-                continue
-
             #catches single comments
             if(splitWords[j] == "BTW"):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("comment delimiter")
+                else:
+                    types[i+1].append("comment delimiter")
+
                 singleCommentFound = True
                 continue
             
@@ -145,11 +144,35 @@ def findLexemes(lines):
 
             #catches multi comments
             if(splitWords[j] == "OBTW"):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("comment delimiter")
+                else:
+                    types[i+1].append("comment delimiter")
+
                 multiCommentFound = True
                 continue
             
             if(multiCommentFound == True):
-                if(splitWords[j] == "TLDR"):
+                if (splitWords[j] == "TLDR"):
+                    if(i+1 not in lexemes):
+                        lexemes[i+1] = []
+                        lexemes[i+1].append(splitWords[j])
+                    else:
+                        lexemes[i+1].append(splitWords[j])
+
+                    if(i+1 not in types):
+                        types[i+1] = []
+                        types[i+1].append("comment delimiter")
+                    else:
+                        types[i+1].append("comment delimiter")
+
                     multiCommentFound = False
                 else:
                     multiComment = multiComment + splitWords[j] + " "
@@ -371,22 +394,36 @@ def findLexemes(lines):
                 continue
 
             #PLACE KEYWORDS HERE (make sure identifier is last)
-            haiKeyword = re.search("^(HAI)", splitWords[j])                        # HAI
+            haiKeyword = re.search("^(HAI)$", splitWords[j])                        # HAI
             if (haiKeyword):
-                lexemes.append(splitWords[j])
-                types.append("code delimiter")
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+                
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("code delimiter")
+                else:
+                    types[i+1].append("code delimiter")
+
                 continue
 
             kThxByeKeyword = re.search("^(KTHXBYE)$", splitWords[j])               # KTHXBYE
             if (kThxByeKeyword):
-                lexemes.append(splitWords[j])
-                types.append("code delimiter")
-                continue
-
-            tldrKeyword = re.search("^(TLDR)$", splitWords[j])                        # TLDR (own line & only first)
-            if (tldrKeyword):
-                lexemes.append(splitWords[j])
-                types.append("multi comment delimiter")
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+                
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("code delimiter")
+                else:
+                    types[i+1].append("code delimiter")
+                    
                 continue
             
             # I HAS A KEYWORD               (ONLY KEYWORD STARTING WITH I)
@@ -403,8 +440,17 @@ def findLexemes(lines):
                     continue
                 elif (splitWords[j] == "A"):
                     keyword = keyword + "A"
-                    lexemes.append(keyword)
-                    types.append("variable declaration")
+                    if(i+1 not in lexemes):
+                        lexemes[i+1] = []
+                        lexemes[i+1].append(keyword)
+                    else:
+                        lexemes[i+1].append(keyword)
+                    
+                    if(i+1 not in types):
+                        types[i+1] = []
+                        types[i+1].append("variable declaration")
+                    else:
+                        types[i+1].append("variable declaration")
                     continue
                 else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
@@ -413,14 +459,32 @@ def findLexemes(lines):
 
             itzKeyword = re.search("^(ITZ)$", splitWords[j])                          # ITZ
             if (itzKeyword):
-                lexemes.append(splitWords[j])
-                types.append("variable initialization")
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+                
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("variable initialization")
+                else:
+                    types[i+1].append("variable initialization")
                 continue
             
             rKeyword = re.search("^(R)$", splitWords[j])                          # R
             if (rKeyword):
-                lexemes.append(splitWords[j])
-                types.append("assignment operator")
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+                
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("assignment operator")
+                else:
+                    types[i+1].append("assignment operator")
                 continue
             
             # SUM OF KEYWORD               (ONLY KEYWORD STARTING WITH SUM)
@@ -432,8 +496,17 @@ def findLexemes(lines):
             if (keywordFound == True and len(keyword) != 0):
                 if (splitWords[j] == "OF"):
                     keyword = keyword + "OF"
-                    lexemes.append(keyword)
-                    types.append("add operator")
+                    if(i+1 not in lexemes):
+                        lexemes[i+1] = []
+                        lexemes[i+1].append(keyword)
+                    else:
+                        lexemes[i+1].append(keyword)
+                    
+                    if(i+1 not in types):
+                        types[i+1] = []
+                        types[i+1].append("add operator")
+                    else:
+                        types[i+1].append("add operator")
                     continue
                 else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
@@ -449,8 +522,17 @@ def findLexemes(lines):
             if (keywordFound == True and len(keyword) != 0):
                 if (splitWords[j] == "OF"):
                     keyword = keyword + "OF"
-                    lexemes.append(keyword)
-                    types.append("subtract operator")
+                    if(i+1 not in lexemes):
+                        lexemes[i+1] = []
+                        lexemes[i+1].append(keyword)
+                    else:
+                        lexemes[i+1].append(keyword)
+                    
+                    if(i+1 not in types):
+                        types[i+1] = []
+                        types[i+1].append("subtract operator")
+                    else:
+                        types[i+1].append("subtract operator")
                     continue
                 else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
@@ -466,8 +548,17 @@ def findLexemes(lines):
             if (keywordFound == True and len(keyword) != 0):
                 if (splitWords[j] == "OF"):
                     keyword = keyword + "OF"
-                    lexemes.append(keyword)
-                    types.append("multiply operator")
+                    if(i+1 not in lexemes):
+                        lexemes[i+1] = []
+                        lexemes[i+1].append(keyword)
+                    else:
+                        lexemes[i+1].append(keyword)
+                    
+                    if(i+1 not in types):
+                        types[i+1] = []
+                        types[i+1].append("multiply operator")
+                    else:
+                        types[i+1].append("multiply operator")
                     continue
                 else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
@@ -483,8 +574,17 @@ def findLexemes(lines):
             if (keywordFound == True and len(keyword) != 0):
                 if (splitWords[j] == "OF"):
                     keyword = keyword + "OF"
-                    lexemes.append(keyword)
-                    types.append("divide operator")
+                    if(i+1 not in lexemes):
+                        lexemes[i+1] = []
+                        lexemes[i+1].append(keyword)
+                    else:
+                        lexemes[i+1].append(keyword)
+                    
+                    if(i+1 not in types):
+                        types[i+1] = []
+                        types[i+1].append("divide operator")
+                    else:
+                        types[i+1].append("divide operator")
                     continue
                 else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
@@ -500,8 +600,17 @@ def findLexemes(lines):
             if (keywordFound == True and len(keyword) != 0):
                 if (splitWords[j] == "OF"):
                     keyword = keyword + "OF"
-                    lexemes.append(keyword)
-                    types.append("modulo operator")
+                    if(i+1 not in lexemes):
+                        lexemes[i+1] = []
+                        lexemes[i+1].append(keyword)
+                    else:
+                        lexemes[i+1].append(keyword)
+                    
+                    if(i+1 not in types):
+                        types[i+1] = []
+                        types[i+1].append("modulo operator")
+                    else:
+                        types[i+1].append("modulo operator")
                     continue
                 else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
@@ -517,8 +626,17 @@ def findLexemes(lines):
             if (keywordFound == True and len(keyword) != 0):
                 if (splitWords[j] == "OF"):
                     keyword = keyword + "OF"
-                    lexemes.append(keyword)
-                    types.append("max operator")
+                    if(i+1 not in lexemes):
+                        lexemes[i+1] = []
+                        lexemes[i+1].append(keyword)
+                    else:
+                        lexemes[i+1].append(keyword)
+                    
+                    if(i+1 not in types):
+                        types[i+1] = []
+                        types[i+1].append("max operator")
+                    else:
+                        types[i+1].append("max operator")
                     continue
                 else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
@@ -534,8 +652,17 @@ def findLexemes(lines):
             if (keywordFound == True and len(keyword) != 0):
                 if (splitWords[j] == "OF"):
                     keyword = keyword + "OF"
-                    lexemes.append(keyword)
-                    types.append("min operator")
+                    if(i+1 not in lexemes):
+                        lexemes[i+1] = []
+                        lexemes[i+1].append(keyword)
+                    else:
+                        lexemes[i+1].append(keyword)
+                    
+                    if(i+1 not in types):
+                        types[i+1] = []
+                        types[i+1].append("min operator")
+                    else:
+                        types[i+1].append("min operator")
                     continue
                 else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
@@ -551,8 +678,17 @@ def findLexemes(lines):
             if (keywordFound == True and len(keyword) != 0):
                 if (splitWords[j] == "OF"):
                     keyword = keyword + "OF"
-                    lexemes.append(keyword)
-                    types.append("and operator")
+                    if(i+1 not in lexemes):
+                        lexemes[i+1] = []
+                        lexemes[i+1].append(keyword)
+                    else:
+                        lexemes[i+1].append(keyword)
+                    
+                    if(i+1 not in types):
+                        types[i+1] = []
+                        types[i+1].append("and operator")
+                    else:
+                        types[i+1].append("and operator")
                     continue
                 else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
@@ -568,8 +704,17 @@ def findLexemes(lines):
             if (keywordFound == True and len(keyword) != 0):
                 if (splitWords[j] == "OF"):
                     keyword = keyword + "OF"
-                    lexemes.append(keyword)
-                    types.append("or operator")
+                    if(i+1 not in lexemes):
+                        lexemes[i+1] = []
+                        lexemes[i+1].append(keyword)
+                    else:
+                        lexemes[i+1].append(keyword)
+                    
+                    if(i+1 not in types):
+                        types[i+1] = []
+                        types[i+1].append("or operator")
+                    else:
+                        types[i+1].append("or operator")
                     continue
                 else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
@@ -585,8 +730,17 @@ def findLexemes(lines):
             if (keywordFound == True and len(keyword) != 0):
                 if (splitWords[j] == "OF"):
                     keyword = keyword + "OF"
-                    lexemes.append(keyword)
-                    types.append("xor operator")
+                    if(i+1 not in lexemes):
+                        lexemes[i+1] = []
+                        lexemes[i+1].append(keyword)
+                    else:
+                        lexemes[i+1].append(keyword)
+                    
+                    if(i+1 not in types):
+                        types[i+1] = []
+                        types[i+1].append("xor operator")
+                    else:
+                        types[i+1].append("xor operator")
                     continue
                 else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
@@ -596,8 +750,17 @@ def findLexemes(lines):
             # NOT KEYWORD
             notKeyword = re.findall("^(NOT)$", splitWords[j])                          # NOT (between)
             if (notKeyword):
-                lexemes.append(splitWords[j])
-                types.append("not operator")
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+                
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("not operator")
+                else:
+                    types[i+1].append("not operator")
                 continue
             
             # ANY OF KEYWORD
@@ -609,8 +772,17 @@ def findLexemes(lines):
             if (keywordFound == True and len(keyword) != 0):
                 if (splitWords[j] == "OF"):
                     keyword = keyword + "OF"
-                    lexemes.append(keyword)
-                    types.append("infinite arity OR operator")
+                    if(i+1 not in lexemes):
+                        lexemes[i+1] = []
+                        lexemes[i+1].append(keyword)
+                    else:
+                        lexemes[i+1].append(keyword)
+                    
+                    if(i+1 not in types):
+                        types[i+1] = []
+                        types[i+1].append("infinite arity OR operator")
+                    else:
+                        types[i+1].append("infinite arity OR operator")
                     continue
                 else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
@@ -626,8 +798,17 @@ def findLexemes(lines):
             if (keywordFound == True and len(keyword) != 0):
                 if (splitWords[j] == "OF"):
                     keyword = keyword + "OF"
-                    lexemes.append(keyword)
-                    types.append("infinite arity AND operator")
+                    if(i+1 not in lexemes):
+                        lexemes[i+1] = []
+                        lexemes[i+1].append(keyword)
+                    else:
+                        lexemes[i+1].append(keyword)
+                    
+                    if(i+1 not in types):
+                        types[i+1] = []
+                        types[i+1].append("infinite arity AND operator")
+                    else:
+                        types[i+1].append("infinite arity AND operator")
                     continue
                 else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
@@ -643,8 +824,17 @@ def findLexemes(lines):
             if (keywordFound == True and len(keyword) != 0):
                 if (splitWords[j] == "SAEM"):
                     keyword = keyword + "OF"
-                    lexemes.append(keyword)
-                    types.append("is equal comparison")
+                    if(i+1 not in lexemes):
+                        lexemes[i+1] = []
+                        lexemes[i+1].append(keyword)
+                    else:
+                        lexemes[i+1].append(keyword)
+                    
+                    if(i+1 not in types):
+                        types[i+1] = []
+                        types[i+1].append("is equal comparison operator")
+                    else:
+                        types[i+1].append("is equal comparison operator")
                     continue
                 else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
@@ -859,8 +1049,8 @@ def printSymbolTable():
     #         print("")
 
     for i in lexemes.keys():
+        print("Line " + str(i))
         for j in range(0, len(lexemes[i])):
-            print("Line " + str(i))
             print("Lexeme: " + lexemes[i][j], end=(" " * (space1 - len(lexemes[i][j]))))
             print("Type: " + types[i][j], end=(" " * (space2 - len(types[i][j]))))
             print("")
@@ -945,4 +1135,4 @@ findLexemes(lines)
 # for i in types.keys():
 #     print("[" + str(i) + "] " + str(types[i]))
 
-# printSymbolTable()
+printSymbolTable()
