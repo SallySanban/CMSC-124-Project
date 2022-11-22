@@ -1,6 +1,6 @@
 import re
 
-filename = "Project 3/samplecodewrong.txt"
+filename = "Project 3/samplecodecomments.txt"
 
 #reads file and cleans each line in the file
 def readFile(filename):
@@ -470,7 +470,6 @@ def findLexemes(lines):
                 else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
                     keyword = ""
-                    continue
 
             itzKeyword = re.search("^(ITZ)$", splitWords[j])                          # ITZ
             if (itzKeyword):
@@ -526,7 +525,6 @@ def findLexemes(lines):
                 else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
                     keyword = ""
-                    continue
             
             # DIFF OF KEYWORD
             if (splitWords[j] == "DIFF"):
@@ -552,7 +550,6 @@ def findLexemes(lines):
                 else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
                     keyword = ""
-                    continue
             
             # PRODUKT OF KEYWORD
             if (splitWords[j].strip() == "PRODUKT" and (keyword == "PRODUKT")):
