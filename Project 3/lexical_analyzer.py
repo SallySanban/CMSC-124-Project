@@ -432,14 +432,14 @@ def findLexemes(lines):
                 keyword = keyword + splitWords[j]
                 continue
 
-            if (keywordFound == True and len(keyword) != 0):
+            if (keywordFound == True and (keyword == "I" or keyword =="I HAS")):
                 # print(keyword)              # CHECKER
                 # print("HEHEH")
-                if (splitWords[j] == "HAS"):
-                    keyword = keyword + " " + "HAS" + " "
+                if (splitWords[j].strip() == "HAS"):
+                    keyword = keyword + " " + "HAS"
                     continue
-                elif (splitWords[j] == "A"):
-                    keyword = keyword + "A"
+                elif (splitWords[j].strip() == "A"):
+                    keyword = keyword + " " + "A"
                     if(i+1 not in lexemes):
                         lexemes[i+1] = []
                         lexemes[i+1].append(keyword)
@@ -488,14 +488,14 @@ def findLexemes(lines):
                 continue
             
             # SUM OF KEYWORD               (ONLY KEYWORD STARTING WITH SUM)
-            if (splitWords[j] == "SUM"):
+            if (splitWords[j].strip() == "SUM"):
                 keywordFound = True
                 keyword = keyword + splitWords[j]
                 continue
 
-            if (keywordFound == True and len(keyword) != 0):
-                if (splitWords[j] == "OF"):
-                    keyword = keyword + "OF"
+            if (keywordFound == True and (keyword == "SUM")):
+                if (splitWords[j].strip() == "OF"):
+                    keyword = keyword + " " + "OF"
                     if(i+1 not in lexemes):
                         lexemes[i+1] = []
                         lexemes[i+1].append(keyword)
@@ -519,9 +519,9 @@ def findLexemes(lines):
                 keyword = keyword + splitWords[j]
                 continue
 
-            if (keywordFound == True and len(keyword) != 0):
+            if (keywordFound == True and (keyword == "DIFF")):
                 if (splitWords[j] == "OF"):
-                    keyword = keyword + "OF"
+                    keyword = keyword + " " + "OF"
                     if(i+1 not in lexemes):
                         lexemes[i+1] = []
                         lexemes[i+1].append(keyword)
@@ -540,14 +540,14 @@ def findLexemes(lines):
                     continue
             
             # PRODUKT OF KEYWORD
-            if (splitWords[j].strip() == "PRODUKT"):
+            if (splitWords[j].strip() == "PRODUKT" and (keyword == "PRODUKT")):
                 keywordFound = True
                 keyword = keyword + splitWords[j]
                 continue
 
             if (keywordFound == True and len(keyword) != 0):
                 if (splitWords[j] == "OF"):
-                    keyword = keyword + "OF"
+                    keyword = keyword + " " + "OF"
                     if(i+1 not in lexemes):
                         lexemes[i+1] = []
                         lexemes[i+1].append(keyword)
@@ -571,9 +571,9 @@ def findLexemes(lines):
                 keyword = keyword + splitWords[j]
                 continue
 
-            if (keywordFound == True and len(keyword) != 0):
+            if (keywordFound == True and (keyword == "QUOSHUNT")):
                 if (splitWords[j] == "OF"):
-                    keyword = keyword + "OF"
+                    keyword = keyword + " " + "OF"
                     if(i+1 not in lexemes):
                         lexemes[i+1] = []
                         lexemes[i+1].append(keyword)
@@ -597,9 +597,9 @@ def findLexemes(lines):
                 keyword = keyword + splitWords[j]
                 continue
 
-            if (keywordFound == True and len(keyword) != 0):
+            if (keywordFound == True and (keyword == "MOD")):
                 if (splitWords[j] == "OF"):
-                    keyword = keyword + "OF"
+                    keyword = keyword + " " + "OF"
                     if(i+1 not in lexemes):
                         lexemes[i+1] = []
                         lexemes[i+1].append(keyword)
@@ -623,9 +623,9 @@ def findLexemes(lines):
                 keyword = keyword + splitWords[j]
                 continue
 
-            if (keywordFound == True and len(keyword) != 0):
+            if (keywordFound == True and (keyword == "BIGGR")):
                 if (splitWords[j] == "OF"):
-                    keyword = keyword + "OF"
+                    keyword = keyword + " " + "OF"
                     if(i+1 not in lexemes):
                         lexemes[i+1] = []
                         lexemes[i+1].append(keyword)
@@ -649,9 +649,9 @@ def findLexemes(lines):
                 keyword = keyword + splitWords[j]
                 continue
 
-            if (keywordFound == True and len(keyword) != 0):
+            if (keywordFound == True and (keyword == "SMALLR")):
                 if (splitWords[j] == "OF"):
-                    keyword = keyword + "OF"
+                    keyword = keyword + " " + "OF"
                     if(i+1 not in lexemes):
                         lexemes[i+1] = []
                         lexemes[i+1].append(keyword)
@@ -675,9 +675,9 @@ def findLexemes(lines):
                 keyword = keyword + splitWords[j]
                 continue
 
-            if (keywordFound == True and len(keyword) != 0):
+            if (keywordFound == True and (keyword == "BOTH")):
                 if (splitWords[j] == "OF"):
-                    keyword = keyword + "OF"
+                    keyword = keyword + " " + "OF"
                     if(i+1 not in lexemes):
                         lexemes[i+1] = []
                         lexemes[i+1].append(keyword)
@@ -701,9 +701,9 @@ def findLexemes(lines):
                 keyword = keyword + splitWords[j]
                 continue
 
-            if (keywordFound == True and len(keyword) != 0):
+            if (keywordFound == True and (keyword == "EITHER")):
                 if (splitWords[j] == "OF"):
-                    keyword = keyword + "OF"
+                    keyword = keyword + " " + "OF"
                     if(i+1 not in lexemes):
                         lexemes[i+1] = []
                         lexemes[i+1].append(keyword)
@@ -727,9 +727,9 @@ def findLexemes(lines):
                 keyword = keyword + splitWords[j]
                 continue
 
-            if (keywordFound == True and len(keyword) != 0):
+            if (keywordFound == True and (keyword == "WON")):
                 if (splitWords[j] == "OF"):
-                    keyword = keyword + "OF"
+                    keyword = keyword + " " + "OF"
                     if(i+1 not in lexemes):
                         lexemes[i+1] = []
                         lexemes[i+1].append(keyword)
@@ -769,9 +769,9 @@ def findLexemes(lines):
                 keyword = keyword + splitWords[j]
                 continue
 
-            if (keywordFound == True and len(keyword) != 0):
+            if (keywordFound == True and (keyword == "ANY")):
                 if (splitWords[j] == "OF"):
-                    keyword = keyword + "OF"
+                    keyword = keyword + " " + "OF"
                     if(i+1 not in lexemes):
                         lexemes[i+1] = []
                         lexemes[i+1].append(keyword)
@@ -795,9 +795,9 @@ def findLexemes(lines):
                 keyword = keyword + splitWords[j]
                 continue
 
-            if (keywordFound == True and len(keyword) != 0):
+            if (keywordFound == True and (keyword == "ALL")):
                 if (splitWords[j] == "OF"):
-                    keyword = keyword + "OF"
+                    keyword = keyword + " " + "OF"
                     if(i+1 not in lexemes):
                         lexemes[i+1] = []
                         lexemes[i+1].append(keyword)
@@ -821,9 +821,9 @@ def findLexemes(lines):
                 keyword = keyword + splitWords[j]
                 continue
 
-            if (keywordFound == True and len(keyword) != 0):
+            if (keywordFound == True and (keyword == "BOTH")):
                 if (splitWords[j] == "SAEM"):
-                    keyword = keyword + "OF"
+                    keyword = keyword + " " + "OF"
                     if(i+1 not in lexemes):
                         lexemes[i+1] = []
                         lexemes[i+1].append(keyword)
