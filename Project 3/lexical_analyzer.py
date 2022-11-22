@@ -91,6 +91,8 @@ def findLexemes(lines):
     stringFound = False
     singleCommentFound = False
     multiCommentFound = False
+    keywordFound = False
+    keyword = ""
     string = ""
     singleComment = ""
     multiComment = ""
@@ -98,6 +100,19 @@ def findLexemes(lines):
     for i in range(0, len(lines)):
         splitWords = lines[i].split()
         for j in range(0, len(splitWords)):
+            # Comment keywords
+            btwKeyword = re.search("^(KTHXBYE)$", splitWords[j])              # BTW (be able to coexist with others)
+            if (btwKeyword):
+                lexemes.append(splitWords[j])
+                types.append("code delimiter")
+                continue
+
+            obtwKeyword = re.search("^(OBTW)$", splitWords[j])                        # OBTW (own line & first)
+            if (obtwKeyword):
+                lexemes.append(splitWords[j])
+                types.append("code delimiter")
+                continue
+
             #catches single comments
             if(splitWords[j] == "BTW"):
                 singleCommentFound = True
@@ -223,160 +238,286 @@ def findLexemes(lines):
                 continue
 
             #PLACE KEYWORDS HERE (make sure identifier is last)
-            # haiKeyword = re.findall("^(HAI)", lines[i])                        # HAI
-            # if (len(haiKeyword) != 0):
-            #     if (symbolTable['code delimiter'].get(haiKeyword[0])):
-            #         symbolTable['code delimiter'][haiKeyword[0]][0] += len(haiKeyword)
-            #     else:
-            #         symbolTable['code delimiter'][haiKeyword[0]] = [len(haiKeyword)]
+            haiKeyword = re.search("^(HAI)", splitWords[j])                        # HAI
+            if (haiKeyword):
+                lexemes.append(splitWords[j])
+                types.append("code delimiter")
+                continue
 
-            # kThxByeKeyword = re.findall("^(KTHXBYE)$", lines[i])               # KTHXBYE
-            # if (len(kThxByeKeyword) != 0):
-            #     if (symbolTable['code delimiter'].get(kThxByeKeyword[0])):
-            #         symbolTable['code delimiter'][kThxByeKeyword[0]][0] += len(kThxByeKeyword)
-            #     else:
-            #         symbolTable['code delimiter'][kThxByeKeyword[0]] = [len(kThxByeKeyword)]
+            kThxByeKeyword = re.search("^(KTHXBYE)$", splitWords[j])               # KTHXBYE
+            if (kThxByeKeyword):
+                lexemes.append(splitWords[j])
+                types.append("code delimiter")
+                continue
 
-            # btwKeyword = re.findall("[^O](BTW)", lines[i])                        # BTW (be able to coexist with others)
-            # if (len(btwKeyword) != 0):
-            #     if (symbolTable['single comment delimiter'].get(btwKeyword[0])):
-            #         symbolTable['single comment delimiter'][btwKeyword[0]][0] += len(btwKeyword)
-            #     else:
-            #         symbolTable['single comment delimiter'][btwKeyword[0]] = [len(btwKeyword)]
+            tldrKeyword = re.search("^(TLDR)$", splitWords[j])                        # TLDR (own line & only first)
+            if (tldrKeyword):
+                lexemes.append(splitWords[j])
+                types.append("multi comment delimiter")
+                continue
+            
+            # I HAS A KEYWORD               (ONLY KEYWORD STARTING WITH I)
+            if (splitWords[j].strip() == "I"):
+                keywordFound = True
+                keyword = keyword + splitWords[j]
+                continue
 
-            # obtwKeyword = re.findall("^(OBTW)", lines[i])                        # OBTW (own line & first)
-            # if (len(obtwKeyword) != 0):
-            #     if (symbolTable['multi comment delimiter'].get(obtwKeyword[0])):
-            #         symbolTable['multi comment delimiter'][obtwKeyword[0]][0] += len(obtwKeyword)
-            #     else:
-            #         symbolTable['multi comment delimiter'][obtwKeyword[0]] = [len(obtwKeyword)]
+            if (keywordFound == True and len(keyword) != 0):
+                # print(keyword)              # CHECKER
+                # print("HEHEH")
+                if (splitWords[j] == "HAS"):
+                    keyword = keyword + " " + "HAS" + " "
+                    continue
+                elif (splitWords[j] == "A"):
+                    keyword = keyword + "A"
+                    lexemes.append(keyword)
+                    types.append("variable declaration")
+                    continue
+                else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
+                    continue
 
-            # tldrKeyword = re.findall("^(TLDR)", lines[i])                        # TLDR (own line & only first)
-            # if (len(tldrKeyword) != 0):
-            #     if (symbolTable['multi comment delimiter'].get(tldrKeyword[0])):
-            #         symbolTable['multi comment delimiter']["TLDR"][0] += len(tldrKeyword)
-            #     else:
-            #         symbolTable['multi comment delimiter'][tldrKeyword[0]] = [len(tldrKeyword)]
+            itzKeyword = re.search("^(ITZ)$", splitWords[j])                          # ITZ
+            if (itzKeyword):
+                lexemes.append(splitWords[j])
+                types.append("variable initialization")
+                continue
             
-            # iHasAKeyword = re.findall("^(I\ HAS\ A)", lines[i])                  # I HAS A (first)
-            # if (len(iHasAKeyword) != 0):
-            #     if (symbolTable['variable declaration'].get(iHasAKeyword[0])):
-            #         symbolTable['variable declaration']["I HAS A"][0] += len(iHasAKeyword)
-            #     else:
-            #         symbolTable['variable declaration'][iHasAKeyword[0]] = [len(iHasAKeyword)]
+            rKeyword = re.search("^(R)$", splitWords[j])                          # R
+            if (rKeyword):
+                lexemes.append(splitWords[j])
+                types.append("assignment operator")
+                continue
+            
+            # SUM OF KEYWORD               (ONLY KEYWORD STARTING WITH SUM)
+            if (splitWords[j] == "SUM"):
+                keywordFound = True
+                keyword = keyword + splitWords[j]
+                continue
 
-            # itzKeyword = re.findall("( ITZ )", lines[i])                          # ITZ
-            # if (len(itzKeyword) != 0):
-            #     if (symbolTable['variable initialization'].get(itzKeyword[0].strip())):
-            #         symbolTable['variable initialization']["ITZ"][0] += len(itzKeyword)
-            #     else:
-            #         symbolTable['variable initialization'][itzKeyword[0].strip()] = [len(itzKeyword)]
+            if (keywordFound == True and len(keyword) != 0):
+                if (splitWords[j] == "OF"):
+                    keyword = keyword + "OF"
+                    lexemes.append(keyword)
+                    types.append("add operator")
+                    continue
+                else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
+                    continue
             
-            # rKeyword = re.findall("( R )", lines[i])                          # R
-            # if (len(rKeyword) != 0):
-            #     if (symbolTable['assignment operator'].get(rKeyword[0].strip())):           # Used the strip to remove leading and trailing whitespaces         (To catch only the letter)
-            #         symbolTable['assignment operator']["R"][0] += len(rKeyword)
-            #     else:
-            #         symbolTable['assignment operator'][rKeyword[0].strip()] = [len(rKeyword)]
+            # DIFF OF KEYWORD
+            if (splitWords[j] == "DIFF"):
+                keywordFound = True
+                keyword = keyword + splitWords[j]
+                continue
 
-            # sumOfKeyword = re.findall("(SUM\ OF)", lines[i])                          # SUM OF (between)
-            # if (len(sumOfKeyword) != 0):
-            #   if (symbolTable['add operator'].get(sumOfKeyword[0])):           
-            #       symbolTable['add operator']["SUM OF"][0] += len(sumOfKeyword)
-            #   else:
-            #       symbolTable['add operator'][sumOfKeyword[0]] = [len(sumOfKeyword)]
+            if (keywordFound == True and len(keyword) != 0):
+                if (splitWords[j] == "OF"):
+                    keyword = keyword + "OF"
+                    lexemes.append(keyword)
+                    types.append("subtract operator")
+                    continue
+                else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
+                    continue
+            
+            # PRODUKT OF KEYWORD
+            if (splitWords[j].strip() == "PRODUKT"):
+                keywordFound = True
+                keyword = keyword + splitWords[j]
+                continue
 
-            # diffOfKeyword = re.findall("(DIFF\ OF)", lines[i])                          # DIFF OF (between)
-            # if (len(diffOfKeyword) != 0):
-            #     if (symbolTable['subtract operator'].get(diffOfKeyword[0])):           
-            #         symbolTable['subtract operator']["DIFF OF"][0] += len(diffOfKeyword)
-            #     else:
-            #         symbolTable['subtract operator'][diffOfKeyword[0]] = [len(diffOfKeyword)]
-            
-            # produktOfKeyword = re.findall("(PRODUKT\ OF)", lines[i])                          # PRODUKT OF (between)
-            # if (len(produktOfKeyword) != 0):
-            #     if (symbolTable['multiply operator'].get(produktOfKeyword[0])):           
-            #         symbolTable['multiply operator']["PRODUKT OF"][0] += len(produktOfKeyword)
-            #     else:
-            #         symbolTable['multiply operator'][produktOfKeyword[0]] = [len(produktOfKeyword)]
-            
-            # quoshuntOfKeyword = re.findall("(QUOSHUNT\ OF)", lines[i])                          # QUOSHUNT OF (between)
-            # if (len(quoshuntOfKeyword) != 0):
-            #     if (symbolTable['divide operator'].get(quoshuntOfKeyword[0])):           
-            #         symbolTable['divide operator']["QUOSHUNT OF"][0] += len(quoshuntOfKeyword)
-            #     else:
-            #         symbolTable['divide operator'][quoshuntOfKeyword[0]] = [len(quoshuntOfKeyword)]
+            if (keywordFound == True and len(keyword) != 0):
+                if (splitWords[j] == "OF"):
+                    keyword = keyword + "OF"
+                    lexemes.append(keyword)
+                    types.append("multiply operator")
+                    continue
+                else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
+                    continue
 
-            # modOfKeyword = re.findall("(MOD\ OF)", lines[i])                          # MOD OF (between)
-            # if (len(modOfKeyword) != 0):
-            #     if (symbolTable['modulo operator'].get(modOfKeyword[0])):           
-            #         symbolTable['modulo operator']["MOD OF"][0] += len(modOfKeyword)
-            #     else:
-            #         symbolTable['modulo operator'][modOfKeyword[0]] = [len(modOfKeyword)]
-            
-            # biggrOfKeyword = re.findall("(BIGGR\ OF)", lines[i])                          # BIGGR OF (between)
-            # if (len(biggrOfKeyword) != 0):
-            #     if (symbolTable['max operator'].get(biggrOfKeyword[0])):           
-            #         symbolTable['max operator']["BIGGR OF"][0] += len(biggrOfKeyword)
-            #     else:
-            #         symbolTable['max operator'][biggrOfKeyword[0]] = [len(biggrOfKeyword)]
-            
-            # smallrOfKeyword = re.findall("(SMALLR\ OF)", lines[i])                          # SMALLR OF (between)
-            # if (len(smallrOfKeyword) != 0):
-            #     if (symbolTable['min operator'].get(smallrOfKeyword[0])):           
-            #         symbolTable['min operator']["SMALLR OF"][0] += len(smallrOfKeyword)
-            #     else:
-            #         symbolTable['min operator'][smallrOfKeyword[0]] = [len(smallrOfKeyword)]
-            
-            # bothOfKeyword = re.findall("(BOTH\ OF)", lines[i])                          # BOTH OF (between)
-            # if (len(bothOfKeyword) != 0):
-            #     if (symbolTable['and operator'].get(bothOfKeyword[0])):           
-            #         symbolTable['and operator']["BOTH OF"][0] += len(bothOfKeyword)
-            #     else:
-            #         symbolTable['and operator'][bothOfKeyword[0]] = [len(bothOfKeyword)]
-            
-            # eitherOfKeyword = re.findall("(EITHER\ OF)", lines[i])                          # EITHER OF (between)
-            # if (len(eitherOfKeyword) != 0):
-            #     if (symbolTable['or operator'].get(eitherOfKeyword[0])):           
-            #         symbolTable['or operator']["EITHER OF"][0] += len(eitherOfKeyword)
-            #     else:
-            #         symbolTable['or operator'][eitherOfKeyword[0]] = [len(eitherOfKeyword)]
-            
-            # wonOfKeyword = re.findall("(WON\ OF)", lines[i])                          # WON OF (between)
-            # if (len(wonOfKeyword) != 0):
-            #     if (symbolTable['xor operator'].get(wonOfKeyword[0])):           
-            #         symbolTable['xor operator']["WON OF"][0] += len(wonOfKeyword)
-            #     else:
-            #         symbolTable['xor operator'][wonOfKeyword[0]] = [len(wonOfKeyword)]
-            
-            # notKeyword = re.findall("(NOT)", lines[i])                          # NOT (between)
-            # if (len(notKeyword) != 0):
-            #     if (symbolTable['not operator'].get(notKeyword[0])):           
-            #         symbolTable['not operator']["NOT"][0] += len(notKeyword)
-            #     else:
-            #         symbolTable['not operator'][notKeyword[0]] = [len(notKeyword)]
-            
-            # anyOfKeyword = re.findall("^(ANY\ OF)", lines[i])                          # ANY OF (first)
-            # if (len(anyOfKeyword) != 0):
-            #     if (symbolTable['infinite arity OR operator'].get(anyOfKeyword[0])):           
-            #         symbolTable['infinite arity OR operator']["ANY OF"][0] += len(anyOfKeyword)
-            #     else:
-            #         symbolTable['infinite arity OR operator'][anyOfKeyword[0]] = [len(anyOfKeyword)]
-            
-            # allOfKeyword = re.findall("^(ALL\ OF)", lines[i])                          # ALL OF (first)
-            # if (len(allOfKeyword) != 0):
-            #     if (symbolTable['infinite arity AND operator'].get(allOfKeyword[0])):           
-            #         symbolTable['infinite arity AND operator']["ALL OF"][0] += len(allOfKeyword)
-            #     else:
-            #         symbolTable['infinite arity AND operator'][allOfKeyword[0]] = [len(allOfKeyword)]
+            # QUOSHUNT OF KEYWORD
+            if (splitWords[j].strip() == "QUOSHUNT"):
+                keywordFound = True
+                keyword = keyword + splitWords[j]
+                continue
 
-            # bothSaemKeyword = re.findall("^(BOTH\ SAEM)", lines[i])                          # BOTH SAEM (first)
-            # if (len(bothSaemKeyword) != 0):
-            #     if (symbolTable['is equal comparison'].get(bothSaemKeyword[0])):           
-            #         symbolTable['is equal comparison']["BOTH SAEM"][0] += len(bothSaemKeyword)
-            #     else:
-            #         symbolTable['is equal comparison'][bothSaemKeyword[0]] = [len(bothSaemKeyword)]
+            if (keywordFound == True and len(keyword) != 0):
+                if (splitWords[j] == "OF"):
+                    keyword = keyword + "OF"
+                    lexemes.append(keyword)
+                    types.append("divide operator")
+                    continue
+                else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
+                    continue
+            
+            # MOD OF KEYWORD
+            if (splitWords[j].strip() == "MOD"):
+                keywordFound = True
+                keyword = keyword + splitWords[j]
+                continue
 
+            if (keywordFound == True and len(keyword) != 0):
+                if (splitWords[j] == "OF"):
+                    keyword = keyword + "OF"
+                    lexemes.append(keyword)
+                    types.append("modulo operator")
+                    continue
+                else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
+                    continue
+            
+            # BIGGR OF KEYWORD
+            if (splitWords[j].strip() == "BIGGR"):
+                keywordFound = True
+                keyword = keyword + splitWords[j]
+                continue
+
+            if (keywordFound == True and len(keyword) != 0):
+                if (splitWords[j] == "OF"):
+                    keyword = keyword + "OF"
+                    lexemes.append(keyword)
+                    types.append("max operator")
+                    continue
+                else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
+                    continue
+            
+            # SMALLR OF KEYWORD
+            if (splitWords[j].strip() == "SMALLR"):
+                keywordFound = True
+                keyword = keyword + splitWords[j]
+                continue
+
+            if (keywordFound == True and len(keyword) != 0):
+                if (splitWords[j] == "OF"):
+                    keyword = keyword + "OF"
+                    lexemes.append(keyword)
+                    types.append("min operator")
+                    continue
+                else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
+                    continue
+            
+            # BOTH OF KEYWORD
+            if (splitWords[j].strip() == "BOTH"):
+                keywordFound = True
+                keyword = keyword + splitWords[j]
+                continue
+
+            if (keywordFound == True and len(keyword) != 0):
+                if (splitWords[j] == "OF"):
+                    keyword = keyword + "OF"
+                    lexemes.append(keyword)
+                    types.append("and operator")
+                    continue
+                else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
+                    continue
+            
+            # EITHER OF KEYWORD
+            if (splitWords[j].strip() == "EITHER"):
+                keywordFound = True
+                keyword = keyword + splitWords[j]
+                continue
+
+            if (keywordFound == True and len(keyword) != 0):
+                if (splitWords[j] == "OF"):
+                    keyword = keyword + "OF"
+                    lexemes.append(keyword)
+                    types.append("or operator")
+                    continue
+                else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
+                    continue
+            
+            # WON OF KEYWORD
+            if (splitWords[j].strip() == "WON"):
+                keywordFound = True
+                keyword = keyword + splitWords[j]
+                continue
+
+            if (keywordFound == True and len(keyword) != 0):
+                if (splitWords[j] == "OF"):
+                    keyword = keyword + "OF"
+                    lexemes.append(keyword)
+                    types.append("xor operator")
+                    continue
+                else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
+                    continue
+
+            # NOT KEYWORD
+            notKeyword = re.findall("^(NOT)$", splitWords[j])                          # NOT (between)
+            if (notKeyword):
+                lexemes.append(splitWords[j])
+                types.append("not operator")
+                continue
+            
+            # ANY OF KEYWORD
+            if (splitWords[j].strip() == "ANY"):
+                keywordFound = True
+                keyword = keyword + splitWords[j]
+                continue
+
+            if (keywordFound == True and len(keyword) != 0):
+                if (splitWords[j] == "OF"):
+                    keyword = keyword + "OF"
+                    lexemes.append(keyword)
+                    types.append("infinite arity OR operator")
+                    continue
+                else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
+                    continue
+            
+            # ALL OF KEYWORD
+            if (splitWords[j].strip() == "ALL"):
+                keywordFound = True
+                keyword = keyword + splitWords[j]
+                continue
+
+            if (keywordFound == True and len(keyword) != 0):
+                if (splitWords[j] == "OF"):
+                    keyword = keyword + "OF"
+                    lexemes.append(keyword)
+                    types.append("infinite arity AND operator")
+                    continue
+                else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
+                    continue
+            
+            # BOTH SAEM KEYWORD
+            if (splitWords[j].strip() == "BOTH"):
+                keywordFound = True
+                keyword = keyword + splitWords[j]
+                continue
+
+            if (keywordFound == True and len(keyword) != 0):
+                if (splitWords[j] == "SAEM"):
+                    keyword = keyword + "OF"
+                    lexemes.append(keyword)
+                    types.append("is equal comparison")
+                    continue
+                else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
+                    continue
+            
             # diffrintKeyword = re.findall("^(DIFFRINT)", lines[i])                          # DIFFRINT
             # if (len(diffrintKeyword) != 0):
             #     if (symbolTable['not equal comparison'].get(diffrintKeyword[0])):           
@@ -656,4 +797,4 @@ findLexemes(lines)
 # for i in range(0, len(types)):
 #     print("[" + str(i) + "] " + types[i])
 
-#printSymbolTable()
+# printSymbolTable()
