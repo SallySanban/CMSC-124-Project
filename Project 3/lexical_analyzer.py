@@ -578,7 +578,6 @@ def findLexemes(lines):
                 else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
                     keyword = ""
-                    continue
 
             # QUOSHUNT OF KEYWORD
             if (splitWords[j].strip() == "QUOSHUNT"):
@@ -604,7 +603,6 @@ def findLexemes(lines):
                 else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
                     keyword = ""
-                    continue
             
             # MOD OF KEYWORD
             if (splitWords[j].strip() == "MOD"):
@@ -630,7 +628,6 @@ def findLexemes(lines):
                 else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
                     keyword = ""
-                    continue
             
             # BIGGR OF KEYWORD
             if (splitWords[j].strip() == "BIGGR"):
@@ -656,7 +653,6 @@ def findLexemes(lines):
                 else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
                     keyword = ""
-                    continue
             
             # SMALLR OF KEYWORD
             if (splitWords[j].strip() == "SMALLR"):
@@ -682,7 +678,6 @@ def findLexemes(lines):
                 else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
                     keyword = ""
-                    continue
             
             # BOTH OF KEYWORD
             if (splitWords[j].strip() == "BOTH"):
@@ -708,7 +703,6 @@ def findLexemes(lines):
                 else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
                     keyword = ""
-                    continue
             
             # EITHER OF KEYWORD
             if (splitWords[j].strip() == "EITHER"):
@@ -734,7 +728,6 @@ def findLexemes(lines):
                 else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
                     keyword = ""
-                    continue
             
             # WON OF KEYWORD
             if (splitWords[j].strip() == "WON"):
@@ -760,7 +753,6 @@ def findLexemes(lines):
                 else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
                     keyword = ""
-                    continue
 
             # NOT KEYWORD
             notKeyword = re.findall("^(NOT)$", splitWords[j])                          # NOT (between)
@@ -802,7 +794,6 @@ def findLexemes(lines):
                 else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
                     keyword = ""
-                    continue
             
             # ALL OF KEYWORD
             if (splitWords[j].strip() == "ALL"):
@@ -828,7 +819,6 @@ def findLexemes(lines):
                 else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
                     keyword = ""
-                    continue
             
             # BOTH SAEM KEYWORD
             if (splitWords[j].strip() == "BOTH"):
@@ -854,7 +844,6 @@ def findLexemes(lines):
                 else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
                     keyword = ""
-                    continue
             
             # diffrintKeyword = re.findall("^(DIFFRINT)", lines[i])                          # DIFFRINT
             # if (len(diffrintKeyword) != 0):
