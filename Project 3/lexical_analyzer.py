@@ -1135,4 +1135,4 @@ findLexemes(lines)
 # for i in types.keys():
 #     print("[" + str(i) + "] " + str(types[i]))
 
-printSymbolTable()
+#printSymbolTable()
