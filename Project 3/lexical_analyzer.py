@@ -1048,19 +1048,41 @@ def findLexemes(lines):
             #     else:
             #         symbolTable['switch case keyword'][wtfKeyword[0]] = [len(wtfKeyword)]
 
-            # omgKeyword = re.findall("^(OMG)", lines[i])                                  # OMG
-            # if (len(omgKeyword) != 0):
-            #     if (symbolTable['comparison start keyword'].get(omgKeyword[0])):
-            #         symbolTable['comparison start keyword']["OMG"][0] += len(omgKeyword)
-            #     else:
-            #         symbolTable['comparison start keyword'][omgKeyword[0]] = [len(omgKeyword)]
+            omgKeyword = re.search("^(OMG)$", splitWords[j])
+            if(omgKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
             
-            # omgwtfKeyword = re.findall("^(OMGWTF)", lines[i])                            # OMGWTF
-            # if (len(omgwtfKeyword) != 0):
-            #     if (symbolTable['default case keyword'].get(omgwtfKeyword[0])):
-            #         symbolTable['default case keyword']["OMGWTF"][0] += len(omgwtfKeyword)
-            #     else:
-            #         symbolTable['default case keyword'][omgwtfKeyword[0]] = [len(omgwtfKeyword)]
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("comparison delimiter")
+                else:
+                    types[i+1].append("comparison delimiter")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
+
+            omgwtfKeyword = re.search("^(OMGWTF)$", splitWords[j])
+            if(omgwtfKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("default case operator")
+                else:
+                    types[i+1].append("default case operator")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
 
             # imInYrKeyword = re.findall("^(IM\ IN\ YR)", lines[i])                        # IM IN YR
             # if (len(imInYrKeyword) != 0):
@@ -1069,19 +1091,41 @@ def findLexemes(lines):
             #     else:
             #         symbolTable['loop keyword'][imInYrKeyword[0]] = [len(imInYrKeyword)]
 
-            # uppinKeyword = re.findall("(UPPIN)", lines[i])                        # UPPIN
-            # if (len( uppinKeyword) != 0):
-            #     if (symbolTable['increment operator'].get( uppinKeyword[0])):
-            #         symbolTable['increment operator']["UPPIN"][0] += len(uppinKeyword)
-            #     else:
-            #         symbolTable['increment operator'][ uppinKeyword[0]] = [len(uppinKeyword)]
+            uppinKeyword = re.search("^(UPPIN)$", splitWords[j])
+            if(uppinKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("increment operator")
+                else:
+                    types[i+1].append("increment operator")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
 
-            # nerfinKeyword = re.findall("(NERFIN)", lines[i])                       # NERFIN
-            # if (len(nerfinKeyword) != 0):
-            #     if (symbolTable['decrement operator'].get(nerfinKeyword[0])):
-            #         symbolTable['decrement operator']["NERFIN"][0] += len(nerfinKeyword)
-            #     else:
-            #         symbolTable['decrement operator'][nerfinKeyword[0]] = [len(nerfinKeyword)]
+            nerfinKeyword = re.search("^(NERFIN)$", splitWords[j])
+            if(nerfinKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("decrement operator")
+                else:
+                    types[i+1].append("decrement operator")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
 
             # yrKeyword = re.findall("(YR)", lines[i])                                # YR
             # if (len(yrKeyword) != 0):
@@ -1117,13 +1161,6 @@ def findLexemes(lines):
             #         symbolTable['loop break keyword']["GTFO"][0] += len(gtfoKeyword)
             #     else:
             #         symbolTable['loop break keyword'][gtfoKeyword[0]] = [len(gtfoKeyword)]
-
-            # aKeyword = re.findall("(A)", lines[i])                               # A
-            # if (len(aKeyword) != 0):
-            #     if (symbolTable['type keyword'].get(aKeyword[0])):
-            #         symbolTable['type keyword']["A"][0] += len(aKeyword)
-            #     else:
-            #         symbolTable['type keyword'][aKeyword[0]] = [len(aKeyword)]
 
             # anKeyword = re.findall("(AN)", lines[i])                               # AN
             # if (len(anKeyword) != 0):
