@@ -954,6 +954,35 @@ def findLexemes(lines):
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
                     keyword = ""
 
+            # IS NOW A KEYWORD      CURRENTLY NOT WORKING
+            if (splitWords[j].strip() == "IS"):
+                keywordFound = True
+                keyword = keyword + splitWords[j]
+                continue
+
+            if (keywordFound == True and (keyword == "IS" or keyword =="IS NOW")):
+                print(keyword)  
+                if (splitWords[j].strip() == "NOW"):
+                    keyword = keyword + " " + "NOW"
+                    continue
+                elif (splitWords[j].strip() == "A"):
+                    keyword = keyword + " " + "A"
+                    if(i+1 not in lexemes):
+                        lexemes[i+1] = []
+                        lexemes[i+1].append(keyword)
+                    else:
+                        lexemes[i+1].append(keyword)
+                    
+                    if(i+1 not in types):
+                        types[i+1] = []
+                        types[i+1].append("typecasting keyword")
+                    else:
+                        types[i+1].append("typecasting keyword")
+                    continue
+                else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
+                    continue
             # isNowAKeyword = re.findall("(IS\ NOW\ A)", lines[i])                          # IS NOW A (changed regex here to catch in betweens)
             # if (len(isNowAKeyword) != 0):
             #     if (symbolTable['typecasting keyword'].get(isNowAKeyword[0])):           
