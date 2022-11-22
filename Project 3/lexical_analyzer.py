@@ -1127,26 +1127,59 @@ def findLexemes(lines):
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
                     keyword = ""
 
-            # yrKeyword = re.findall("(YR)", lines[i])                                # YR
-            # if (len(yrKeyword) != 0):
-            #     if (symbolTable['iterator keyword'].get(yrKeyword[0])):
-            #         symbolTable['iterator keyword']["YR"][0] += len(yrKeyword)
-            #     else:
-            #         symbolTable['iterator keyword'][yrKeyword[0]] = [len(yrKeyword)]
+            yrKeyword = re.search("^(YR)$", splitWords[j])
+            if(yrKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("identifier delimiter operator")
+                else:
+                    types[i+1].append("identifier delimiter operator")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
 
-            # tilKeyword = re.findall("(TIL)", lines[i])                                # TIL
-            # if (len(tilKeyword) != 0):
-            #     if (symbolTable['loop until operator'].get(tilKeyword[0])):
-            #         symbolTable['loop until operator']["TIL"][0] += len(tilKeyword)
-            #     else:
-            #         symbolTable['loop until operator'][tilKeyword[0]] = [len(tilKeyword)]
+            tilKeyword = re.search("^(TIL)$", splitWords[j])
+            if(tilKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("loop fail condition operator")
+                else:
+                    types[i+1].append("loop fail condition operator")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
 
-            # wileKeyword = re.findall("(WILE)", lines[i])                                # WILE
-            # if (len(wileKeyword) != 0):
-            #     if (symbolTable['loop while operator'].get(wileKeyword[0])):
-            #         symbolTable['loop while operator']["WILE"][0] += len(wileKeyword)
-            #     else:
-            #         symbolTable['loop while operator'][wileKeyword[0]] = [len(wileKeyword)]
+            wileKeyword = re.search("^(WILE)$", splitWords[j])
+            if(wileKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("loop win condition operator")
+                else:
+                    types[i+1].append("loop win condition operator")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
 
             # imOuttaYrKeyword = re.findall("^(IM\ OUTTA\ YR)", lines[i])                   # IM OUTTA YR
             # if (len(imOuttaYrKeyword) != 0):
@@ -1155,20 +1188,42 @@ def findLexemes(lines):
             #     else:
             #         symbolTable['loop exit keyword'][imOuttaYrKeyword[0]] = [len(imOuttaYrKeyword)]
 
-            # gtfoKeyword = re.findall("^(GTFO)", lines[i])                               # GTFO
-            # if (len(gtfoKeyword) != 0):
-            #     if (symbolTable['loop break keyword'].get(gtfoKeyword[0])):
-            #         symbolTable['loop break keyword']["GTFO"][0] += len(gtfoKeyword)
-            #     else:
-            #         symbolTable['loop break keyword'][gtfoKeyword[0]] = [len(gtfoKeyword)]
-
-            # anKeyword = re.findall("(AN)", lines[i])                               # AN
-            # if (len(anKeyword) != 0):
-            #     if (symbolTable['argument separator keyword'].get(anKeyword[0])):
-            #         symbolTable['argument separator keyword']["AN"][0] += len(anKeyword)
-            #     else:
-            #         symbolTable['argument separator keyword'][anKeyword[0]] = [len(anKeyword)]
+            gtfoKeyword = re.search("^(GTFO)$", splitWords[j])
+            if(gtfoKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
             
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("break operator")
+                else:
+                    types[i+1].append("break operator")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
+
+            anKeyword = re.search("^(AN)$", splitWords[j])
+            if(anKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("argument separator keyword")
+                else:
+                    types[i+1].append("argument separator keyword")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
+
             #catches identifiers
             if(splitWords[j] in keywords): #will delete this block when keywords are added above (not neccesary anymore)
                 continue
