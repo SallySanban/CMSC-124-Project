@@ -72,8 +72,6 @@ def singleCommentSyntax(lineNumber):
         if(types[lineNumber][i] != "comment"):
             return "[Line " + str(lineNumber) + "] SyntaxError: not a comment"
 
-    commentFound = False
-
     return "OK"
 
 def tldrSyntax(lineNumber):
@@ -95,8 +93,10 @@ def multiCommentSyntax(lineNumber):
     while(commentFound == True):
         for i in range(start, len(types[lineNumber])):
             if(lexemes[lineNumber][i] == "TLDR"):
-                if(tldrSyntax(lineNumber) != "OK"):
-                    return tldrSyntax(lineNumber)
+                syntaxError = tldrSyntax(lineNumber)
+
+                if(syntaxError != "OK"):
+                    return syntaxError
 
                 commentFound = False
                 break
@@ -120,54 +120,94 @@ def multiCommentSyntax(lineNumber):
 
     return nextLineNumber(lineNumber)
 
+def itzSyntax(lineNumber):
+    itzLexeme = lexemes[lineNumber].index("ITZ")
+
+    
+
+def iHasASyntax(lineNumber):
+    if(len(lexemes[lineNumber]) == 1):
+        return "[Line " + str(lineNumber) + "] SyntaxError: required identifier"
+
+    if(len(lexemes[lineNumber]) >= 2):
+        if(types[lineNumber][1] != "identifier"):
+            return "[Line " + str(lineNumber) + "] SyntaxError: required identifier"
+
+        if(len(lexemes[lineNumber]) > 2):
+            if(lexemes[lineNumber][2] == "ITZ")
+                syntaxError = itzSyntax(lineNumber)
+
+                if(syntaxError != "OK"):
+                    return syntaxError
+
+    return "OK"
 
 
 
-
-
-
-
-
-line = list(lexemes.keys())[0]
-lexeme = 0
+lineNumber = list(lexemes.keys())[0]
+lexemeIndex = 0
 
 codeStarted = False
 commentFound = False
 
 while(True):
-    #print("NOW CHECKING: " + lexemes[line][lexeme] + " in line " + str(line))
+    print("NOW CHECKING: " + lexemes[lineNumber][lexemeIndex] + " in line " + str(lineNumber))
     if(codeStarted == False):
-        if(lexemes[line][lexeme] != "HAI"):
-            if(lexemes[line][lexeme] == "BTW"):
-                commentFound = True
-                syntaxError = singleCommentSyntax(line)
+        if(lexemes[lineNumber][lexemeIndex] != "HAI"):
+            if(lexemes[lineNumber][lexemeIndex] == "BTW"):
+                syntaxError = singleCommentSyntax(lineNumber)
 
                 if(syntaxError != "OK"):
                     print(syntaxError)
                     break
 
-                line = nextLineNumber(line)
+                lineNumber = nextLineNumber(lineNumber)
                 continue
-            elif(lexemes[line][lexeme] == "OBTW"):
+            elif(lexemes[lineNumber][lexemeIndex] == "OBTW"):
                 commentFound = True
-                syntaxError = multiCommentSyntax(line)
+                syntaxError = multiCommentSyntax(lineNumber)
 
                 if(isinstance(syntaxError, int)):
-                    line = syntaxError
-
+                    lineNumber = syntaxError
                     continue
-                elif(syntaxError == None):
-                    print("[Line " + str(line) + "] SyntaxError: Missing TLDR")
-                    break
                 else:
                     print(syntaxError)
                     break
             else:
-                print("[Line " + str(line) + "] SyntaxError: Cannot include statements before HAI")
+                print("[Line " + str(lineNumber) + "] SyntaxError: Cannot include statements before HAI")
                 break
         else:
-            print("OK")
-            break
+            codeStarted = True
+    else:
+        if(lexemes[lineNumber][lexemeIndex] == "BTW"):
+            syntaxError = singleCommentSyntax(lineNumber)
+
+            if(syntaxError != "OK"):
+                print(syntaxError)
+                break
+
+            lineNumber = nextLineNumber(lineNumber)
+            continue
+        elif(lexemes[lineNumber][lexemeIndex] == "OBTW"):
+            commentFound = True
+            syntaxError = multiCommentSyntax(lineNumber)
+
+            if(isinstance(syntaxError, int)):
+                lineNumber = syntaxError
+                continue
+            else:
+                print(syntaxError)
+                break
+        elif(lexemes[lineNumber][lexemeIndex] == "I HAS A"):
+            syntaxError = iHasASyntax(lineNumber)
+
+            if(syntaxError != "OK"):
+                print(syntaxError)
+                break
+
+            lineNumber = nextLineNumber(lineNumber)
+            continue
+
             
                 
                 
