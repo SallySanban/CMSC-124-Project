@@ -842,27 +842,144 @@ def findLexemes(lines):
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
                     keyword = ""
             
-            # diffrintKeyword = re.findall("^(DIFFRINT)", lines[i])                          # DIFFRINT
-            # if (len(diffrintKeyword) != 0):
-            #     if (symbolTable['not equal comparison'].get(diffrintKeyword[0])):           
-            #         symbolTable['not equal comparison']["DIFFRINT"][0] += len(diffrintKeyword)
-            #     else:
-            #         symbolTable['not equal comparison'][diffrintKeyword[0]] = [len(diffrintKeyword)]
+            # DIFFRINT KEYWORD
+            diffrintKeyword = re.search("^(DIFFRINT)$", splitWords[j])
+            if(diffrintKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
             
-            # smooshKeyword = re.findall("^(SMOOSH)", lines[i])                              # SMOOSH
-            # if (len(smooshKeyword) != 0):
-            #     if (symbolTable['concatenation keyword'].get(smooshKeyword[0])):           
-            #         symbolTable['concatenation keyword']["SMOOSH"][0] += len(smooshKeyword)
-            #     else:
-            #         symbolTable['concatenation keyword'][smooshKeyword[0]] = [len(smooshKeyword)]
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("not equal comparison operator")
+                else:
+                    types[i+1].append("not equal comparison operator")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
 
-            # maekKeyword = re.findall("(MAEK)", lines[i])                              # MAEK
-            # if (len(smooshKeyword) != 0):
-            #     if (symbolTable['explicit cast keyword'].get(maekKeyword[0])):           
-            #         symbolTable['explicit cast keyword']["MAEK"][0] += len(maekKeyword)
-            #     else:
-            #         symbolTable['explicit cast keyword'][maekKeyword[0]] = [len(maekKeyword)]
+            smooshKeyword = re.search("^(SMOOSH)$", splitWords[j])                              # SMOOSH
+            if(smooshKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("concatenation delimiter")
+                else:
+                    types[i+1].append("concatenation delimiter")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
+            
+            smooshKeyword = re.search("^(SMOOSH)$", splitWords[j])                              # SMOOSH
+            if(smooshKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("concatenation delimiter")
+                else:
+                    types[i+1].append("concatenation delimiter")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
+            
+            mkayKeyword = re.search("^(MKAY)$", splitWords[j])                              # SMOOSH
+            if(mkayKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("concatenation delimiter")
+                else:
+                    types[i+1].append("concatenation delimiter")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
+            
+            maekKeyword = re.search("^(MAEK)$", splitWords[j])
+            if(maekKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("typecasting operator")
+                else:
+                    types[i+1].append("typecasting operator")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
+            
+            aKeyword = re.search("^(A)$", splitWords[j])
+            if(aKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("type separator operator")
+                else:
+                    types[i+1].append("type separator operator")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
 
+            # IS NOW A KEYWORD      CURRENTLY NOT WORKING
+            if (splitWords[j].strip() == "IS"):
+                keywordFound = True
+                keyword = keyword + splitWords[j]
+                continue
+
+            if (keywordFound == True and (keyword == "IS" or keyword =="IS NOW")):
+                print(keyword)  
+                if (splitWords[j].strip() == "NOW"):
+                    keyword = keyword + " " + "NOW"
+                    continue
+                elif (splitWords[j].strip() == "A"):
+                    keyword = keyword + " " + "A"
+                    if(i+1 not in lexemes):
+                        lexemes[i+1] = []
+                        lexemes[i+1].append(keyword)
+                    else:
+                        lexemes[i+1].append(keyword)
+                    
+                    if(i+1 not in types):
+                        types[i+1] = []
+                        types[i+1].append("typecasting keyword")
+                    else:
+                        types[i+1].append("typecasting keyword")
+                    continue
+                else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
+                    continue
             # isNowAKeyword = re.findall("(IS\ NOW\ A)", lines[i])                          # IS NOW A (changed regex here to catch in betweens)
             # if (len(isNowAKeyword) != 0):
             #     if (symbolTable['typecasting keyword'].get(isNowAKeyword[0])):           
@@ -870,20 +987,41 @@ def findLexemes(lines):
             #     else:
             #         symbolTable['typecasting keyword'][isNowAKeyword[0]] = [len(isNowAKeyword)]
 
-            # visibleKeyword = re.findall("^(VISIBLE)", lines[i])                          # VISIBLE
-            # if (len(visibleKeyword) != 0):
-            #     if (symbolTable['print keyword'].get(visibleKeyword[0])):
-            #         symbolTable['print keyword']["VISIBLE"][0] += len(visibleKeyword)
-            #     else:
-            #         symbolTable['print keyword'][visibleKeyword[0]] = [len(visibleKeyword)]
+            visibleKeyword = re.search("^(VISIBLE)$", splitWords[j])
+            if(visibleKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("print keyword")
+                else:
+                    types[i+1].append("print keyword")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
 
-            # gimmehKeyword = re.findall("^(GIMMEH)", lines[i])                            # GIMMEH
-            # if (len(gimmehKeyword) != 0):
-            #     if (symbolTable['input keyword'].get(gimmehKeyword[0])):
-            #         symbolTable['input keyword']["GIMMEH"][0] += len(gimmehKeyword)
-            #     else:
-            #         symbolTable['input keyword'][gimmehKeyword[0]] = [len(gimmehKeyword)]
-
+            gimmehKeyword = re.search("^(GIMMEH)$", splitWords[j])
+            if(gimmehKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("input keyword")
+                else:
+                    types[i+1].append("input keyword")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
             # oRlyKeyword = re.findall("(O\ RLY\?)", lines[i])                            # O RLY?
             # if (len(oRlyKeyword) != 0):
             #     if (symbolTable['ifthen keyword'].get(oRlyKeyword[0])):
@@ -898,12 +1036,23 @@ def findLexemes(lines):
             #     else:
             #         symbolTable['ifthen win keyword'][yaRlyKeyword[0]] = [len(yaRlyKeyword)]
 
-            # mebbeKeyword = re.findall("^(MEBBE)", lines[i])                             # MEBBE
-            # if (len(mebbeKeyword) != 0):
-            #     if (symbolTable['elseif keyword'].get(mebbeKeyword[0])):
-            #         symbolTable['elseif keyword']["MEBBE"][0] += len(mebbeKeyword)
-            #     else:
-            #         symbolTable['elseif keyword'][mebbeKeyword[0]] = [len(mebbeKeyword)]
+            mebbeKeyword = re.search("^(MEBBE)$", splitWords[j])
+            if(mebbeKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("then operator")
+                else:
+                    types[i+1].append("then operator")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
 
             # noWaiKeyword = re.findall("^(NO\ WAI)", lines[i])                           # NO WAI
             # if (len(noWaiKeyword) != 0):
@@ -912,33 +1061,76 @@ def findLexemes(lines):
             #     else:
             #         symbolTable['ifthen fail keyword'][noWaiKeyword[0]] = [len(noWaiKeyword)]
 
-            # oicKeyword = re.findall("^(OIC)", lines[i])                                  # OIC
-            # if (len(oicKeyword) != 0):
-            #     if (symbolTable['ifthen exit keyword'].get(oicKeyword[0])):
-            #         symbolTable['ifthen exit keyword']["OIC"][0] += len(oicKeyword)
-            #     else:
-            #         symbolTable['ifthen exit keyword'][oicKeyword[0]] = [len(oicKeyword)]
+            oicKeyword = re.search("^(OIC)$", splitWords[j])
+            if(oicKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
             
-            # wtfKeyword = re.findall("^(WTF\?)", lines[i])                                # WTF?
-            # if (len(wtfKeyword) != 0):
-            #     if (symbolTable['switch case keyword'].get(wtfKeyword[0])):
-            #         symbolTable['switch case keyword']["WTF"][0] += len(wtfKeyword)
-            #     else:
-            #         symbolTable['switch case keyword'][wtfKeyword[0]] = [len(wtfKeyword)]
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("ifthen delimiter")
+                else:
+                    types[i+1].append("ifthen delimiter")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
 
-            # omgKeyword = re.findall("^(OMG)", lines[i])                                  # OMG
-            # if (len(omgKeyword) != 0):
-            #     if (symbolTable['comparison start keyword'].get(omgKeyword[0])):
-            #         symbolTable['comparison start keyword']["OMG"][0] += len(omgKeyword)
-            #     else:
-            #         symbolTable['comparison start keyword'][omgKeyword[0]] = [len(omgKeyword)]
+            wtfKeyword = re.search("^(WTF\?)$", splitWords[j])
+            if(wtfKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
             
-            # omgwtfKeyword = re.findall("^(OMGWTF)", lines[i])                            # OMGWTF
-            # if (len(omgwtfKeyword) != 0):
-            #     if (symbolTable['default case keyword'].get(omgwtfKeyword[0])):
-            #         symbolTable['default case keyword']["OMGWTF"][0] += len(omgwtfKeyword)
-            #     else:
-            #         symbolTable['default case keyword'][omgwtfKeyword[0]] = [len(omgwtfKeyword)]
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("ifthen delimiter")
+                else:
+                    types[i+1].append("ifthen delimiter")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
+            omgKeyword = re.search("^(OMG)$", splitWords[j])
+            if(omgKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("comparison delimiter")
+                else:
+                    types[i+1].append("comparison delimiter")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
+
+            omgwtfKeyword = re.search("^(OMGWTF)$", splitWords[j])
+            if(omgwtfKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("default case operator")
+                else:
+                    types[i+1].append("default case operator")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
 
             # imInYrKeyword = re.findall("^(IM\ IN\ YR)", lines[i])                        # IM IN YR
             # if (len(imInYrKeyword) != 0):
@@ -947,40 +1139,95 @@ def findLexemes(lines):
             #     else:
             #         symbolTable['loop keyword'][imInYrKeyword[0]] = [len(imInYrKeyword)]
 
-            # uppinKeyword = re.findall("(UPPIN)", lines[i])                        # UPPIN
-            # if (len( uppinKeyword) != 0):
-            #     if (symbolTable['increment operator'].get( uppinKeyword[0])):
-            #         symbolTable['increment operator']["UPPIN"][0] += len(uppinKeyword)
-            #     else:
-            #         symbolTable['increment operator'][ uppinKeyword[0]] = [len(uppinKeyword)]
+            uppinKeyword = re.search("^(UPPIN)$", splitWords[j])
+            if(uppinKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("increment operator")
+                else:
+                    types[i+1].append("increment operator")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
 
-            # nerfinKeyword = re.findall("(NERFIN)", lines[i])                       # NERFIN
-            # if (len(nerfinKeyword) != 0):
-            #     if (symbolTable['decrement operator'].get(nerfinKeyword[0])):
-            #         symbolTable['decrement operator']["NERFIN"][0] += len(nerfinKeyword)
-            #     else:
-            #         symbolTable['decrement operator'][nerfinKeyword[0]] = [len(nerfinKeyword)]
+            nerfinKeyword = re.search("^(NERFIN)$", splitWords[j])
+            if(nerfinKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("decrement operator")
+                else:
+                    types[i+1].append("decrement operator")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
 
-            # yrKeyword = re.findall("(YR)", lines[i])                                # YR
-            # if (len(yrKeyword) != 0):
-            #     if (symbolTable['iterator keyword'].get(yrKeyword[0])):
-            #         symbolTable['iterator keyword']["YR"][0] += len(yrKeyword)
-            #     else:
-            #         symbolTable['iterator keyword'][yrKeyword[0]] = [len(yrKeyword)]
+            yrKeyword = re.search("^(YR)$", splitWords[j])
+            if(yrKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("identifier delimiter operator")
+                else:
+                    types[i+1].append("identifier delimiter operator")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
 
-            # tilKeyword = re.findall("(TIL)", lines[i])                                # TIL
-            # if (len(tilKeyword) != 0):
-            #     if (symbolTable['loop until operator'].get(tilKeyword[0])):
-            #         symbolTable['loop until operator']["TIL"][0] += len(tilKeyword)
-            #     else:
-            #         symbolTable['loop until operator'][tilKeyword[0]] = [len(tilKeyword)]
+            tilKeyword = re.search("^(TIL)$", splitWords[j])
+            if(tilKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("loop fail condition operator")
+                else:
+                    types[i+1].append("loop fail condition operator")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
 
-            # wileKeyword = re.findall("(WILE)", lines[i])                                # WILE
-            # if (len(wileKeyword) != 0):
-            #     if (symbolTable['loop while operator'].get(wileKeyword[0])):
-            #         symbolTable['loop while operator']["WILE"][0] += len(wileKeyword)
-            #     else:
-            #         symbolTable['loop while operator'][wileKeyword[0]] = [len(wileKeyword)]
+            wileKeyword = re.search("^(WILE)$", splitWords[j])
+            if(wileKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("loop win condition operator")
+                else:
+                    types[i+1].append("loop win condition operator")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
 
             # imOuttaYrKeyword = re.findall("^(IM\ OUTTA\ YR)", lines[i])                   # IM OUTTA YR
             # if (len(imOuttaYrKeyword) != 0):
@@ -989,34 +1236,42 @@ def findLexemes(lines):
             #     else:
             #         symbolTable['loop exit keyword'][imOuttaYrKeyword[0]] = [len(imOuttaYrKeyword)]
 
-            # gtfoKeyword = re.findall("^(GTFO)", lines[i])                               # GTFO
-            # if (len(gtfoKeyword) != 0):
-            #     if (symbolTable['loop break keyword'].get(gtfoKeyword[0])):
-            #         symbolTable['loop break keyword']["GTFO"][0] += len(gtfoKeyword)
-            #     else:
-            #         symbolTable['loop break keyword'][gtfoKeyword[0]] = [len(gtfoKeyword)]
-
-            # mkayKeyword = re.findall("(MKAY)", lines[i])                               # MKAY
-            # if (len(mkayKeyword) != 0):
-            #     if (symbolTable['infinite arity keyword'].get(mkayKeyword[0])):
-            #         symbolTable['infinite arity keyword']["MKAY"][0] += len(mkayKeyword)
-            #     else:
-            #         symbolTable['infinite arity keyword'][mkayKeyword[0]] = [len(mkayKeyword)]
-
-            # aKeyword = re.findall("(A)", lines[i])                               # A
-            # if (len(aKeyword) != 0):
-            #     if (symbolTable['type keyword'].get(aKeyword[0])):
-            #         symbolTable['type keyword']["A"][0] += len(aKeyword)
-            #     else:
-            #         symbolTable['type keyword'][aKeyword[0]] = [len(aKeyword)]
-
-            # anKeyword = re.findall("(AN)", lines[i])                               # AN
-            # if (len(anKeyword) != 0):
-            #     if (symbolTable['argument separator keyword'].get(anKeyword[0])):
-            #         symbolTable['argument separator keyword']["AN"][0] += len(anKeyword)
-            #     else:
-            #         symbolTable['argument separator keyword'][anKeyword[0]] = [len(anKeyword)]
+            gtfoKeyword = re.search("^(GTFO)$", splitWords[j])
+            if(gtfoKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
             
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("break operator")
+                else:
+                    types[i+1].append("break operator")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
+
+            anKeyword = re.search("^(AN)$", splitWords[j])
+            if(anKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("argument separator keyword")
+                else:
+                    types[i+1].append("argument separator keyword")
+                continue
+            else:
+                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+                    keyword = ""
+
             #catches identifiers
             if(splitWords[j] in keywords): #will delete this block when keywords are added above (not neccesary anymore)
                 continue
@@ -1136,4 +1391,4 @@ findLexemes(lines)
 # for i in types.keys():
 #     print("[" + str(i) + "] " + str(types[i]))
 
-#printSymbolTable()
+printSymbolTable()
