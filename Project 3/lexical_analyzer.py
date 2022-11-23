@@ -442,7 +442,7 @@ def findLexemes(lines):
                 continue
             
             # I HAS A KEYWORD               (ONLY KEYWORD STARTING WITH I)
-            if (splitWords[j].strip() == "I"):
+            if (splitWords[j] == "I"):
                 keywordFound = True
                 keyword = keyword + splitWords[j]
                 continue
@@ -450,10 +450,10 @@ def findLexemes(lines):
             if (keywordFound == True and (keyword == "I" or keyword =="I HAS")):
                 # print(keyword)              # CHECKER
                 # print("HEHEH")
-                if (splitWords[j].strip() == "HAS"):
+                if (splitWords[j] == "HAS"):
                     keyword = keyword + " " + "HAS"
                     continue
-                elif (splitWords[j].strip() == "A"):
+                elif (splitWords[j] == "A" and keyword == "I HAS"):
                     keyword = keyword + " " + "A"
                     if(i+1 not in lexemes):
                         lexemes[i+1] = []
