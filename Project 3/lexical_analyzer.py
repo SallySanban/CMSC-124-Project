@@ -1,6 +1,6 @@
 import re
 
-filename = "Project 3/samplecodecomments.txt"
+filename = "Project 3/samplecodewrong.txt"
 
 #reads file and cleans each line in the file
 def readFile(filename):
