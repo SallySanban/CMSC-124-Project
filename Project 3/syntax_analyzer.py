@@ -130,7 +130,7 @@ def mathOperationSyntax(lineNumber):
     operationDone = False
     counter = 0
     for keyword in lexemes[lineNumber]:                 # Checks the n operation keywords
-        if (keyword in ["SUM OF", "DIFF OF", "PRODUKT OF", "QUOSHUNT OF", "MOD OF"]):
+        if (keyword in ["SUM OF", "DIFF OF", "PRODUKT OF", "QUOSHUNT OF", "MOD OF", "BIGGR OF", "SMALLR OF"]):
             counter += 1
         else:
             break
@@ -156,14 +156,6 @@ def mathOperationSyntax(lineNumber):
                 return singleCommentSyntax(lineNumber)
             else:
                 return "[Line " + str(lineNumber) + "] SyntaxError: cannot have statements after arithmetic operation"
-
-def biggrOfSyntax(lineNumber):
-    print("")
-    #INSERT CODE HERE
-
-def smallrOfSyntax(lineNumber):
-    print("")
-    #INSERT CODE HERE
 
 def smooshSyntax(lineNumber):
     print("")
@@ -217,18 +209,8 @@ def itzSyntax(lineNumber):
                 singleCommentSyntax(lineNumber)
             else:
                 return "[Line " + str(lineNumber) + "] SyntaxError: cannot have statements after variable declaration"
-    elif(lexemes[lineNumber][itzLexeme + 1] == ("SUM OF" or "DIFF OF" or "PRODUKT OF" or "QUOSHUNT OF" or "MOD OF")):
+    elif(lexemes[lineNumber][itzLexeme + 1] in ["SUM OF", "DIFF OF", "PRODUKT OF", "QUOSHUNT OF", "MOD OF", "SMALLR OF", "BIGGR OF"]):
         syntaxError = mathOperationSyntax(lineNumber)
-
-        if(syntaxError != "OK"):
-            return syntaxError
-    elif(lexemes[lineNumber][itzLexeme + 1] == "BIGGR OF"):
-        syntaxError = biggrOfSyntax(lineNumber)
-
-        if(syntaxError != "OK"):
-            return syntaxError
-    elif(lexemes[lineNumber][itzLexeme + 1] == "SMALLR OF"):
-        syntaxError = smallrOfSyntax(lineNumber)
 
         if(syntaxError != "OK"):
             return syntaxError
@@ -410,7 +392,7 @@ while(True):
             continue
         
         # ! START OF RIO DUCUSIN'S PART
-        elif(lexemes[lineNumber][lexemeIndex] == ("SUM OF" or "DIFF OF" or "PRODUKT OF" or "QUOSHUNT OF" or "MOD OF")):
+        elif(lexemes[lineNumber][lexemeIndex] in ["SUM OF", "DIFF OF", "PRODUKT OF", "QUOSHUNT OF", "MOD OF", "BIGGR OF", "SMALLR OF"]):
             syntaxError = mathOperationSyntax(lineNumber)
 
             if(syntaxError != "OK"):
@@ -419,27 +401,6 @@ while(True):
 
             lineNumber = nextLineNumber(lineNumber)
             continue
-
-        # elif(lexemes[lineNumber][lexemeIndex] == "BIGGR OF"):
-        #     syntaxError = biggrOfSyntax(lineNumber)
-
-        #     if(syntaxError != "OK"):
-        #         print(syntaxError)
-        #         break
-
-        #     lineNumber = nextLineNumber(lineNumber)
-        #     continue
-
-        # elif(lexemes[lineNumber][lexemeIndex] == "SMALLR OF"):
-        #     syntaxError = smallrOfSyntax(lineNumber)
-
-        #     if(syntaxError != "OK"):
-        #         print(syntaxError)
-        #         break
-
-        #     lineNumber = nextLineNumber(lineNumber)
-        #     continue
-
         # elif(lexemes[lineNumber][lexemeIndex] == "BOTH OF"):
         #     syntaxError = bothOfSyntax(lineNumber)
 
