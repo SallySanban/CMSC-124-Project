@@ -170,19 +170,19 @@ def sumOfSyntax(lineNumber):
     numberCnt = 0
     for k in range(sumOfIndex + counter, len(lexemes[lineNumber])):
         if (numberCnt < counter + 1):
-            try:
-                isNumber = not isNumber
-                if isNumber:
-                    if (isinstance(int(lexemes[lineNumber][k]), int) or isinstance(float(lexemes[lineNumber][k]), float)):
-                        numberCnt += 1
+            isNumber = not isNumber
+            if isNumber:
+                if (types[lineNumber][k] in ["NUMBR literal", "NUMBAR literal"]):
+                    numberCnt += 1
+            else:
+                if (lexemes[lineNumber][k] != "AN"):
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Expected an argument separator keyword"
+                elif (lexemes[lineNumber][k] == "AN"):
+                    continue
                 else:
-                    if (lexemes[lineNumber][k] != "AN"):
-                        return "[Line " + str(lineNumber) + "] SyntaxError: Expected an AN keyword between the literals"
-            except ValueError:
-                print(lexemes[lineNumber][k])
-                return "[Line " + str(lineNumber) + "] SyntaxError: Expected a numbr or numbar literal after arithmetic operator"
+                    print(lexemes[lineNumber][k])
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Expected a numbr or numbar literal after arithmetic operator"
         else:
-            # print(lexemes[lineNumber][k])       # Checker
             if(lexemes[lineNumber][k] == "BTW"):
                 return singleCommentSyntax(lineNumber)
             else:
@@ -203,19 +203,19 @@ def diffOfSyntax(lineNumber):
     numberCnt = 0
     for k in range(diffOfIndex + counter, len(lexemes[lineNumber])):
         if (numberCnt < counter + 1):
-            try:
-                isNumber = not isNumber
-                if isNumber:
-                    if (isinstance(int(lexemes[lineNumber][k]), int) or isinstance(float(lexemes[lineNumber][k]), float)):
-                        numberCnt += 1
+            isNumber = not isNumber
+            if isNumber:
+                if (types[lineNumber][k] in ["NUMBR literal", "NUMBAR literal"]):
+                    numberCnt += 1
+            else:
+                if (lexemes[lineNumber][k] != "AN"):
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Expected an argument separator keyword"
+                elif (lexemes[lineNumber][k] == "AN"):
+                    continue
                 else:
-                    if (lexemes[lineNumber][k] != "AN"):
-                        return "[Line " + str(lineNumber) + "] SyntaxError: Expected an AN keyword between the literals"
-            except ValueError:
-                print(lexemes[lineNumber][k])
-                return "[Line " + str(lineNumber) + "] SyntaxError: Expected a numbr or numbar literal after arithmetic operator"
+                    print(lexemes[lineNumber][k])
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Expected a numbr or numbar literal after arithmetic operator"
         else:
-            # print(lexemes[lineNumber][k])       # Checker
             if(lexemes[lineNumber][k] == "BTW"):
                 return singleCommentSyntax(lineNumber)
             else:
@@ -236,19 +236,19 @@ def produktOfSyntax(lineNumber):
     numberCnt = 0
     for k in range(produktOfIndex + counter, len(lexemes[lineNumber])):
         if (numberCnt < counter + 1):
-            try:
-                isNumber = not isNumber
-                if isNumber:
-                    if (isinstance(int(lexemes[lineNumber][k]), int) or isinstance(float(lexemes[lineNumber][k]), float)):
-                        numberCnt += 1
+            isNumber = not isNumber
+            if isNumber:
+                if (types[lineNumber][k] in ["NUMBR literal", "NUMBAR literal"]):
+                    numberCnt += 1
+            else:
+                if (lexemes[lineNumber][k] != "AN"):
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Expected an argument separator keyword"
+                elif (lexemes[lineNumber][k] == "AN"):
+                    continue
                 else:
-                    if (lexemes[lineNumber][k] != "AN"):
-                        return "[Line " + str(lineNumber) + "] SyntaxError: Expected an AN keyword between the literals"
-            except ValueError:
-                print(lexemes[lineNumber][k])
-                return "[Line " + str(lineNumber) + "] SyntaxError: Expected a numbr or numbar literal after arithmetic operator"
+                    print(lexemes[lineNumber][k])
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Expected a numbr or numbar literal after arithmetic operator"
         else:
-            # print(lexemes[lineNumber][k])       # Checker
             if(lexemes[lineNumber][k] == "BTW"):
                 return singleCommentSyntax(lineNumber)
             else:
@@ -269,19 +269,19 @@ def quoshuntOfSyntax(lineNumber):
     numberCnt = 0
     for k in range(quoshuntOfIndex + counter, len(lexemes[lineNumber])):
         if (numberCnt < counter + 1):
-            try:
-                isNumber = not isNumber
-                if isNumber:
-                    if (isinstance(int(lexemes[lineNumber][k]), int) or isinstance(float(lexemes[lineNumber][k]), float)):
-                        numberCnt += 1
+            isNumber = not isNumber
+            if isNumber:
+                if (types[lineNumber][k] in ["NUMBR literal", "NUMBAR literal"]):
+                    numberCnt += 1
+            else:
+                if (lexemes[lineNumber][k] != "AN"):
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Expected an argument separator keyword"
+                elif (lexemes[lineNumber][k] == "AN"):
+                    continue
                 else:
-                    if (lexemes[lineNumber][k] != "AN"):
-                        return "[Line " + str(lineNumber) + "] SyntaxError: Expected an AN keyword between the literals"
-            except ValueError:
-                print(lexemes[lineNumber][k])
-                return "[Line " + str(lineNumber) + "] SyntaxError: Expected a numbr or numbar literal after arithmetic operator"
+                    print(lexemes[lineNumber][k])
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Expected a numbr or numbar literal after arithmetic operator"
         else:
-            # print(lexemes[lineNumber][k])       # Checker
             if(lexemes[lineNumber][k] == "BTW"):
                 return singleCommentSyntax(lineNumber)
             else:
@@ -302,19 +302,19 @@ def modOfSyntax(lineNumber):
     numberCnt = 0
     for k in range(modOfIndex + counter, len(lexemes[lineNumber])):
         if (numberCnt < counter + 1):
-            try:
-                isNumber = not isNumber
-                if isNumber:
-                    if (isinstance(int(lexemes[lineNumber][k]), int) or isinstance(float(lexemes[lineNumber][k]), float)):
-                        numberCnt += 1
+            isNumber = not isNumber
+            if isNumber:
+                if (types[lineNumber][k] in ["NUMBR literal", "NUMBAR literal"]):
+                    numberCnt += 1
+            else:
+                if (lexemes[lineNumber][k] != "AN"):
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Expected an argument separator keyword"
+                elif (lexemes[lineNumber][k] == "AN"):
+                    continue
                 else:
-                    if (lexemes[lineNumber][k] != "AN"):
-                        return "[Line " + str(lineNumber) + "] SyntaxError: Expected an AN keyword between the literals"
-            except ValueError:
-                print(lexemes[lineNumber][k])
-                return "[Line " + str(lineNumber) + "] SyntaxError: Expected a numbr or numbar literal after arithmetic operator"
+                    print(lexemes[lineNumber][k])
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Expected a numbr or numbar literal after arithmetic operator"
         else:
-            # print(lexemes[lineNumber][k])       # Checker
             if(lexemes[lineNumber][k] == "BTW"):
                 return singleCommentSyntax(lineNumber)
             else:
@@ -335,19 +335,19 @@ def biggrOfSyntax(lineNumber):
     numberCnt = 0
     for k in range(biggrOfIndex + counter, len(lexemes[lineNumber])):
         if (numberCnt < counter + 1):
-            try:
-                isNumber = not isNumber
-                if isNumber:
-                    if (isinstance(int(lexemes[lineNumber][k]), int) or isinstance(float(lexemes[lineNumber][k]), float)):
-                        numberCnt += 1
+            isNumber = not isNumber
+            if isNumber:
+                if (types[lineNumber][k] in ["NUMBR literal", "NUMBAR literal"]):
+                    numberCnt += 1
+            else:
+                if (lexemes[lineNumber][k] != "AN"):
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Expected an argument separator keyword"
+                elif (lexemes[lineNumber][k] == "AN"):
+                    continue
                 else:
-                    if (lexemes[lineNumber][k] != "AN"):
-                        return "[Line " + str(lineNumber) + "] SyntaxError: Expected an AN keyword between the literals"
-            except ValueError:
-                print(lexemes[lineNumber][k])
-                return "[Line " + str(lineNumber) + "] SyntaxError: Expected a numbr or numbar literal after arithmetic operator"
+                    print(lexemes[lineNumber][k])
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Expected a numbr or numbar literal after arithmetic operator"
         else:
-            # print(lexemes[lineNumber][k])       # Checker
             if(lexemes[lineNumber][k] == "BTW"):
                 return singleCommentSyntax(lineNumber)
             else:
@@ -368,19 +368,19 @@ def smallrOfSyntax(lineNumber):
     numberCnt = 0
     for k in range(smallrOfIndex + counter, len(lexemes[lineNumber])):
         if (numberCnt < counter + 1):
-            try:
-                isNumber = not isNumber
-                if isNumber:
-                    if (isinstance(int(lexemes[lineNumber][k]), int) or isinstance(float(lexemes[lineNumber][k]), float)):
-                        numberCnt += 1
+            isNumber = not isNumber
+            if isNumber:
+                if (types[lineNumber][k] in ["NUMBR literal", "NUMBAR literal"]):
+                    numberCnt += 1
+            else:
+                if (lexemes[lineNumber][k] != "AN"):
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Expected an argument separator keyword"
+                elif (lexemes[lineNumber][k] == "AN"):
+                    continue
                 else:
-                    if (lexemes[lineNumber][k] != "AN"):
-                        return "[Line " + str(lineNumber) + "] SyntaxError: Expected an AN keyword between the literals"
-            except ValueError:
-                print(lexemes[lineNumber][k])
-                return "[Line " + str(lineNumber) + "] SyntaxError: Expected a numbr or numbar literal after arithmetic operator"
+                    print(lexemes[lineNumber][k])
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Expected a numbr or numbar literal after arithmetic operator"
         else:
-            # print(lexemes[lineNumber][k])       # Checker
             if(lexemes[lineNumber][k] == "BTW"):
                 return singleCommentSyntax(lineNumber)
             else:
@@ -392,55 +392,483 @@ def smooshSyntax(lineNumber):
     #INSERT CODE HERE
 
 def notSyntax(lineNumber):
-    notKeyword = lexemes[lineNumber].index("NOT")
-
-
-
-    # counter = 0
-    # for keyword in lexemes[lineNumber]:                 # Checks the n operation keywords
-    #     if (keyword in ["BOTH OF", "EITHER OF", "WON OF", "NOT"]):
-    #         counter += 1
-    #     else:
-    #         break
-
-    # isNumber = False
-    # numberCnt = 0
-    # for k in range(counter, len(lexemes[lineNumber])):
-    #     if (numberCnt < counter + 1):
-    #         try:
-    #             isNumber = not isNumber
-    #             if isNumber:
-    #                 if (isinstance(int(lexemes[lineNumber][k]), int) or isinstance(float(lexemes[lineNumber][k]), float)):
-    #                     numberCnt += 1
-    #             else:
-    #                 if (lexemes[lineNumber][k] != "AN"):
-    #                     return "[Line " + str(lineNumber) + "] SyntaxError: Expected an AN keyword between the literals"
-    #         except ValueError:
-    #             print(lexemes[lineNumber][k])
-    #             return "[Line " + str(lineNumber) + "] SyntaxError: Expected a numbr or numbar literal after arithmetic operator"
-    #     else:
-    #         # print(lexemes[lineNumber][k])       # Checker
-    #         if(lexemes[lineNumber][k] == "BTW"):
-    #             return singleCommentSyntax(lineNumber)
-    #         else:
-    #             return "[Line " + str(lineNumber) + "] SyntaxError: cannot have statements after arithmetic operation"
-
-
-def bothOfSyntax(lineNumber):
     print("")
-    #INSERT CODE HERE
+        
+def bothOfSyntax(lineNumber):
+    bothOfIndex = lexemes[lineNumber].index("BOTH OF")
+
+    if (len(lexemes[lineNumber]) < 4):
+        return "[Line " + str(lineNumber) + "] SyntaxError: missing arguments"
+        
+    if (types[lineNumber][bothOfIndex + 1] == "TROOF literal"):
+        if (types[lineNumber][bothOfIndex + 2] == "argument separator keyword"):
+            if (types[lineNumber][bothOfIndex + 3] in ["TROOF literal", "identifier"]):
+                if (lexemes[lineNumber][bothOfIndex + 4] == "BTW"):
+                    syntaxError = singleCommentSyntax(lineNumber)
+
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    return "OK"
+                else:
+                    return "[Line " + str(lineNumber) + "] SyntaxError: cannot have statements after boolean operation"
+            elif (lexemes[lineNumber][bothOfIndex + 3] in ["BOTH OF", "EITHER OF", "WON OF", "NOT"]):
+                if (types[lineNumber][bothOfIndex + 3] == "BOTH OF"):
+                    syntaxError = bothOfSyntax(lineNumber)
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    return "OK"
+                elif (types[lineNumber][bothOfIndex + 3] == "EITHER OF"):
+                    syntaxError = eitherOfSyntax(lineNumber)
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    return "OK"
+                elif (types[lineNumber][bothOfIndex + 3] == "WON OF"):
+                    syntaxError = wonOfSyntax(lineNumber)
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    return "OK"
+                else:
+                    syntaxError = notSyntax(lineNumber)
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    return "OK"
+            else:
+                return "[Line " + str(lineNumber) + "] SyntaxError: invalid identifier"
+        else:
+            return "[Line " + str(lineNumber) + "] SyntaxError: required argument separator keyword"
+    else:
+        if (lexemes[lineNumber][bothOfIndex + 1] in ["BOTH OF", "EITHER OF", "WON OF", "NOT"]):
+            print(lexemes[lineNumber][bothOfIndex + 1])
+            if (lexemes[lineNumber][bothOfIndex + 1] == "BOTH OF"):
+                syntaxError = bothOfSyntax(lineNumber)
+                if (syntaxError != "OK"):
+                    return syntaxError
+            elif (lexemes[lineNumber][bothOfIndex + 1] == "EITHER OF"):
+                syntaxError = eitherOfSyntax(lineNumber)
+                if (syntaxError != "OK"):
+                    return syntaxError
+            elif (lexemes[lineNumber][bothOfIndex + 1] == "WON OF"):
+                syntaxError = wonOfSyntax(lineNumber)
+                if (syntaxError != "OK"):
+                    return syntaxError
+            else:
+                syntaxError = notSyntax(lineNumber)
+                if (syntaxError != "OK"):
+                    return syntaxError
+        
+        if (types[lineNumber][bothOfIndex + 2] == "argument separator keyword"):
+            if (types[lineNumber][bothOfIndex + 3] in ["TROOF literal", "identifier"]):
+                if (lexemes[lineNumber][bothOfIndex + 4] == "BTW"):
+                    syntaxError = singleCommentSyntax(lineNumber)
+
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    return "OK"
+                else:
+                    return "[Line " + str(lineNumber) + "] SyntaxError: cannot have statements after boolean operation"
+            elif (lexemes[lineNumber][bothOfIndex + 3] in ["BOTH OF", "EITHER OF", "WON OF", "NOT"]):
+                if (lexemes[lineNumber][bothOfIndex + 3] == "BOTH OF"):
+                    syntaxError = bothOfSyntax(lineNumber)
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    return "OK"
+                elif (lexemes[lineNumber][bothOfIndex + 3] == "EITHER OF"):
+                    syntaxError = eitherOfSyntax(lineNumber)
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    return "OK"
+                elif (lexemes[lineNumber][bothOfIndex + 3] == "WON OF"):
+                    syntaxError = wonOfSyntax(lineNumber)
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    return "OK"
+                else:
+                    syntaxError = notSyntax(lineNumber)
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    return "OK"
+            else:
+                return "[Line " + str(lineNumber) + "] SyntaxError: invalid identifier"
+        else:
+            return "[Line " + str(lineNumber) + "] SyntaxError: Expected an argument separator keyword"
 
 def eitherOfSyntax(lineNumber):
-    print("")
-    #INSERT CODE HERE
+    eitherOfIndex = lexemes[lineNumber].index("EITHER OF")
+
+    if (len(lexemes[lineNumber]) < 4):
+        return "[Line " + str(lineNumber) + "] SyntaxError: missing arguments"
+        
+    if (types[lineNumber][eitherOfIndex + 1] == "TROOF literal"):
+        if (types[lineNumber][eitherOfIndex + 2] == "argument separator keyword"):
+            if (types[lineNumber][eitherOfIndex + 3] in ["TROOF literal", "identifier"]):
+                if (lexemes[lineNumber][eitherOfIndex + 4] == "BTW"):
+                    syntaxError = singleCommentSyntax(lineNumber)
+
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    return "OK"
+                else:
+                    return "[Line " + str(lineNumber) + "] SyntaxError: cannot have statements after boolean operation"
+            elif (lexemes[lineNumber][eitherOfIndex + 3] in ["BOTH OF", "EITHER OF", "WON OF", "NOT"]):
+                if (types[lineNumber][eitherOfIndex + 3] == "BOTH OF"):
+                    syntaxError = bothOfSyntax(lineNumber)
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    return "OK"
+                elif (types[lineNumber][eitherOfIndex + 3] == "EITHER OF"):
+                    syntaxError = eitherOfSyntax(lineNumber)
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    return "OK"
+                elif (types[lineNumber][eitherOfIndex + 3] == "WON OF"):
+                    syntaxError = wonOfSyntax(lineNumber)
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    return "OK"
+                else:
+                    syntaxError = notSyntax(lineNumber)
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    return "OK"
+            else:
+                return "[Line " + str(lineNumber) + "] SyntaxError: invalid identifier"
+        else:
+            return "[Line " + str(lineNumber) + "] SyntaxError: required argument separator keyword"
+    else:
+        if (lexemes[lineNumber][eitherOfIndex + 1] in ["BOTH OF", "EITHER OF", "WON OF", "NOT"]):
+            if (lexemes[lineNumber][eitherOfIndex + 1] == "BOTH OF"):
+                syntaxError = bothOfSyntax(lineNumber)
+                if (syntaxError != "OK"):
+                    return syntaxError
+            elif (lexemes[lineNumber][eitherOfIndex + 1] == "EITHER OF"):
+                syntaxError = eitherOfSyntax(lineNumber)
+                if (syntaxError != "OK"):
+                    return syntaxError
+            elif (lexemes[lineNumber][eitherOfIndex + 1] == "WON OF"):
+                syntaxError = wonOfSyntax(lineNumber)
+                if (syntaxError != "OK"):
+                    return syntaxError
+            else:
+                syntaxError = notSyntax(lineNumber)
+                if (syntaxError != "OK"):
+                    return syntaxError
+
+        if (types[lineNumber][eitherOfIndex + 2] == "argument separator keyword"):
+            if (types[lineNumber][eitherOfIndex + 3] in ["TROOF literal", "identifier"]):
+                if (lexemes[lineNumber][eitherOfIndex + 4] == "BTW"):
+                    syntaxError = singleCommentSyntax(lineNumber)
+
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    return "OK"
+                else:
+                    return "[Line " + str(lineNumber) + "] SyntaxError: cannot have statements after boolean operation"
+            elif (lexemes[lineNumber][eitherOfIndex + 3] in ["BOTH OF", "EITHER OF", "WON OF", "NOT"]):
+                if (lexemes[lineNumber][eitherOfIndex + 3] == "BOTH OF"):
+                    syntaxError = bothOfSyntax(lineNumber)
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    return "OK"
+                elif (lexemes[lineNumber][eitherOfIndex + 3] == "EITHER OF"):
+                    syntaxError = eitherOfSyntax(lineNumber)
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    return "OK"
+                elif (lexemes[lineNumber][eitherOfIndex + 3] == "WON OF"):
+                    syntaxError = wonOfSyntax(lineNumber)
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    return "OK"
+                else:
+                    syntaxError = notSyntax(lineNumber)
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    return "OK"
+            else:
+                return "[Line " + str(lineNumber) + "] SyntaxError: invalid identifier"
+        else:
+            return "[Line " + str(lineNumber) + "] SyntaxError: Expected an argument separator keyword"
 
 def wonOfSyntax(lineNumber):
-    print("")
-    #INSERT CODE HERE
+    wonOfIndex = lexemes[lineNumber].index("WON OF")
+
+    if (len(lexemes[lineNumber]) < 4):
+        return "[Line " + str(lineNumber) + "] SyntaxError: missing arguments"
+        
+    if (types[lineNumber][wonOfIndex + 1] == "TROOF literal"):
+        if (types[lineNumber][wonOfIndex + 2] == "argument separator keyword"):
+            if (types[lineNumber][wonOfIndex + 3] in ["TROOF literal", "identifier"]):
+                if (lexemes[lineNumber][wonOfIndex + 4] == "BTW"):
+                    syntaxError = singleCommentSyntax(lineNumber)
+
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    return "OK"
+                else:
+                    return "[Line " + str(lineNumber) + "] SyntaxError: cannot have statements after boolean operation"
+            elif (lexemes[lineNumber][wonOfIndex + 3] in ["BOTH OF", "EITHER OF", "WON OF", "NOT"]):
+                if (lexemes[lineNumber][wonOfIndex + 3] == "BOTH OF"):
+                    syntaxError = bothOfSyntax(lineNumber)
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    return "OK"
+                elif (lexemes[lineNumber][wonOfIndex + 3] == "EITHER OF"):
+                    syntaxError = eitherOfSyntax(lineNumber)
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    return "OK"
+                elif (lexemes[lineNumber][wonOfIndex + 3] == "WON OF"):
+                    syntaxError = wonOfSyntax(lineNumber)
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    return "OK"
+                else:
+                    syntaxError = notSyntax(lineNumber)
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    return "OK"
+            else:
+                return "[Line " + str(lineNumber) + "] SyntaxError: invalid identifier"
+        else:
+            return "[Line " + str(lineNumber) + "] SyntaxError: required argument separator keyword"
+    else:
+        if (lexemes[lineNumber][wonOfIndex + 1] in ["BOTH OF", "EITHER OF", "WON OF", "NOT"]):
+            if (lexemes[lineNumber][wonOfIndex + 1] == "BOTH OF"):
+                syntaxError = bothOfSyntax(lineNumber)
+                if (syntaxError != "OK"):
+                    return syntaxError
+            elif (lexemes[lineNumber][wonOfIndex + 1] == "EITHER OF"):
+                syntaxError = eitherOfSyntax(lineNumber)
+                if (syntaxError != "OK"):
+                    return syntaxError
+            elif (lexemes[lineNumber][wonOfIndex + 1] == "WON OF"):
+                syntaxError = wonOfSyntax(lineNumber)
+                if (syntaxError != "OK"):
+                    return syntaxError
+            else:
+                syntaxError = notSyntax(lineNumber)
+                if (syntaxError != "OK"):
+                    return syntaxError
+
+        if (types[lineNumber][wonOfIndex + 2] == "argument separator keyword"):
+            if (types[lineNumber][wonOfIndex + 3] in ["TROOF literal", "identifier"]):
+                if (lexemes[lineNumber][wonOfIndex + 4] == "BTW"):
+                    syntaxError = singleCommentSyntax(lineNumber)
+
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    return "OK"
+                else:
+                    return "[Line " + str(lineNumber) + "] SyntaxError: cannot have statements after boolean operation"
+            elif (lexemes[lineNumber][wonOfIndex + 3] in ["BOTH OF", "EITHER OF", "WON OF", "NOT"]):
+                if (lexemes[lineNumber][wonOfIndex + 3] == "BOTH OF"):
+                    syntaxError = bothOfSyntax(lineNumber)
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    return "OK"
+                elif (lexemes[lineNumber][wonOfIndex + 3] == "EITHER OF"):
+                    syntaxError = eitherOfSyntax(lineNumber)
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    return "OK"
+                elif (lexemes[lineNumber][wonOfIndex + 3] == "WON OF"):
+                    syntaxError = wonOfSyntax(lineNumber)
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    return "OK"
+                else:
+                    syntaxError = notSyntax(lineNumber)
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    return "OK"
+            else:
+                return "[Line " + str(lineNumber) + "] SyntaxError: invalid identifier"
+        else:
+            return "[Line " + str(lineNumber) + "] SyntaxError: Expected an argument separator keyword"
 
 def allOfSyntax(lineNumber):
-    print("")
-    #INSERT CODE HERE
+    allOfIndex = lexemes[lineNumber].index("ALL OF")
+
+    if (len(lexemes[lineNumber]) < 4):
+        return "[Line " + str(lineNumber) + "] SyntaxError: missing arguments"
+        
+    if (types[lineNumber][allOfIndex + 1] == "TROOF literal"):
+        if (types[lineNumber][allOfIndex + 2] == "argument separator keyword"):
+            if (types[lineNumber][allOfIndex + 3] in ["TROOF literal", "identifier"]):
+                if (lexemes[lineNumber][allOfIndex + 4] == "MKAY"):
+                    if (lexemes[lineNumber][allOfIndex + 5] == "BTW"):
+                        syntaxError = singleCommentSyntax(lineNumber)
+
+                        if (syntaxError != "OK"):
+                            return syntaxError
+
+                        return "OK"
+                    else:
+                        return "[Line " + str(lineNumber) + "] SyntaxError: cannot have statements after boolean operation"
+                else:
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Expected infinitary arity AND operator delimiter"
+            elif (lexemes[lineNumber][allOfIndex + 3] in ["BOTH OF", "EITHER OF", "WON OF", "NOT"]):
+                if (types[lineNumber][allOfIndex + 3] == "BOTH OF"):
+                    syntaxError = bothOfSyntax(lineNumber)
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    if (lexemes[lineNumber][allOfIndex + 4] == "MKAY"):
+                        if (lexemes[lineNumber][allOfIndex + 5] == "BTW"):
+                            syntaxError = singleCommentSyntax(lineNumber)
+
+                            if (syntaxError != "OK"):
+                                return syntaxError
+
+                            return "OK"
+                        else:
+                            return "[Line " + str(lineNumber) + "] SyntaxError: cannot have statements after boolean operation"
+                    else:
+                        return "[Line " + str(lineNumber) + "] SyntaxError: Expected infinitary arity AND operator delimiter"
+                elif (types[lineNumber][allOfIndex + 3] == "EITHER OF"):
+                    syntaxError = eitherOfSyntax(lineNumber)
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    if (lexemes[lineNumber][allOfIndex + 4] == "MKAY"):
+                        if (lexemes[lineNumber][allOfIndex + 5] == "BTW"):
+                            syntaxError = singleCommentSyntax(lineNumber)
+
+                            if (syntaxError != "OK"):
+                                return syntaxError
+
+                            return "OK"
+                        else:
+                            return "[Line " + str(lineNumber) + "] SyntaxError: cannot have statements after boolean operation"
+                    else:
+                        return "[Line " + str(lineNumber) + "] SyntaxError: Expected infinitary arity AND operator delimiter"
+                elif (types[lineNumber][allOfIndex + 3] == "WON OF"):
+                    syntaxError = wonOfSyntax(lineNumber)
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    if (lexemes[lineNumber][allOfIndex + 4] == "MKAY"):
+                        if (lexemes[lineNumber][allOfIndex + 5] == "BTW"):
+                            syntaxError = singleCommentSyntax(lineNumber)
+
+                            if (syntaxError != "OK"):
+                                return syntaxError
+
+                            return "OK"
+                        else:
+                            return "[Line " + str(lineNumber) + "] SyntaxError: cannot have statements after boolean operation"
+                    else:
+                        return "[Line " + str(lineNumber) + "] SyntaxError: Expected infinitary arity AND operator delimiter"
+                else:
+                    syntaxError = notSyntax(lineNumber)
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    if (lexemes[lineNumber][allOfIndex + 4] == "MKAY"):
+                        if (lexemes[lineNumber][allOfIndex + 5] == "BTW"):
+                            syntaxError = singleCommentSyntax(lineNumber)
+
+                            if (syntaxError != "OK"):
+                                return syntaxError
+
+                            return "OK"
+                        else:
+                            return "[Line " + str(lineNumber) + "] SyntaxError: cannot have statements after boolean operation"
+                    else:
+                        return "[Line " + str(lineNumber) + "] SyntaxError: Expected infinitary arity AND operator delimiter"
+            else:
+                return "[Line " + str(lineNumber) + "] SyntaxError: invalid identifier"
+        else:
+            return "[Line " + str(lineNumber) + "] SyntaxError: required argument separator keyword"
+    else:
+        if (lexemes[lineNumber][allOfIndex + 1] in ["BOTH OF", "EITHER OF", "WON OF", "NOT"]):
+            if (types[lineNumber][allOfIndex + 1] == "BOTH OF"):
+                syntaxError = bothOfSyntax(lineNumber)
+                if (syntaxError != "OK"):
+                    return syntaxError
+            elif (lexemes[lineNumber][allOfIndex + 1] == "EITHER OF"):
+                syntaxError = eitherOfSyntax(lineNumber)
+                if (syntaxError != "OK"):
+                    return syntaxError
+            elif (lexemes[lineNumber][allOfIndex + 1] == "WON OF"):
+                syntaxError = wonOfSyntax(lineNumber)
+                if (syntaxError != "OK"):
+                    return syntaxError
+            else:
+                syntaxError = notSyntax(lineNumber)
+                if (syntaxError != "OK"):
+                    return syntaxError
+
+        if (types[lineNumber][allOfIndex + 2] == "argument separator keyword"):
+            if (types[lineNumber][allOfIndex + 3] in ["TROOF literal", "identifier"]):
+                if (lexemes[lineNumber][allOfIndex + 4] == "BTW"):
+                    syntaxError = singleCommentSyntax(lineNumber)
+
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    return "OK"
+                else:
+                    return "[Line " + str(lineNumber) + "] SyntaxError: cannot have statements after boolean operation"
+            elif (lexemes[lineNumber][allOfIndex + 3] in ["BOTH OF", "EITHER OF", "WON OF", "NOT"]):
+                if (lexemes[lineNumber][allOfIndex + 3] == "BOTH OF"):
+                    syntaxError = bothOfSyntax(lineNumber)
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    return "OK"
+                elif (lexemes[lineNumber][allOfIndex + 3] == "EITHER OF"):
+                    syntaxError = eitherOfSyntax(lineNumber)
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    return "OK"
+                elif (types[lineNumber][allOfIndex + 3] == "WON OF"):
+                    syntaxError = wonOfSyntax(lineNumber)
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    return "OK"
+                else:
+                    syntaxError = notSyntax(lineNumber)
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    return "OK"
+            else:
+                return "[Line " + str(lineNumber) + "] SyntaxError: invalid identifier"
+        else:
+            return "[Line " + str(lineNumber) + "] SyntaxError: required argument separator keyword"
 
 def anyOfSyntax(lineNumber):
     print("")
@@ -759,35 +1187,33 @@ while(True):
 
             lineNumber = nextLineNumber(lineNumber)
             continue
-        # elif(lexemes[lineNumber][lexemeIndex] == "BOTH OF"):
-        #     syntaxError = bothOfSyntax(lineNumber)
+        elif(lexemes[lineNumber][lexemeIndex] == "BOTH OF"):
+            syntaxError = bothOfSyntax(lineNumber)
 
-        #     if(syntaxError != "OK"):
-        #         print(syntaxError)
-        #         break
+            if(syntaxError != "OK"):
+                print(syntaxError)
+                break
 
-        #     lineNumber = nextLineNumber(lineNumber)
-        #     continue
+            lineNumber = nextLineNumber(lineNumber)
+            continue
+        elif(lexemes[lineNumber][lexemeIndex] == "EITHER OF"):
+            syntaxError = eitherOfSyntax(lineNumber)
 
-        # elif(lexemes[lineNumber][lexemeIndex] == "EITHER OF"):
-        #     syntaxError = eitherOfSyntax(lineNumber)
+            if(syntaxError != "OK"):
+                print(syntaxError)
+                break
 
-        #     if(syntaxError != "OK"):
-        #         print(syntaxError)
-        #         break
+            lineNumber = nextLineNumber(lineNumber)
+            continue
+        elif(lexemes[lineNumber][lexemeIndex] == "WON OF"):
+            syntaxError = wonOfSyntax(lineNumber)
 
-        #     lineNumber = nextLineNumber(lineNumber)
-        #     continue
+            if(syntaxError != "OK"):
+                print(syntaxError)
+                break
 
-        # elif(lexemes[lineNumber][lexemeIndex] == "WON OF"):
-        #     syntaxError = wonOfSyntax(lineNumber)
-
-        #     if(syntaxError != "OK"):
-        #         print(syntaxError)
-        #         break
-
-        #     lineNumber = nextLineNumber(lineNumber)
-        #     continue
+            lineNumber = nextLineNumber(lineNumber)
+            continue
 
         # elif(lexemes[lineNumber][lexemeIndex] == "NOT"):
         #     syntaxError = notSyntax(lineNumber)
@@ -809,15 +1235,15 @@ while(True):
         #     lineNumber = nextLineNumber(lineNumber)
         #     continue
 
-        # elif(lexemes[lineNumber][lexemeIndex] == "ALL OF"):
-        #     syntaxError = allOfSyntax(lineNumber)
+        elif(lexemes[lineNumber][lexemeIndex] == "ALL OF"):
+            syntaxError = allOfSyntax(lineNumber)
 
-        #     if(syntaxError != "OK"):
-        #         print(syntaxError)
-        #         break
+            if(syntaxError != "OK"):
+                print(syntaxError)
+                break
 
-        #     lineNumber = nextLineNumber(lineNumber)
-        #     continue
+            lineNumber = nextLineNumber(lineNumber)
+            continue
 
         # elif(lexemes[lineNumber][lexemeIndex] == "BOTH SAEM"):
         #     syntaxError = bothSaemSyntax(lineNumber)
