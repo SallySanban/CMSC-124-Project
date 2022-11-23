@@ -126,35 +126,36 @@ def multiCommentSyntax(lineNumber):
 
     return nextLineNumber(lineNumber)
 
-def sumOfSyntax(lineNumber):
-    print("")
-    sumOfKeyword = lexemes[lineNumber].index("SUM OF")
-    print(sumOfKeyword)
+def mathOperationSyntax(lineNumber):
+    operationDone = False
+    counter = 0
+    for keyword in lexemes[lineNumber]:                 # Checks the n operation keywords
+        if (keyword in ["SUM OF", "DIFF OF", "PRODUKT OF", "QUOSHUNT OF", "MOD OF"]):
+            counter += 1
+        else:
+            break
 
-    # if(commentDelimiter + 1 == len(types[lineNumber])):
-    #     return "[Line " + str(lineNumber) + "] SyntaxError: no comment indicated"
-
-    # for i in range(commentDelimiter + 1, len(types[lineNumber])):
-    #     if(types[lineNumber][i] != "comment"):
-    #         return "[Line " + str(lineNumber) + "] SyntaxError: not a comment"
-
-    # return "OK"
-
-def diffOfSyntax(lineNumber):
-    print("")
-    #INSERT CODE HERE
-
-def produktOfSyntax(lineNumber):
-    print("")
-    #INSERT CODE HERE
-
-def quoshuntOfSyntax(lineNumber):
-    print("")
-    #INSERT CODE HERE
-
-def modOfSyntax(lineNumber):
-    print("")
-    #INSERT CODE HERE
+    isNumber = False
+    numberCnt = 0
+    for k in range(counter, len(lexemes[lineNumber])):
+        if (numberCnt < counter + 1):
+            try:
+                isNumber = not isNumber
+                if isNumber:
+                    if (isinstance(int(lexemes[lineNumber][k]), int) or isinstance(float(lexemes[lineNumber][k]), float)):
+                        numberCnt += 1
+                else:
+                    if (lexemes[lineNumber][k] != "AN"):
+                        return "[Line " + str(lineNumber) + "] SyntaxError: Expected an AN keyword between the literals"
+            except ValueError:
+                print(lexemes[lineNumber][k])
+                return "[Line " + str(lineNumber) + "] SyntaxError: Expected a numbr or numbar literal after arithmetic operator"
+        else:
+            # print(lexemes[lineNumber][k])       # Checker
+            if(lexemes[lineNumber][k] == "BTW"):
+                return singleCommentSyntax(lineNumber)
+            else:
+                return "[Line " + str(lineNumber) + "] SyntaxError: cannot have statements after arithmetic operation"
 
 def biggrOfSyntax(lineNumber):
     print("")
@@ -216,28 +217,8 @@ def itzSyntax(lineNumber):
                 singleCommentSyntax(lineNumber)
             else:
                 return "[Line " + str(lineNumber) + "] SyntaxError: cannot have statements after variable declaration"
-    elif(lexemes[lineNumber][itzLexeme + 1] == "SUM OF"):
-        syntaxError = sumOfSyntax(lineNumber)
-
-        if(syntaxError != "OK"):
-            return syntaxError
-    elif(lexemes[lineNumber][itzLexeme + 1] == "DIFF OF"):
-        syntaxError = diffOfSyntax(lineNumber)
-
-        if(syntaxError != "OK"):
-            return syntaxError
-    elif(lexemes[lineNumber][itzLexeme + 1] == "PRODUKT OF"):
-        syntaxError = produktOfSyntax(lineNumber)
-
-        if(syntaxError != "OK"):
-            return syntaxError
-    elif(lexemes[lineNumber][itzLexeme + 1] == "QUOSHUNT OF"):
-        syntaxError = quoshuntOfSyntax(lineNumber)
-
-        if(syntaxError != "OK"):
-            return syntaxError
-    elif(lexemes[lineNumber][itzLexeme + 1] == "MOD OF"):
-        syntaxError = modOfSyntax(lineNumber)
+    elif(lexemes[lineNumber][itzLexeme + 1] == ("SUM OF" or "DIFF OF" or "PRODUKT OF" or "QUOSHUNT OF" or "MOD OF")):
+        syntaxError = mathOperationSyntax(lineNumber)
 
         if(syntaxError != "OK"):
             return syntaxError
@@ -429,8 +410,8 @@ while(True):
             continue
         
         # ! START OF RIO DUCUSIN'S PART
-        elif(lexemes[lineNumber][lexemeIndex] == "SUM OF"):
-            syntaxError = sumOfSyntax(lineNumber)
+        elif(lexemes[lineNumber][lexemeIndex] == ("SUM OF" or "DIFF OF" or "PRODUKT OF" or "QUOSHUNT OF" or "MOD OF")):
+            syntaxError = mathOperationSyntax(lineNumber)
 
             if(syntaxError != "OK"):
                 print(syntaxError)
@@ -439,46 +420,6 @@ while(True):
             lineNumber = nextLineNumber(lineNumber)
             continue
 
-        # elif(lexemes[lineNumber][lexemeIndex] == "DIFF OF"):
-        #     syntaxError = diffOfSyntax(lineNumber)
-
-        #     if(syntaxError != "OK"):
-        #         print(syntaxError)
-        #         break
-
-        #     lineNumber = nextLineNumber(lineNumber)
-        #     continue
-
-        # elif(lexemes[lineNumber][lexemeIndex] == "PRODUKT OF"):
-        #     syntaxError = diffOfSyntax(lineNumber)
-
-        #     if(syntaxError != "OK"):
-        #         print(syntaxError)
-        #         break
-
-        #     lineNumber = nextLineNumber(lineNumber)
-        #     continue
-
-        # elif(lexemes[lineNumber][lexemeIndex] == "QUOSHUNT OF"):
-        #     syntaxError = diffOfSyntax(lineNumber)
-
-        #     if(syntaxError != "OK"):
-        #         print(syntaxError)
-        #         break
-
-        #     lineNumber = nextLineNumber(lineNumber)
-        #     continue
-
-        # elif(lexemes[lineNumber][lexemeIndex] == "MOD OF"):
-        #     syntaxError = diffOfSyntax(lineNumber)
-
-        #     if(syntaxError != "OK"):
-        #         print(syntaxError)
-        #         break
-
-        #     lineNumber = nextLineNumber(lineNumber)
-        #     continue
-        
         # elif(lexemes[lineNumber][lexemeIndex] == "BIGGR OF"):
         #     syntaxError = biggrOfSyntax(lineNumber)
 
