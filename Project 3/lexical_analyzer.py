@@ -1,10 +1,6 @@
 import re
 
-<<<<<<< Updated upstream
 filename = "Project 3/samplecodecomments.txt"
-=======
-filename = "Project 3/samplecode.txt"
->>>>>>> Stashed changes
 
 #reads file and cleans each line in the file
 def readFile(filename):
@@ -98,6 +94,7 @@ def findLexemes(lines):
     singleCommentFound = False
     multiCommentFound = False
     keywordFound = False
+    isNowAKeyword = ""
     keyword = ""
     string = ""
     singleComment = ""
@@ -970,7 +967,7 @@ def findLexemes(lines):
                     keyword = ""
             
             aKeyword = re.search("^(A)$", splitWords[j])
-            if(aKeyword):
+            if(aKeyword and isNowAKeyword == ""):
                 if(i+1 not in lexemes):
                     lexemes[i+1] = []
                     lexemes[i+1].append(splitWords[j])
@@ -988,37 +985,60 @@ def findLexemes(lines):
                     keyword = ""
 
             # IS NOW A KEYWORD      CURRENTLY NOT WORKING
-            if (keywordFound == True and (keyword == "IS")): 
-                if (splitWords[j].strip() == "NOW"):
-                    keyword = keyword + " " + "NOW"
-                    continue
-                elif (splitWords[j].strip() == "A"):
-                    keyword = keyword + " " + "A"
-                    if(i+1 not in lexemes):
-                        lexemes[i+1] = []
-                        lexemes[i+1].append(keyword)
-                    else:
-                        lexemes[i+1].append(keyword)
+            # if (keywordFound == True and (keyword == "IS")): 
+            #     if (splitWords[j].strip() == "NOW"):
+            #         keyword = keyword + " " + "NOW"
+            #         continue
+            #     elif (splitWords[j].strip() == "A"):
+            #         keyword = keyword + " " + "A"
+            #         if(i+1 not in lexemes):
+            #             lexemes[i+1] = []
+            #             lexemes[i+1].append(keyword)
+            #         else:
+            #             lexemes[i+1].append(keyword)
                     
-                    if(i+1 not in types):
-                        types[i+1] = []
-                        types[i+1].append("typecasting keyword")
-                    else:
-                        types[i+1].append("typecasting keyword")
+            #         if(i+1 not in types):
+            #             types[i+1] = []
+            #             types[i+1].append("typecasting keyword")
+            #         else:
+            #             types[i+1].append("typecasting keyword")
                     
-                    keywordFound == False        # REINITIALIZE USED VARIABLES
-                    keyword = ""
-                    continue
-                else:
-                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
-                    keyword = ""
-                    continue
-            # isNowAKeyword = re.findall("(IS\ NOW\ A)", lines[i])                          # IS NOW A (changed regex here to catch in betweens)
-            # if (len(isNowAKeyword) != 0):
-            #     if (symbolTable['typecasting keyword'].get(isNowAKeyword[0])):           
-            #         symbolTable['typecasting keyword']["IS NOW A"][0] += len(isNowAKeyword)
+            #         keywordFound == False        # REINITIALIZE USED VARIABLES
+            #         keyword = ""
+            #         continue
             #     else:
-            #         symbolTable['typecasting keyword'][isNowAKeyword[0]] = [len(isNowAKeyword)]
+            #         keywordFound == False        # NOT FOUND -> WRONG SYNTAX
+            #         keyword = ""
+            #         continue
+            
+            if(splitWords[j] == "IS"):
+                isNowAKeyword = isNowAKeyword + splitWords[j] + " "
+                continue
+
+
+            if(isNowAKeyword == "IS "):
+                if(splitWords[j] == "NOW"):
+                    isNowAKeyword = isNowAKeyword + splitWords[j] + " "
+                    continue
+
+            if(isNowAKeyword == "IS NOW "):
+                if(splitWords[j] == "A"):
+                    isNowAKeyword = isNowAKeyword + splitWords[j]
+
+                    if(isNowAKeyword == "IS NOW A"):
+                        if(i+1 not in lexemes):
+                            lexemes[i+1] = []
+                            lexemes[i+1].append(isNowAKeyword)
+                        else:
+                            lexemes[i+1].append(isNowAKeyword)
+                    
+                        if(i+1 not in types):
+                            types[i+1] = []
+                            types[i+1].append("typecast keyword")
+                        else:
+                            types[i+1].append("typecast keyword")
+                        
+                        isNowAKeyword = ""
 
             visibleKeyword = re.search("^(VISIBLE)$", splitWords[j])
             if(visibleKeyword):
