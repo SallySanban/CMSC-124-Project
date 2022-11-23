@@ -1,6 +1,10 @@
 import re
 
+<<<<<<< Updated upstream
 filename = "Project 3/samplecodecomments.txt"
+=======
+filename = "Project 3/samplecode.txt"
+>>>>>>> Stashed changes
 
 #reads file and cleans each line in the file
 def readFile(filename):
@@ -984,13 +988,7 @@ def findLexemes(lines):
                     keyword = ""
 
             # IS NOW A KEYWORD      CURRENTLY NOT WORKING
-            if (splitWords[j].strip() == "IS"):
-                keywordFound = True
-                keyword = keyword + splitWords[j]
-                continue
-
-            if (keywordFound == True and (keyword == "IS" or keyword =="IS NOW")):
-                print(keyword)  
+            if (keywordFound == True and (keyword == "IS")): 
                 if (splitWords[j].strip() == "NOW"):
                     keyword = keyword + " " + "NOW"
                     continue
@@ -1007,6 +1005,9 @@ def findLexemes(lines):
                         types[i+1].append("typecasting keyword")
                     else:
                         types[i+1].append("typecasting keyword")
+                    
+                    keywordFound == False        # REINITIALIZE USED VARIABLES
+                    keyword = ""
                     continue
                 else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
