@@ -1,6 +1,6 @@
 import re
 
-filename = "Project 3/samplecodewrong.txt"
+filename = "Project 3/samplecodecomments.txt"
 
 #reads file and cleans each line in the file
 def readFile(filename):
@@ -725,6 +725,23 @@ def findLexemes(lines):
                     keywordFound == False        # REINITIALIZE USED VARIABLES
                     keyword = ""
                     continue
+                elif (splitWords[j] == "SAEM"):
+                    keyword = keyword + " " + "SAEM"
+                    if(i+1 not in lexemes):
+                        lexemes[i+1] = []
+                        lexemes[i+1].append(keyword)
+                    else:
+                        lexemes[i+1].append(keyword)
+                    
+                    if(i+1 not in types):
+                        types[i+1] = []
+                        types[i+1].append("is equal comparison operator")
+                    else:
+                        types[i+1].append("is equal comparison operator")
+                    
+                    keywordFound == False        # REINITIALIZE USED VARIABLES
+                    keyword = ""
+                    continue
                 else:
                     keywordFound == False        # NOT FOUND -> WRONG SYNTAX
                     keyword = ""
@@ -849,34 +866,6 @@ def findLexemes(lines):
                         types[i+1].append("infinite arity AND operator")
                     else:
                         types[i+1].append("infinite arity AND operator")
-                    
-                    keywordFound == False        # REINITIALIZE USED VARIABLES
-                    keyword = ""
-                    continue
-                else:
-                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
-                    keyword = ""
-            
-            # BOTH SAEM KEYWORD
-            if (splitWords[j].strip() == "BOTH"):
-                keywordFound = True
-                keyword = keyword + splitWords[j]
-                continue
-
-            if (keywordFound == True and (keyword == "BOTH")):
-                if (splitWords[j] == "SAEM"):
-                    keyword = keyword + " " + "OF"
-                    if(i+1 not in lexemes):
-                        lexemes[i+1] = []
-                        lexemes[i+1].append(keyword)
-                    else:
-                        lexemes[i+1].append(keyword)
-                    
-                    if(i+1 not in types):
-                        types[i+1] = []
-                        types[i+1].append("is equal comparison operator")
-                    else:
-                        types[i+1].append("is equal comparison operator")
                     
                     keywordFound == False        # REINITIALIZE USED VARIABLES
                     keyword = ""
