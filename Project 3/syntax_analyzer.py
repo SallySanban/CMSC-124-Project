@@ -128,7 +128,17 @@ def multiCommentSyntax(lineNumber):
 
 def sumOfSyntax(lineNumber):
     print("")
-    #INSERT CODE HERE
+    sumOfKeyword = lexemes[lineNumber].index("SUM OF")
+    print(sumOfKeyword)
+
+    # if(commentDelimiter + 1 == len(types[lineNumber])):
+    #     return "[Line " + str(lineNumber) + "] SyntaxError: no comment indicated"
+
+    # for i in range(commentDelimiter + 1, len(types[lineNumber])):
+    #     if(types[lineNumber][i] != "comment"):
+    #         return "[Line " + str(lineNumber) + "] SyntaxError: not a comment"
+
+    # return "OK"
 
 def diffOfSyntax(lineNumber):
     print("")
@@ -417,6 +427,150 @@ while(True):
 
             lineNumber = nextLineNumber(lineNumber)
             continue
+        
+        # ! START OF RIO DUCUSIN'S PART
+        elif(lexemes[lineNumber][lexemeIndex] == "SUM OF"):
+            syntaxError = sumOfSyntax(lineNumber)
+
+            if(syntaxError != "OK"):
+                print(syntaxError)
+                break
+
+            lineNumber = nextLineNumber(lineNumber)
+            continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "DIFF OF"):
+        #     syntaxError = diffOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "PRODUKT OF"):
+        #     syntaxError = diffOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "QUOSHUNT OF"):
+        #     syntaxError = diffOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "MOD OF"):
+        #     syntaxError = diffOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+        
+        # elif(lexemes[lineNumber][lexemeIndex] == "BIGGR OF"):
+        #     syntaxError = biggrOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "SMALLR OF"):
+        #     syntaxError = smallrOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "BOTH OF"):
+        #     syntaxError = bothOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "EITHER OF"):
+        #     syntaxError = eitherOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "WON OF"):
+        #     syntaxError = wonOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "NOT"):
+        #     syntaxError = notSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "ANY OF"):
+        #     syntaxError = anyOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "ALL OF"):
+        #     syntaxError = allOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "BOTH SAEM"):
+        #     syntaxError = bothSaemSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # ! END OF RIO DUCUSIN'S PART
+
         elif(lexemes[lineNumber][lexemeIndex] == "KTHXBYE"):
             codeEnded = True
             syntaxError = kthxbyeSyntax(lineNumber)
