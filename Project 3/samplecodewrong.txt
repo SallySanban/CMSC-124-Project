@@ -51,6 +51,7 @@ BTW Binary notation:
 BOTH OF WIN AN WIN           BTW and: WIN if x=WIN, y=WIN
 EITHER OF FAIL AN WIN        BTW or: FAIL if x=FAIL, y=FAIL
 WON OF WIN AN FAIL           BTW xor: FAIL if x=y
+NOT NOT NOT NOT NOT x                    BTW unary negation: WIN if x=FAIL
 
 BTW Comparison:
 

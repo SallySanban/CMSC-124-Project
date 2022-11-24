@@ -392,7 +392,99 @@ def smooshSyntax(lineNumber):
     #INSERT CODE HERE
 
 def notSyntax(lineNumber):
-    print("")
+    # NOT <x>
+    global startBoolOperator
+    global sameBoolOperator
+
+    if (startBoolOperator == ""):
+        startBoolOperator = "NOT"
+        sameBoolOperator += 1                   # Incrementing the count
+
+        notIndex = lexemes[lineNumber].index("NOT")
+
+        if (types[lineNumber][notIndex + 1] in ["TROOF literal", "identifier"]):
+            try:
+                if (lexemes[lineNumber][notIndex + 2] == "BTW"):
+                    syntaxError = singleCommentSyntax(lineNumber)
+
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    startBoolOperator = ""
+                    sameBoolOperator = 0
+                    return "OK"
+                else:
+                    return "[Line " + str(lineNumber) + "] SyntaxError: cannot have statements after boolean operation"
+            except IndexError:
+                startBoolOperator = ""
+                sameBoolOperator = 0
+                return "OK"         # When there is no comment
+        elif (lexemes[lineNumber][notIndex + 1] in ["BOTH OF", "EITHER OF", "WON OF", "NOT"]):
+            if (lexemes[lineNumber][notIndex + 1] == "BOTH OF"):
+                syntaxError = bothOfSyntax(lineNumber)
+                if (syntaxError != "OK"):
+                    return syntaxError
+            elif (lexemes[lineNumber][notIndex + 1] == "EITHER OF"):
+                syntaxError = eitherOfSyntax(lineNumber)
+                if (syntaxError != "OK"):
+                    return syntaxError
+            elif (lexemes[lineNumber][notIndex + 1] == "WON OF"):
+                syntaxError = wonOfSyntax(lineNumber)
+                if (syntaxError != "OK"):
+                    return syntaxError
+            else:
+                sameBoolOperator += 1
+
+                syntaxError = notSyntax(lineNumber)
+                if (syntaxError != "OK"):
+                    return syntaxError
+            
+            try:
+                btwIndex = lexemes[lineNumber].index("BTW")
+                if (lexemes[lineNumber][btwIndex] == "BTW"):
+                    syntaxError = singleCommentSyntax(lineNumber)
+
+                    if (syntaxError != "OK"):
+                        return syntaxError
+
+                    startBoolOperator = ""
+                    sameBoolOperator = 0
+                    return "OK"
+                else:
+                    return "[Line " + str(lineNumber) + "] SyntaxError: cannot have statements after boolean operation"
+            except IndexError:
+                startBoolOperator = ""
+                sameBoolOperator = 0
+                return "OK"         # When there is no comment
+        else:
+            return "[Line " + str(lineNumber) + "] SyntaxError: Missing arguments"
+    else:
+        notIndex = [i for i, n in enumerate(lexemes[lineNumber]) if n == 'NOT'][sameBoolOperator - 1]
+
+        if (types[lineNumber][notIndex + 1] in ["TROOF literal", "identifier"]):
+                return "OK"         
+        elif (lexemes[lineNumber][notIndex + 1] in ["BOTH OF", "EITHER OF", "WON OF", "NOT"]):
+            if (lexemes[lineNumber][notIndex + 1] == "BOTH OF"):
+                syntaxError = bothOfSyntax(lineNumber)
+                if (syntaxError != "OK"):
+                    return syntaxError
+            elif (lexemes[lineNumber][notIndex + 1] == "EITHER OF"):
+                syntaxError = eitherOfSyntax(lineNumber)
+                if (syntaxError != "OK"):
+                    return syntaxError
+            elif (lexemes[lineNumber][notIndex + 1] == "WON OF"):
+                syntaxError = wonOfSyntax(lineNumber)
+                if (syntaxError != "OK"):
+                    return syntaxError
+            else:
+                sameBoolOperator += 1
+                syntaxError = notSyntax(lineNumber)
+                if (syntaxError != "OK"):
+                    return syntaxError
+
+            return "OK"         # When there is no comment
+        else:
+            return "[Line " + str(lineNumber) + "] SyntaxError: Missing arguments"
 
 def bothOfSyntax(lineNumber):
     # BOTH OF <x> AN <y>
@@ -409,9 +501,9 @@ def bothOfSyntax(lineNumber):
 
         bothOfIndex = lexemes[lineNumber].index("BOTH OF")
 
-        if (types[lineNumber][bothOfIndex + 1] in ["TROOF literal", "variable identifier"]):
+        if (types[lineNumber][bothOfIndex + 1] in ["TROOF literal", "identifier"]):
             if (types[lineNumber][bothOfIndex + 2] == "argument separator keyword"):
-                if (types[lineNumber][bothOfIndex + 3] in ["TROOF literal", "variable identifier"]):
+                if (types[lineNumber][bothOfIndex + 3] in ["TROOF literal", "identifier"]):
                     try:
                         if (lexemes[lineNumber][bothOfIndex + 4] == "BTW"):
                             syntaxError = singleCommentSyntax(lineNumber)
@@ -536,9 +628,9 @@ def bothOfSyntax(lineNumber):
     else:
         # BOTH OF <x> AN <y>
         sameBoolIndex = [i for i, n in enumerate(lexemes[lineNumber]) if n == 'BOTH OF'][sameBoolOperator - 1]       # Index of ith instance of EITHER OF
-        if (types[lineNumber][sameBoolIndex + 1] in ["TROOF literal", "variable identifier"]):
+        if (types[lineNumber][sameBoolIndex + 1] in ["TROOF literal", "identifier"]):
             if (types[lineNumber][sameBoolIndex + 2] == "argument separator keyword"):
-                if (types[lineNumber][sameBoolIndex + 3] in ["TROOF literal", "variable identifier"]):
+                if (types[lineNumber][sameBoolIndex + 3] in ["TROOF literal", "identifier"]):
                     return "OK"         # When there is no comment
                 elif (lexemes[lineNumber][sameBoolIndex + 3] in ["BOTH OF", "EITHER OF", "WON OF", "NOT"]):
                     if (lexemes[lineNumber][sameBoolIndex + 3] == "BOTH OF"):
@@ -616,9 +708,9 @@ def eitherOfSyntax(lineNumber):
 
         eitherOfIndex = lexemes[lineNumber].index("EITHER OF")
 
-        if (types[lineNumber][eitherOfIndex + 1] in ["TROOF literal", "variable identifier"]):
+        if (types[lineNumber][eitherOfIndex + 1] in ["TROOF literal", "identifier"]):
             if (types[lineNumber][eitherOfIndex + 2] == "argument separator keyword"):
-                if (types[lineNumber][eitherOfIndex + 3] in ["TROOF literal", "variable identifier"]):
+                if (types[lineNumber][eitherOfIndex + 3] in ["TROOF literal", "identifier"]):
                     try:
                         if (lexemes[lineNumber][eitherOfIndex + 4] == "BTW"):
                             syntaxError = singleCommentSyntax(lineNumber)
@@ -745,9 +837,9 @@ def eitherOfSyntax(lineNumber):
     else:
         # EITHER OF <x> AN <y>
         sameBoolIndex = [i for i, n in enumerate(lexemes[lineNumber]) if n == 'EITHER OF'][sameBoolOperator - 1]       # Index of ith instance of EITHER OF
-        if (types[lineNumber][sameBoolIndex + 1] in ["TROOF literal", "variable identifier"]):
+        if (types[lineNumber][sameBoolIndex + 1] in ["TROOF literal", "identifier"]):
             if (types[lineNumber][sameBoolIndex + 2] == "argument separator keyword"):
-                if (types[lineNumber][sameBoolIndex + 3] in ["TROOF literal", "variable identifier"]):
+                if (types[lineNumber][sameBoolIndex + 3] in ["TROOF literal", "identifier"]):
                     return "OK"         # When there is no comment
                 elif (lexemes[lineNumber][sameBoolIndex + 3] in ["BOTH OF", "EITHER OF", "WON OF", "NOT"]):
                     if (lexemes[lineNumber][sameBoolIndex + 3] == "BOTH OF"):
@@ -824,9 +916,9 @@ def wonOfSyntax(lineNumber):
 
         bothOfIndex = lexemes[lineNumber].index("WON OF")
 
-        if (types[lineNumber][bothOfIndex + 1] in ["TROOF literal", "variable identifier"]):
+        if (types[lineNumber][bothOfIndex + 1] in ["TROOF literal", "identifier"]):
             if (types[lineNumber][bothOfIndex + 2] == "argument separator keyword"):
-                if (types[lineNumber][bothOfIndex + 3] in ["TROOF literal", "variable identifier"]):
+                if (types[lineNumber][bothOfIndex + 3] in ["TROOF literal", "identifier"]):
                     try:
                         if (lexemes[lineNumber][bothOfIndex + 4] == "BTW"):
                             syntaxError = singleCommentSyntax(lineNumber)
@@ -950,9 +1042,9 @@ def wonOfSyntax(lineNumber):
     else:
         # BOTH OF <x> AN <y>
         sameBoolIndex = [i for i, n in enumerate(lexemes[lineNumber]) if n == 'BOTH OF'][sameBoolOperator - 1]       # Index of ith instance of EITHER OF
-        if (types[lineNumber][sameBoolIndex + 1] in ["TROOF literal", "variable identifier"]):
+        if (types[lineNumber][sameBoolIndex + 1] in ["TROOF literal", "identifier"]):
             if (types[lineNumber][sameBoolIndex + 2] == "argument separator keyword"):
-                if (types[lineNumber][sameBoolIndex + 3] in ["TROOF literal", "variable identifier"]):
+                if (types[lineNumber][sameBoolIndex + 3] in ["TROOF literal", "identifier"]):
                     return "OK"         # When there is no comment
                 elif (lexemes[lineNumber][sameBoolIndex + 3] in ["BOTH OF", "EITHER OF", "WON OF", "NOT"]):
                     if (lexemes[lineNumber][sameBoolIndex + 3] == "BOTH OF"):
@@ -1514,16 +1606,15 @@ while(True):
 
             lineNumber = nextLineNumber(lineNumber)
             continue
+        elif(lexemes[lineNumber][lexemeIndex] == "NOT"):
+            syntaxError = notSyntax(lineNumber)
 
-        # elif(lexemes[lineNumber][lexemeIndex] == "NOT"):
-        #     syntaxError = notSyntax(lineNumber)
+            if(syntaxError != "OK"):
+                print(syntaxError)
+                break
 
-        #     if(syntaxError != "OK"):
-        #         print(syntaxError)
-        #         break
-
-        #     lineNumber = nextLineNumber(lineNumber)
-        #     continue
+            lineNumber = nextLineNumber(lineNumber)
+            continue
 
         # elif(lexemes[lineNumber][lexemeIndex] == "ANY OF"):
         #     syntaxError = anyOfSyntax(lineNumber)
