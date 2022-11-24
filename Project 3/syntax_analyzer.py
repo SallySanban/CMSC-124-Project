@@ -175,6 +175,8 @@ def sumOfSyntax(lineNumber):
             if isNumber:
                 if (types[lineNumber][k] in ["NUMBR literal", "NUMBAR literal"]):
                     numberCnt += 1
+                else:
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Expected a numbr or numbar literal"
             else:
                 if (lexemes[lineNumber][k] != "AN"):
                     return "[Line " + str(lineNumber) + "] SyntaxError: Expected an argument separator keyword"
@@ -208,6 +210,8 @@ def diffOfSyntax(lineNumber):
             if isNumber:
                 if (types[lineNumber][k] in ["NUMBR literal", "NUMBAR literal"]):
                     numberCnt += 1
+                else:
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Expected a numbr or numbar literal"
             else:
                 if (lexemes[lineNumber][k] != "AN"):
                     return "[Line " + str(lineNumber) + "] SyntaxError: Expected an argument separator keyword"
@@ -241,6 +245,8 @@ def produktOfSyntax(lineNumber):
             if isNumber:
                 if (types[lineNumber][k] in ["NUMBR literal", "NUMBAR literal"]):
                     numberCnt += 1
+                else:
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Expected a numbr or numbar literal"
             else:
                 if (lexemes[lineNumber][k] != "AN"):
                     return "[Line " + str(lineNumber) + "] SyntaxError: Expected an argument separator keyword"
@@ -274,6 +280,8 @@ def quoshuntOfSyntax(lineNumber):
             if isNumber:
                 if (types[lineNumber][k] in ["NUMBR literal", "NUMBAR literal"]):
                     numberCnt += 1
+                else:
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Expected a numbr or numbar literal"
             else:
                 if (lexemes[lineNumber][k] != "AN"):
                     return "[Line " + str(lineNumber) + "] SyntaxError: Expected an argument separator keyword"
@@ -307,6 +315,8 @@ def modOfSyntax(lineNumber):
             if isNumber:
                 if (types[lineNumber][k] in ["NUMBR literal", "NUMBAR literal"]):
                     numberCnt += 1
+                else:
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Expected a numbr or numbar literal"
             else:
                 if (lexemes[lineNumber][k] != "AN"):
                     return "[Line " + str(lineNumber) + "] SyntaxError: Expected an argument separator keyword"
@@ -340,6 +350,8 @@ def biggrOfSyntax(lineNumber):
             if isNumber:
                 if (types[lineNumber][k] in ["NUMBR literal", "NUMBAR literal"]):
                     numberCnt += 1
+                else:
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Expected a numbr or numbar literal"
             else:
                 if (lexemes[lineNumber][k] != "AN"):
                     return "[Line " + str(lineNumber) + "] SyntaxError: Expected an argument separator keyword"
@@ -364,7 +376,7 @@ def smallrOfSyntax(lineNumber):
             counter += 1
         else:
             break
-    
+
     isNumber = False
     numberCnt = 0
     for k in range(smallrOfIndex + counter, len(lexemes[lineNumber])):
@@ -373,6 +385,8 @@ def smallrOfSyntax(lineNumber):
             if isNumber:
                 if (types[lineNumber][k] in ["NUMBR literal", "NUMBAR literal"]):
                     numberCnt += 1
+                else:
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Expected a numbr or numbar literal"
             else:
                 if (lexemes[lineNumber][k] != "AN"):
                     return "[Line " + str(lineNumber) + "] SyntaxError: Expected an argument separator keyword"
