@@ -39,7 +39,7 @@ TLDR
 BTW LOLCODE uses polish notation style math.
 
 BTW Basic mathematical notation:
-SUM OF 21 AN 33         BTW 21 + 33
+SUM OF SUM OF 21 AN 33 AN 21         BTW 21 + 33
 DIFF OF 90 AN 10        BTW 90 - 10
 PRODUKT OF 12 AN 13     BTW 12 * 13
 QUOSHUNT OF 32 AN 43    BTW 32 / 43

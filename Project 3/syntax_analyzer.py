@@ -159,6 +159,7 @@ def multiCommentSyntax(lineNumber):
 def sumOfSyntax(lineNumber):
     sumOfIndex = lexemes[lineNumber].index("SUM OF")
 
+    # print(lexemes[lineNumber])
     counter = 0
     for keyword in range(sumOfIndex, len(lexemes[lineNumber])):                 # Checks the n operation keywords
         if (lexemes[lineNumber][keyword] in ["SUM OF", "DIFF OF", "PRODUKT OF", "QUOSHUNT OF", "MOD OF", "BIGGR OF", "SMALLR OF"]):
