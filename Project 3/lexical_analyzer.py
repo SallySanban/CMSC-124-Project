@@ -1,13 +1,11 @@
 import re
 
-filename = "Project 3/samplecode.txt"
+filename = "Project 3/samplecodecomments.txt"
 
 #reads file and cleans each line in the file
 def readFile(filename):
     file = open(filename)
     lines = []
-
-    #print(file.readlines())
 
     #reads the file and places each line in a list
     for line in file.readlines():
@@ -27,69 +25,6 @@ def readFile(filename):
 
 #finds lexemes in code and groups them 
 def findLexemes(lines):
-    keywords = ["HAI",
-                "KTHXBYE",
-                "OBTW",
-                "BTW",
-                "TLDR",
-                "I",
-                "HAS",
-                "A",
-                "ITZ",
-                "R",
-                "SUM",
-                "OF",
-                "DIFF",
-                "PRODUKT",
-                "QUOSHUNT",
-                "MOD",
-                "BIGGR",
-                "SMALLR",
-                "BOTH",
-                "EITHER",
-                "WON",
-                "NOT",
-                "ANY",
-                "ALL",
-                "SAEM",
-                "DIFFRINT",
-                "SMOOSH",
-                "MAEK",
-                "AN",
-                "IS",
-                "NOW",
-                "VISIBLE",
-                "GIMMEH",
-                "O",
-                "RLY?",
-                "YA",
-                "RLY",
-                "MEBBE",
-                "NO",
-                "WAI",
-                "OIC",
-                "WTF?",
-                "OMG",
-                "OMGWTF",
-                "IM",
-                "IN",
-                "UPPIN",
-                "NERFIN",
-                "OUTTA",
-                "YR",
-                "TIL",
-                "WILE",
-                "GTFO",
-                "MKAY",
-                "WIN",
-                "FAIL",
-                "TROOF",
-                "NOOB",
-                "NUMBR",
-                "NUMBAR",
-                "YARN",
-                "TYPE"
-                ]
     stringFound = False
     singleCommentFound = False
     multiCommentFound = False
@@ -453,8 +388,6 @@ def findLexemes(lines):
                 continue
 
             if (keywordFound == True and (keyword == "I" or keyword =="I HAS")):
-                # print(keyword)              # CHECKER
-                # print("HEHEH")
                 if (splitWords[j] == "HAS"):
                     keyword = keyword + " " + "HAS"
                     continue
@@ -569,7 +502,6 @@ def findLexemes(lines):
             if (splitWords[j] == "PRODUKT"):
                 keywordFound = True
                 keyword = keyword + splitWords[j]
-                print(keyword)
                 continue
 
             if (keywordFound == True and (keyword == "PRODUKT")):
@@ -976,6 +908,7 @@ def findLexemes(lines):
                             types[i+1].append("typecast keyword")
                         
                         isNowAKeyword = ""
+                        continue
 
             #VISIBLE Keyword
             visibleKeyword = re.search("^(VISIBLE)$", splitWords[j])
@@ -1306,7 +1239,6 @@ def findLexemes(lines):
                             imYrKeyword = imYrKeyword + splitWords[j]
             elif(imYrKeyword == "IM OUTTA "):
                 if(splitWords[j] == "YR"):
-                    print(splitWords[j])
                     imYrKeyword = imYrKeyword + splitWords[j]
                     if(imYrKeyword == "IM OUTTA YR"):
                         if(i+1 not in lexemes):
@@ -1364,9 +1296,6 @@ def findLexemes(lines):
                     keyword = ""
 
             #catches identifiers
-            if(splitWords[j] in keywords): #will delete this block when keywords are added above (not neccesary anymore)
-                continue
-
             identifier = re.search("^[a-zA-Z][a-zA-Z0-9_]*$", splitWords[j])
             if(identifier):
                 if(i+1 not in lexemes):
@@ -1413,63 +1342,6 @@ def getType():
     return types
 
 #MAIN CODE
-#cinomment ko lang para may reference kayo sa types na iaappend niyo pero idedelete ko rin mamaya
-# symbolTable = {
-#                 "comment": {},
-#                 "identifier": {},
-#                 "NUMBR literal": {},
-#                 "NUMBAR literal": {},
-#                 "YARN literal": {},
-#                 "string delimiter": {},
-#                 "TROOF literal": {},
-#                 "TYPE literal": {},
-#                 "code delimiter": {},
-#                 "single comment delimiter": {},
-#                 "multi comment delimiter": {},
-#                 "variable declaration": {},
-#                 "variable initialization": {},
-#                 "assignment operator": {},
-#                 "add operator": {},
-#                 "subtract operator": {},
-#                 "multiply operator": {},
-#                 "divide operator": {},
-#                 "modulo operator": {},
-#                 "max operator": {},
-#                 "min operator": {},
-#                 "and operator": {},
-#                 "or operator": {},
-#                 "xor operator": {},
-#                 "not operator": {},
-#                 "infinite arity OR operator": {},
-#                 "infinite arity AND operator": {},
-#                 "is equal comparison": {},
-#                 "not equal comparison": {},
-#                 "concatenation keyword":{},
-#                 "typecasting keyword":{},
-#                 "explicit cast keyword":{},
-#                 "print keyword":{},
-#                 "input keyword":{},
-#                 "ifthen keyword":{},
-#                 "ifthen win keyword":{},
-#                 "ifthen fail keyword": {},
-#                 "elseif keyword": {},
-#                 "ifthen exit keyword": {},
-#                 "switch case keyword": {},
-#                 "comparison start keyword": {},
-#                 "default case keyword": {},
-#                 "loop keyword": {},
-#                 "increment operator": {},
-#                 "decrement operator": {},
-#                 "iterator keyword": {},
-#                 "loop until operator": {},
-#                 "loop while operator": {},
-#                 "loop exit keyword": {},
-#                 "loop break keyword": {},
-#                 "infinite arity keyword": {},
-#                 "argument separator keyword": {},
-#                 "type keyword": {},
-#             }
-
 lexemes = {}
 types = {}
 
