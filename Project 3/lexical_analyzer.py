@@ -1,6 +1,6 @@
 import re
 
-filename = "Project 3/samplecodecomments.txt"
+filename = "Project 3/samplecodewrong.txt"
 
 #reads file and cleans each line in the file
 def readFile(filename):
@@ -1354,4 +1354,4 @@ findLexemes(lines)
 # for i in types.keys():
 #     print("[" + str(i) + "] " + str(types[i]))
 
-printSymbolTable()
+#printSymbolTable()
