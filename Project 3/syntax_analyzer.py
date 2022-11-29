@@ -270,6 +270,23 @@ def iHasASyntax(lineNumber):
 
     return "OK"
 
+def rSyntax(lineNumber):
+    rLexeme = lexemes[lineNumber].index("R")
+
+    if(len(lexemes[lineNumber]) <= 2):
+        return "[Line " + str(lineNumber) + "] SyntaxError: required identifier, literal, or expression"
+
+    if(len(lexemes[lineNumber]) >= 3):
+        if(types[lineNumber][1] != "identifier"):
+            return "[Line " + str(lineNumber) + "] SyntaxError: required identifier"
+    
+    if(types[lineNumber][rLexeme + 1] in literals):
+        if(lexemes[lineNumber][rLexeme + 2] == "BTW"):
+            singleCommentSyntax(lineNumber)
+        else:
+            return "[Line " + str(lineNumber) + "] SyntaxError: cannot have statements after variable assignment"
+    return "OK"
+
 def haiSyntax(lineNumber):
     if(len(lexemes[lineNumber]) != 1):
         if(lexemes[lineNumber][1] == "BTW"):
@@ -473,6 +490,169 @@ while(True):
 
         # ! END OF RIO DUCUSIN'S PART
 
+        # START OF ZYRIL TAMARGO'S PART
+
+        elif(lexemes[lineNumber][lexemeIndex] == "R"):
+            syntaxError = rSyntax(lineNumber)
+
+            if(syntaxError != "OK"):
+                print(syntaxError)
+                break
+
+            lineNumber = nextLineNumber(lineNumber)
+            continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "O RLY?"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "YA RLY"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "MEBBE"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "NO WAI"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "WTF?"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "OMG"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "OMGWTF"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "OIC"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "IM IN YR"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+        # elif(lexemes[lineNumber][lexemeIndex] == "IM OUTTA YR"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "UPPIN"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+        # elif(lexemes[lineNumber][lexemeIndex] == "NERFIN"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "GTFO"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+        # elif(lexemes[lineNumber][lexemeIndex] == "TIL"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "WILE"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+        # END OF ZYRIL TAMARGO'S PART
+
         elif(lexemes[lineNumber][lexemeIndex] == "KTHXBYE"):
             codeEnded = True
             syntaxError = kthxbyeSyntax(lineNumber)
@@ -488,7 +668,7 @@ while(True):
             else:
                 break
 
-     
+        
                 
                 
 

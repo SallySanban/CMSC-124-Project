@@ -65,6 +65,8 @@ WTF?
 OIC
 
 MAEK food A NUMBAR
+I HAS A VAR           BTW VAR is null and untyped
+VAR R "THREE"         BTW VAR is now a YARN and equals "THREE"
 
 I HAS A TEMPERATURE
 GIMMEH TEMPERATURE

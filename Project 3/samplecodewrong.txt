@@ -64,6 +64,7 @@ BTW Case statement:
 I HAS A COLOR
         BTW Since there is no `GTFO` the next statements will also be tested
 
+R
 
 BTW For loop:
 I HAS A TEMPERATURE
