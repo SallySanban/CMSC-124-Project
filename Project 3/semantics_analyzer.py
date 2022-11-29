@@ -61,16 +61,18 @@ while(lineNumber):
                     operatorCounter += types[lineNumber].count("subtract operator")
                     operatorCounter += types[lineNumber].count("multiply operator")
                     operatorCounter += types[lineNumber].count("divide operator")
+                    print(types[lineNumber])
                     print(operatorCounter)
+                    break
 
          # * FOUND NO ITZ keyword 
         else:      
             newSymbolTable[lexemes[lineNumber][lexemeIndex + 1]] = [None, "TYPE literal"]
-    elif(lexemes[lineNumber][lexemeIndex] == "VISIBLE"):
-        if types[lineNumber][lexemeIndex + 1] != "string delimiter":
-            print(newSymbolTable[lexemes[lineNumber][lexemeIndex + 1]][0])
-        else:
-            print(lexemes[lineNumber][lexemeIndex + 2])
+    # elif(lexemes[lineNumber][lexemeIndex] == "VISIBLE"):
+        # if types[lineNumber][lexemeIndex + 1] != "string delimiter":
+        #     print(newSymbolTable[lexemes[lineNumber][lexemeIndex + 1]][0])
+        # else:
+        #     print(lexemes[lineNumber][lexemeIndex + 2])
     # * NO ASSIGNMENT, GO NEXT
     lineNumber = nextLineNumber(lineNumber)
             
