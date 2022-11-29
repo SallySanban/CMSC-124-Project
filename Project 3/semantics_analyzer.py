@@ -50,20 +50,194 @@ while(lineNumber):
                         
             # * OPERATIONS   
             else:
-                operatorCounter = 0
+                operatorCount = 0
                 # * If the identifier is existing
                 if(newSymbolTable.get(lexemes[lineNumber][lexemeIndex + 1])):
                     # TODO: If the identifier is existing, check if implicitly typecasted or not first before updating value
                     break
                 # * 
                 else:           # Check nested
-                    operatorCounter += types[lineNumber].count("add operator")
-                    operatorCounter += types[lineNumber].count("subtract operator")
-                    operatorCounter += types[lineNumber].count("multiply operator")
-                    operatorCounter += types[lineNumber].count("divide operator")
-                    print(types[lineNumber])
-                    print(operatorCounter)
+                    itzIndex = lexemes[lineNumber].index("ITZ")
+                    
+                    for typeLiteral in ['add operator', 'subtract operator', 'multiply operator', 'divide operator']:
+                        operatorCount += types[lineNumber].count(typeLiteral)
+                    
+                    # Flow: Start sa innermost to outermost
+                        # first operator appears +n from ITZ
+                    
+                    # I HAS A sum ITZ SUM OF DIFF OF num AN 13 AN 21
+                    # I HAS A sum ITZ SUM OF DIFF OF PRODUKT OF num AN 13 AN 21 AN 4
+                        # Implicit typecasting for troof, 
+                    tempVal = 0
+                    tempCount = 1
+                    while operatorCount > 1:
+                        if tempCount == 1:          # Innermost operation
+                            # * 1st N
+                            if (newSymbolTable.get(lexemes[lineNumber][itzIndex + operatorCount + tempCount])):         # Existing Identifier
+                                # ! ASSUME FIRST THAT ALL VALUES ARE INTEGERS
+
+                                tempVal = newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][0]
+                                # print(tempVal)
+
+                                # * 2nd N
+                                if (newSymbolTable.get(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2])): # Existing Identifier
+                                    if (newSymbolTable[type[lineNumber][itzIndex + operatorCount]] == "add operator"):
+                                        tempVal += newSymbolTable.get(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2])
+                                    elif (newSymbolTable[type[lineNumber][itzIndex + operatorCount]] == "subtract operator"):
+                                        tempVal -= newSymbolTable.get(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2])
+                                    elif (newSymbolTable[type[lineNumber][itzIndex + operatorCount]] == "multiply operator"):
+                                        tempVal *= newSymbolTable.get(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2])
+                                    elif (newSymbolTable[type[lineNumber][itzIndex + operatorCount]] == "divide operator"):
+                                        tempVal /= newSymbolTable.get(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2])
+                                else:           # Literal
+                                    # ! FOR TYPECASTING
+                                    # if (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "NUMBR literal"):
+                                    # elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "NUMBAR literal"):
+                                    # elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "TROOF literal"):
+                                    # elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "YARN literal"):
+                                    # elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "TYPE literal"):
+                                    if (types[lineNumber][itzIndex + operatorCount + tempCount + 2] in literals or types[lineNumber][itzIndex + operatorCount + tempCount + 2] in ["string delimiter"]):
+                                        if (types[lineNumber][itzIndex + operatorCount] == "add operator"):
+                                            # ! ASSUME THEY ARE ALL INTEGERS ! REMOVE TYPECAST
+                                            tempVal += int(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2])
+                                        elif (types[lineNumber][itzIndex + operatorCount] == "subtract operator"):
+                                            tempVal -= int(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2])
+                                        elif (types[lineNumber][itzIndex + operatorCount] == "multiply operator"):
+                                            tempVal *= int(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2])
+                                        elif (types[lineNumber][itzIndex + operatorCount] == "divide operator"):
+                                            tempVal /= int(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2])
+                                        # print(tempVal)
+                                    else:
+                                        print(types[lineNumber][itzIndex + operatorCount + tempCount])
+                                        print("Semantics Error: Invalid type for arithmetic operation")
+                                        break
+                                    # if (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "NUMBR literal"):
+                                    # elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "NUMBAR literal"):
+                                    # elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "TROOF literal"):
+                                    # elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "YARN literal"):
+                                    # elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "TYPE literal"):
+                            # * 1st N
+                            else:           # Literal
+                                if (types[lineNumber][itzIndex + operatorCount + tempCount] in literals or types[lineNumber][itzIndex + operatorCount + tempCount] == "string delimiter"):
+                                    tempVal = lexemes[lineNumber][itzIndex + operatorCount + tempCount]
+                                
+                                    # ! FOR TYPECASTING
+                                    # if (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "NUMBR literal"):
+                                    # elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "NUMBAR literal"):
+                                    # elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "TROOF literal"):
+                                    # elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "YARN literal"):
+                                    # elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "TYPE literal"):
+                            operatorCount -= 1
+                            tempCount += 5
+                            continue
+                        else: # More nested 
+                            if (newSymbolTable.get(lexemes[lineNumber][itzIndex + operatorCount + tempCount])):     # Existing identifier
+                                if (newSymbolTable[type[lineNumber][itzIndex + operatorCount]] == "add operator"):
+                                    tempVal += newSymbolTable.get(lexemes[lineNumber][itzIndex + operatorCount + tempCount])
+                                elif (newSymbolTable[type[lineNumber][itzIndex + operatorCount]] == "subtract operator"):
+                                    tempVal -= newSymbolTable.get(lexemes[lineNumber][itzIndex + operatorCount + tempCount])
+                                elif (newSymbolTable[type[lineNumber][itzIndex + operatorCount]] == "multiply operator"):
+                                    tempVal *= newSymbolTable.get(lexemes[lineNumber][itzIndex + operatorCount + tempCount])
+                                elif (newSymbolTable[type[lineNumber][itzIndex + operatorCount]] == "divide operator"):
+                                    tempVal /= newSymbolTable.get(lexemes[lineNumber][itzIndex + operatorCount + tempCount])
+                            else:               # Literal or NOOB identifier
+                                if (types[lineNumber][itzIndex + operatorCount + tempCount] in literals or types[lineNumber][itzIndex + operatorCount + tempCount + 2] in ["string delimiter"]):
+                                    if (types[lineNumber][itzIndex + operatorCount] == "add operator"):
+                                        # ! ASSUME THEY ARE ALL INTEGERS ! REMOVE TYPECAST
+                                        tempVal += int(lexemes[lineNumber][itzIndex + operatorCount + tempCount])
+                                    elif (types[lineNumber][itzIndex + operatorCount] == "subtract operator"):
+                                        tempVal -= int(lexemes[lineNumber][itzIndex + operatorCount + tempCount])
+                                    elif (types[lineNumber][itzIndex + operatorCount] == "multiply operator"):
+                                        tempVal *= int(lexemes[lineNumber][itzIndex + operatorCount + tempCount])
+                                    elif (types[lineNumber][itzIndex + operatorCount] == "divide operator"):
+                                        tempVal /= int(lexemes[lineNumber][itzIndex + operatorCount + tempCount])
+                                else:
+                                    print(types[lineNumber][itzIndex + operatorCount + tempCount])
+                                    print("Semantics Error: Invalid type for arithmetic operation")
+                                    break
+                                # if (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "NUMBR literal"):
+                                # elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "NUMBAR literal"):
+                                # elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "TROOF literal"):
+                                # elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "YARN literal"):
+                                # elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "TYPE literal"):
+
+                        operatorCount -= 1
+                        tempCount += 3
+                    
+                    # * ONLY REACHES HERE IF THIS IS THE OUTERMOST OPERATION
+                    # I HAS A sum ITZ SUM OF num AN 13                                  # 3
+                    # I HAS A sum ITZ SUM OF DIFF OF num AN 13 AN 21                        # 6
+                    # I HAS A sum ITZ SUM OF DIFF OF PRODUKT OF num AN 13 AN 21 AN 4            # 9
+                    # I HAS A sum ITZ SUM OF DIFF OF PRODUKT OF SUM OF num AN 13 AN 21 AN 4 AN 11          # 12
+
+
+                    # print(tempVal)
+                    # print(lexemes[lineNumber][itzIndex + operatorCount])
+                    # print(tempCount)
+                    # print(lexemes[lineNumber][itzIndex + operatorCount + tempCount - 2])
+                    if (tempVal == 0):          # ! SINGLE OPERATION
+                        # * 1ST N
+                        if (newSymbolTable.get(lexemes[lineNumber][itzIndex + operatorCount + 1])):     # Existing identifier
+                            if (types[lineNumber][itzIndex + operatorCount] == "add operator"):
+                                tempVal += newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + 1]][0]
+                            elif (types[lineNumber][itzIndex + operatorCount] == "subtract operator"):
+                                tempVal -= newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + 1]][0]
+                            elif (types[lineNumber][itzIndex + operatorCount] == "multiply operator"):
+                                tempVal *= newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + 1]][0]
+                            elif (types[lineNumber][itzIndex + operatorCount] == "divide operator"):
+                                tempVal /= newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + 1]][0]
+                        else:               # Literal or NOOB identifier
+                            if (types[lineNumber][itzIndex + operatorCount + 1] in literals or types[lineNumber][itzIndex + operatorCount + 1 + 2] in ["string delimiter"]):
+                                if (types[lineNumber][itzIndex + operatorCount] == "add operator"):
+                                    # ! ASSUME THEY ARE ALL INTEGERS ! REMOVE TYPECAST
+                                    tempVal += int(lexemes[lineNumber][itzIndex + operatorCount + 1])
+                                elif (types[lineNumber][itzIndex + operatorCount] == "subtract operator"):
+                                    tempVal -= int(lexemes[lineNumber][itzIndex + operatorCount + 1])
+                                elif (types[lineNumber][itzIndex + operatorCount] == "multiply operator"):
+                                    tempVal *= int(lexemes[lineNumber][itzIndex + operatorCount + 1])
+                                elif (types[lineNumber][itzIndex + operatorCount] == "divide operator"):
+                                    tempVal /= int(lexemes[lineNumber][itzIndex + operatorCount + 1])
+                            else:
+                                print(types[lineNumber][itzIndex + operatorCount + tempCount])
+                                print("Semantics Error: Invalid type for arithmetic operation")
+                                break
+                    else:
+
+                        if (newSymbolTable.get(lexemes[lineNumber][itzIndex + operatorCount + tempCount])):     # Existing identifier
+                            if (types[lineNumber][itzIndex + operatorCount] == "add operator"):
+                                tempVal += newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][0]
+                            elif (types[lineNumber][itzIndex + operatorCount] == "subtract operator"):
+                                tempVal -= newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][0]
+                            elif (types[lineNumber][itzIndex + operatorCount] == "multiply operator"):
+                                tempVal *= newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][0]
+                            elif (types[lineNumber][itzIndex + operatorCount] == "divide operator"):
+                                tempVal /= newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][0]
+                        else:               # Literal or NOOB identifier
+                            if (types[lineNumber][itzIndex + operatorCount + tempCount] in literals or types[lineNumber][itzIndex + operatorCount + tempCount + 2] in ["string delimiter"]):
+                                if (types[lineNumber][itzIndex + operatorCount] == "add operator"):
+                                    # ! ASSUME THEY ARE ALL INTEGERS ! REMOVE TYPECAST
+                                    # print(newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][0])
+                                    tempVal += int(lexemes[lineNumber][itzIndex + operatorCount + tempCount])
+                                elif (types[lineNumber][itzIndex + operatorCount] == "subtract operator"):
+                                    tempVal -= int(lexemes[lineNumber][itzIndex + operatorCount + tempCount])
+                                elif (types[lineNumber][itzIndex + operatorCount] == "multiply operator"):
+                                    tempVal *= int(lexemes[lineNumber][itzIndex + operatorCount + tempCount])
+                                elif (types[lineNumber][itzIndex + operatorCount] == "divide operator"):
+                                    tempVal /= int(lexemes[lineNumber][itzIndex + operatorCount + tempCount])
+                            else:
+                                print(types[lineNumber][itzIndex + operatorCount + tempCount])
+                                print("Semantics Error: Invalid type for arithmetic operation")
+                                break
+                            # if (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "NUMBR literal"):
+                            # elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "NUMBAR literal"):
+                            # elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "TROOF literal"):
+                            # elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "YARN literal"):
+                            # elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "TYPE literal"):
+                    print(tempVal)          # ! WORKING RIGHT NOW BUT NOT single operation
+                    newSymbolTable[lexemes[lineNumber][1]] = [tempVal, "NUMBR literal"]
                     break
+                        # print(lexemes[lineNumber][itzIndex + operatorCount])
+                        # print(lexemes[lineNumber][itzIndex + operatorCount + tempCount])
 
          # * FOUND NO ITZ keyword 
         else:      
