@@ -1,13 +1,11 @@
 import re
 
-filename = "Project 3/samplewrong.txt"
+filename = "Project 3/Test Files/project-examples/01_variables.lol"
 
 #reads file and cleans each line in the file
 def readFile(filename):
     file = open(filename)
     lines = []
-
-    #print(file.readlines())
 
     #reads the file and places each line in a list
     for line in file.readlines():
@@ -27,79 +25,28 @@ def readFile(filename):
 
 #finds lexemes in code and groups them 
 def findLexemes(lines):
-    keywords = ["HAI",
-                "KTHXBYE",
-                "OBTW",
-                "BTW",
-                "TLDR",
-                "I",
-                "HAS",
-                "A",
-                "ITZ",
-                "R",
-                "SUM",
-                "OF",
-                "DIFF",
-                "PRODUKT",
-                "QUOSHUNT",
-                "MOD",
-                "BIGGR",
-                "SMALLR",
-                "BOTH",
-                "EITHER",
-                "WON",
-                "NOT",
-                "ANY",
-                "ALL",
-                "SAEM",
-                "DIFFRINT",
-                "SMOOSH",
-                "MAEK",
-                "AN",
-                "IS",
-                "NOW",
-                "VISIBLE",
-                "GIMMEH",
-                "O",
-                "RLY?",
-                "YA",
-                "RLY",
-                "MEBBE",
-                "NO",
-                "WAI",
-                "OIC",
-                "WTF?",
-                "OMG",
-                "OMGWTF",
-                "IM",
-                "IN",
-                "UPPIN",
-                "NERFIN",
-                "OUTTA",
-                "YR",
-                "TIL",
-                "WILE",
-                "GTFO",
-                "MKAY",
-                "WIN",
-                "FAIL",
-                "TROOF",
-                "NOOB",
-                "NUMBR",
-                "NUMBAR",
-                "YARN",
-                "TYPE"
-                ]
     stringFound = False
     singleCommentFound = False
     multiCommentFound = False
-    keywordFound = False
+    iHasAKeyword = ""
+    sumOfKeyword = ""
+    diffOfKeyword = ""
+    produktOfKeyword = ""
+    quoshuntOfKeyword = ""
+    modOfKeyword = ""
+    biggrOfKeyword = ""
+    smallrOfKeyword = ""
+    bothKeyword = ""
+    eitherOfKeyword = ""
+    wonOfKeyword = ""
+    anyOfKeyword = ""
+    allOfKeyword = ""
     isNowAKeyword = ""
     oRlyKeyword = ""
     yaRlyKeyword = ""
     noWaiKeyword = ""
+    yrKeyword = ""
     imYrKeyword = ""
-    keyword = ""
     string = ""
     singleComment = ""
     multiComment = ""
@@ -107,7 +54,7 @@ def findLexemes(lines):
     for i in range(0, len(lines)):
         splitWords = lines[i].split()
         for j in range(0, len(splitWords)):
-            #catches single comments
+            #catches SINGLE COMMENTS and BTW
             if(splitWords[j] == "BTW"):
                 if(i+1 not in lexemes):
                     lexemes[i+1] = []
@@ -147,7 +94,7 @@ def findLexemes(lines):
                 
                 continue
             
-            #catches multi comments
+            #catches MULTI COMMENTS, OBTW, and TLDR
             if(splitWords[j] == "OBTW"):
                 if(i+1 not in lexemes):
                     lexemes[i+1] = []
@@ -217,7 +164,7 @@ def findLexemes(lines):
                 
                 continue
 
-            #catches yarn and string delimiter
+            #catches YARN LITERAL and STRING DELIMITER
             if('\"' == splitWords[j][0]):
                 stringFound = True
 
@@ -252,7 +199,7 @@ def findLexemes(lines):
 
                 continue
 
-            #catches literals
+            #catches NUMBR LITERAL
             numbrLiteral = re.search("^[-]?\d+$", splitWords[j])
             if(numbrLiteral):
                 if(i+1 not in lexemes):
@@ -268,7 +215,8 @@ def findLexemes(lines):
                     types[i+1].append("NUMBR literal")
 
                 continue
-
+            
+            #catches NUMBAR LITERAL
             numbarLiteral = re.search("^[-]?\d+[.]\d+$", splitWords[j])
             if(numbarLiteral):
                 if(i+1 not in lexemes):
@@ -285,6 +233,7 @@ def findLexemes(lines):
 
                 continue
             
+            #catches TROOF LITERAL
             troofLiteralWin = re.search("^(WIN)$", splitWords[j])
             if(troofLiteralWin):
                 if(i+1 not in lexemes):
@@ -316,7 +265,8 @@ def findLexemes(lines):
                     types[i+1].append("TROOF literal")
 
                 continue
-
+            
+            #catches TYPE LITERAL
             typeLiteralTroof = re.search("^(TROOF)$", splitWords[j])
             if(typeLiteralTroof):
                 if(i+1 not in lexemes):
@@ -412,9 +362,9 @@ def findLexemes(lines):
                     types[i+1].append("TYPE literal")
 
                 continue
-
-            #PLACE KEYWORDS HERE (make sure identifier is last)
-            haiKeyword = re.search("^(HAI)$", splitWords[j])                        # HAI
+            
+            #catches HAI
+            haiKeyword = re.search("^(HAI)$", splitWords[j])
             if (haiKeyword):
                 if(i+1 not in lexemes):
                     lexemes[i+1] = []
@@ -429,8 +379,9 @@ def findLexemes(lines):
                     types[i+1].append("code delimiter")
 
                 continue
-
-            kThxByeKeyword = re.search("^(KTHXBYE)$", splitWords[j])               # KTHXBYE
+            
+            #catches KTHXBYE
+            kThxByeKeyword = re.search("^(KTHXBYE)$", splitWords[j])
             if (kThxByeKeyword):
                 if(i+1 not in lexemes):
                     lexemes[i+1] = []
@@ -446,40 +397,66 @@ def findLexemes(lines):
                     
                 continue
             
-            # I HAS A KEYWORD               (ONLY KEYWORD STARTING WITH I)
+            #catches I HAS A
             if (splitWords[j] == "I"):
-                keywordFound = True
-                keyword = keyword + splitWords[j]
+                iHasAKeyword = iHasAKeyword + splitWords[j] + " "
                 continue
 
-            if (keywordFound == True and (keyword == "I" or keyword =="I HAS")):
-                # print(keyword)              # CHECKER
-                # print("HEHEH")
+            if (iHasAKeyword == "I "):
                 if (splitWords[j] == "HAS"):
-                    keyword = keyword + " " + "HAS"
+                    iHasAKeyword = iHasAKeyword + splitWords[j] + " "
                     continue
-                elif (splitWords[j] == "A" and keyword == "I HAS"):
-                    keyword = keyword + " " + "A"
+                else: #case where I is alone (identifier)
                     if(i+1 not in lexemes):
                         lexemes[i+1] = []
-                        lexemes[i+1].append(keyword)
+                        lexemes[i+1].append("I")
                     else:
-                        lexemes[i+1].append(keyword)
-                    
+                        lexemes[i+1].append("I")
+
                     if(i+1 not in types):
                         types[i+1] = []
-                        types[i+1].append("variable declaration")
+                        types[i+1].append("identifier")
                     else:
-                        types[i+1].append("variable declaration")
-                    
-                    keywordFound == False        # REINITIALIZE USED VARIABLES
-                    keyword = ""
-                    continue
-                else:
-                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
-                    keyword = ""
+                        types[i+1].append("identifier")
 
-            itzKeyword = re.search("^(ITZ)$", splitWords[j])                          # ITZ
+                    iHasAKeyword = ""
+
+            if(iHasAKeyword == "I HAS "):
+                if (splitWords[j] == "A"):
+                    iHasAKeyword = iHasAKeyword + splitWords[j]
+                    
+                    if(iHasAKeyword == "I HAS A"):
+                        if(i+1 not in lexemes):
+                            lexemes[i+1] = []
+                            lexemes[i+1].append(iHasAKeyword)
+                        else:
+                            lexemes[i+1].append(iHasAKeyword)
+                        
+                        if(i+1 not in types):
+                            types[i+1] = []
+                            types[i+1].append("variable declaration keyword")
+                        else:
+                            types[i+1].append("variable declaration keyword")
+                        
+                        iHasAKeyword = ""
+                        continue
+                else: #case where it's only I HAS (invalid)
+                    if(i+1 not in lexemes):
+                        lexemes[i+1] = []
+                        lexemes[i+1].append("I HAS")
+                    else:
+                        lexemes[i+1].append("I HAS")
+
+                    if(i+1 not in types):
+                        types[i+1] = []
+                        types[i+1].append("invalid keyword")
+                    else:
+                        types[i+1].append("invalid keyword")
+
+                    iHasAKeyword = ""
+            
+            #catches ITZ
+            itzKeyword = re.search("^(ITZ)$", splitWords[j])
             if (itzKeyword):
                 if(i+1 not in lexemes):
                     lexemes[i+1] = []
@@ -489,12 +466,14 @@ def findLexemes(lines):
                 
                 if(i+1 not in types):
                     types[i+1] = []
-                    types[i+1].append("variable initialization")
+                    types[i+1].append("variable initialization keyword")
                 else:
-                    types[i+1].append("variable initialization")
+                    types[i+1].append("variable initialization keyword")
+
                 continue
             
-            rKeyword = re.search("^(R)$", splitWords[j])                          # R
+            #catches R
+            rKeyword = re.search("^(R)$", splitWords[j])
             if (rKeyword):
                 if(i+1 not in lexemes):
                     lexemes[i+1] = []
@@ -507,308 +486,419 @@ def findLexemes(lines):
                     types[i+1].append("assignment operator")
                 else:
                     types[i+1].append("assignment operator")
+
                 continue
             
-            # SUM OF KEYWORD               (ONLY KEYWORD STARTING WITH SUM)
-            if (splitWords[j].strip() == "SUM"):
-                keywordFound = True
-                keyword = keyword + splitWords[j]
+            #catches SUM OF
+            if (splitWords[j] == "SUM"):
+                sumOfKeyword = sumOfKeyword + splitWords[j] + " "
                 continue
 
-            if (keywordFound == True and (keyword == "SUM")):
-                if (splitWords[j].strip() == "OF"):
-                    keyword = keyword + " " + "OF"
+            if (sumOfKeyword == "SUM "):
+                if (splitWords[j] == "OF"):
+                    sumOfKeyword = sumOfKeyword + splitWords[j]
+
+                    if(sumOfKeyword == "SUM OF"):
+                        if(i+1 not in lexemes):
+                            lexemes[i+1] = []
+                            lexemes[i+1].append(sumOfKeyword)
+                        else:
+                            lexemes[i+1].append(sumOfKeyword)
+                        
+                        if(i+1 not in types):
+                            types[i+1] = []
+                            types[i+1].append("add operator")
+                        else:
+                            types[i+1].append("add operator")
+                        
+                        sumOfKeyword = ""
+                        continue
+                else: #only SUM (identifier)
                     if(i+1 not in lexemes):
                         lexemes[i+1] = []
-                        lexemes[i+1].append(keyword)
+                        lexemes[i+1].append("SUM")
                     else:
-                        lexemes[i+1].append(keyword)
-                    
+                        lexemes[i+1].append("SUM")
+
                     if(i+1 not in types):
                         types[i+1] = []
-                        types[i+1].append("add operator")
+                        types[i+1].append("identifier")
                     else:
-                        types[i+1].append("add operator")
-                    
-                    keywordFound == False        # REINITIALIZE USED VARIABLES
-                    keyword = ""
-                    continue
-                else:
-                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
-                    keyword = ""
+                        types[i+1].append("identifier")
+
+                    sumOfKeyword = ""
             
-            # DIFF OF KEYWORD
+            #catches DIFF OF
             if (splitWords[j] == "DIFF"):
-                keywordFound = True
-                keyword = keyword + splitWords[j]
+                diffOfKeyword = diffOfKeyword + splitWords[j] + " "
                 continue
 
-            if (keywordFound == True and (keyword == "DIFF")):
+            if (diffOfKeyword == "DIFF "):
                 if (splitWords[j] == "OF"):
-                    keyword = keyword + " " + "OF"
+                    diffOfKeyword = diffOfKeyword + splitWords[j]
+
+                    if(diffOfKeyword == "DIFF OF"):
+                        if(i+1 not in lexemes):
+                            lexemes[i+1] = []
+                            lexemes[i+1].append(diffOfKeyword)
+                        else:
+                            lexemes[i+1].append(diffOfKeyword)
+                        
+                        if(i+1 not in types):
+                            types[i+1] = []
+                            types[i+1].append("subtract operator")
+                        else:
+                            types[i+1].append("subtract operator")
+                        
+                        diffOfKeyword = ""
+                        continue
+                else: #only DIFF (identifier)
                     if(i+1 not in lexemes):
                         lexemes[i+1] = []
-                        lexemes[i+1].append(keyword)
+                        lexemes[i+1].append("DIFF")
                     else:
-                        lexemes[i+1].append(keyword)
-                    
+                        lexemes[i+1].append("DIFF")
+
                     if(i+1 not in types):
                         types[i+1] = []
-                        types[i+1].append("subtract operator")
+                        types[i+1].append("identifier")
                     else:
-                        types[i+1].append("subtract operator")
-                    
-                    keywordFound == False        # REINITIALIZE USED VARIABLES
-                    keyword = ""
-                    continue
-                else:
-                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
-                    keyword = ""
+                        types[i+1].append("identifier")
+
+                    diffOfKeyword = ""
             
-            # PRODUKT OF KEYWORD
+            #catches PRODUKT OF
             if (splitWords[j] == "PRODUKT"):
-                keywordFound = True
-                keyword = keyword + splitWords[j]
-                print(keyword)
+                produktOfKeyword = produktOfKeyword + splitWords[j] + " "
                 continue
 
-            if (keywordFound == True and (keyword == "PRODUKT")):
+            if (produktOfKeyword == "PRODUKT "):
                 if (splitWords[j] == "OF"):
-                    keyword = keyword + " " + "OF"
+                    produktOfKeyword = produktOfKeyword + splitWords[j]
+
+                    if(produktOfKeyword == "PRODUKT OF"):
+                        if(i+1 not in lexemes):
+                            lexemes[i+1] = []
+                            lexemes[i+1].append(produktOfKeyword)
+                        else:
+                            lexemes[i+1].append(produktOfKeyword)
+                        
+                        if(i+1 not in types):
+                            types[i+1] = []
+                            types[i+1].append("multiply operator")
+                        else:
+                            types[i+1].append("multiply operator")
+                        
+                        produktOfKeyword = ""
+                        continue
+                else: #only PRODUKT (identifier)
                     if(i+1 not in lexemes):
                         lexemes[i+1] = []
-                        lexemes[i+1].append(keyword)
+                        lexemes[i+1].append("PRODUKT")
                     else:
-                        lexemes[i+1].append(keyword)
-                    
+                        lexemes[i+1].append("PRODUKT")
+
                     if(i+1 not in types):
                         types[i+1] = []
-                        types[i+1].append("multiply operator")
+                        types[i+1].append("identifier")
                     else:
-                        types[i+1].append("multiply operator")
-                    
-                    keywordFound == False        # REINITIALIZE USED VARIABLES
-                    keyword = ""
-                    continue
-                else:
-                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
-                    keyword = ""
+                        types[i+1].append("identifier")
 
-            # QUOSHUNT OF KEYWORD
-            if (splitWords[j].strip() == "QUOSHUNT"):
-                keywordFound = True
-                keyword = keyword + splitWords[j]
+                    produktOfKeyword = ""
+
+            #catches QUOSHUNT OF
+            if (splitWords[j] == "QUOSHUNT"):
+                quoshuntOfKeyword = quoshuntOfKeyword + splitWords[j] + " "
                 continue
 
-            if (keywordFound == True and (keyword == "QUOSHUNT")):
+            if (quoshuntOfKeyword == "QUOSHUNT "):
                 if (splitWords[j] == "OF"):
-                    keyword = keyword + " " + "OF"
+                    quoshuntOfKeyword = quoshuntOfKeyword + splitWords[j]
+
+                    if(quoshuntOfKeyword == "QUOSHUNT OF"):
+                        if(i+1 not in lexemes):
+                            lexemes[i+1] = []
+                            lexemes[i+1].append(quoshuntOfKeyword)
+                        else:
+                            lexemes[i+1].append(quoshuntOfKeyword)
+                        
+                        if(i+1 not in types):
+                            types[i+1] = []
+                            types[i+1].append("divide operator")
+                        else:
+                            types[i+1].append("divide operator")
+                        
+                        quoshuntOfKeyword = ""
+                        continue
+                else: #only QUOSHUNT (identifier)
                     if(i+1 not in lexemes):
                         lexemes[i+1] = []
-                        lexemes[i+1].append(keyword)
+                        lexemes[i+1].append("QUOSHUNT")
                     else:
-                        lexemes[i+1].append(keyword)
-                    
+                        lexemes[i+1].append("QUOSHUNT")
+
                     if(i+1 not in types):
                         types[i+1] = []
-                        types[i+1].append("divide operator")
+                        types[i+1].append("identifier")
                     else:
-                        types[i+1].append("divide operator")
-                    
-                    keywordFound == False        # REINITIALIZE USED VARIABLES
-                    keyword = ""
-                    continue
-                else:
-                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
-                    keyword = ""
+                        types[i+1].append("identifier")
+
+                    quoshuntOfKeyword = ""
             
-            # MOD OF KEYWORD
-            if (splitWords[j].strip() == "MOD"):
-                keywordFound = True
-                keyword = keyword + splitWords[j]
+            #catches MOD OF
+            if (splitWords[j] == "MOD"):
+                modOfKeyword = modOfKeyword + splitWords[j] + " "
                 continue
 
-            if (keywordFound == True and (keyword == "MOD")):
+            if (modOfKeyword == "MOD "):
                 if (splitWords[j] == "OF"):
-                    keyword = keyword + " " + "OF"
+                    modOfKeyword = modOfKeyword + splitWords[j]
+
+                    if(modOfKeyword == "MOD OF"):
+                        if(i+1 not in lexemes):
+                            lexemes[i+1] = []
+                            lexemes[i+1].append(modOfKeyword)
+                        else:
+                            lexemes[i+1].append(modOfKeyword)
+                        
+                        if(i+1 not in types):
+                            types[i+1] = []
+                            types[i+1].append("modulo operator")
+                        else:
+                            types[i+1].append("modulo operator")
+                        
+                        quoshuntOfKeyword = ""
+                        continue
+                else: #only MOD (identifier)
                     if(i+1 not in lexemes):
                         lexemes[i+1] = []
-                        lexemes[i+1].append(keyword)
+                        lexemes[i+1].append("MOD")
                     else:
-                        lexemes[i+1].append(keyword)
-                    
+                        lexemes[i+1].append("MOD")
+
                     if(i+1 not in types):
                         types[i+1] = []
-                        types[i+1].append("modulo operator")
+                        types[i+1].append("identifier")
                     else:
-                        types[i+1].append("modulo operator")
-                    
-                    keywordFound == False        # REINITIALIZE USED VARIABLES
-                    keyword = ""
-                    continue
-                else:
-                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
-                    keyword = ""
+                        types[i+1].append("identifier")
+
+                    modOfKeyword = ""
             
-            # BIGGR OF KEYWORD
-            if (splitWords[j].strip() == "BIGGR"):
-                keywordFound = True
-                keyword = keyword + splitWords[j]
+            #catches BIGGR OF
+            if (splitWords[j] == "BIGGR"):
+                biggrOfKeyword = biggrOfKeyword + splitWords[j] + " "
                 continue
 
-            if (keywordFound == True and (keyword == "BIGGR")):
+            if (biggrOfKeyword == "BIGGR "):
                 if (splitWords[j] == "OF"):
-                    keyword = keyword + " " + "OF"
+                    biggrOfKeyword = biggrOfKeyword + splitWords[j]
+
+                    if(biggrOfKeyword == "BIGGR OF"):
+                        if(i+1 not in lexemes):
+                            lexemes[i+1] = []
+                            lexemes[i+1].append(biggrOfKeyword)
+                        else:
+                            lexemes[i+1].append(biggrOfKeyword)
+                        
+                        if(i+1 not in types):
+                            types[i+1] = []
+                            types[i+1].append("max operator")
+                        else:
+                            types[i+1].append("max operator")
+                        
+                        biggrOfKeyword = ""
+                        continue
+                else: #only BIGGR (identifier)
                     if(i+1 not in lexemes):
                         lexemes[i+1] = []
-                        lexemes[i+1].append(keyword)
+                        lexemes[i+1].append("BIGGR")
                     else:
-                        lexemes[i+1].append(keyword)
-                    
+                        lexemes[i+1].append("BIGGR")
+
                     if(i+1 not in types):
                         types[i+1] = []
-                        types[i+1].append("max operator")
+                        types[i+1].append("identifier")
                     else:
-                        types[i+1].append("max operator")
-                    
-                    keywordFound == False        # REINITIALIZE USED VARIABLES
-                    keyword = ""
-                    continue
-                else:
-                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
-                    keyword = ""
+                        types[i+1].append("identifier")
+
+                    biggrOfKeyword = ""
             
-            # SMALLR OF KEYWORD
-            if (splitWords[j].strip() == "SMALLR"):
-                keywordFound = True
-                keyword = keyword + splitWords[j]
+            #catches SMALLR OF
+            if (splitWords[j] == "SMALLR"):
+                smallrOfKeyword = smallrOfKeyword + splitWords[j] + " "
                 continue
 
-            if (keywordFound == True and (keyword == "SMALLR")):
+            if (smallrOfKeyword == "SMALLR "):
                 if (splitWords[j] == "OF"):
-                    keyword = keyword + " " + "OF"
+                    smallrOfKeyword = smallrOfKeyword + splitWords[j]
+
+                    if(smallrOfKeyword == "SMALLR OF"):
+                        if(i+1 not in lexemes):
+                            lexemes[i+1] = []
+                            lexemes[i+1].append(smallrOfKeyword)
+                        else:
+                            lexemes[i+1].append(smallrOfKeyword)
+                        
+                        if(i+1 not in types):
+                            types[i+1] = []
+                            types[i+1].append("min operator")
+                        else:
+                            types[i+1].append("min operator")
+                        
+                        smallrOfKeyword = ""
+                        continue
+                else: #only SMALLR (identifier)
                     if(i+1 not in lexemes):
                         lexemes[i+1] = []
-                        lexemes[i+1].append(keyword)
+                        lexemes[i+1].append("SMALLR")
                     else:
-                        lexemes[i+1].append(keyword)
-                    
+                        lexemes[i+1].append("SMALLR")
+
                     if(i+1 not in types):
                         types[i+1] = []
-                        types[i+1].append("min operator")
+                        types[i+1].append("identifier")
                     else:
-                        types[i+1].append("min operator")
-                    
-                    keywordFound == False        # REINITIALIZE USED VARIABLES
-                    keyword = ""
-                    continue
-                else:
-                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
-                    keyword = ""
+                        types[i+1].append("identifier")
+
+                    smallrOfKeyword = ""
             
-            # BOTH OF KEYWORD
-            if (splitWords[j].strip() == "BOTH"):
-                keywordFound = True
-                keyword = keyword + splitWords[j]
+            #catches BOTH OF or BOTH SAEM
+            if (splitWords[j] == "BOTH"):
+                bothKeyword = bothKeyword + splitWords[j] + " "
                 continue
 
-            if (keywordFound == True and (keyword == "BOTH")):
+            if (bothKeyword == "BOTH "):
                 if (splitWords[j] == "OF"):
-                    keyword = keyword + " " + "OF"
-                    if(i+1 not in lexemes):
-                        lexemes[i+1] = []
-                        lexemes[i+1].append(keyword)
-                    else:
-                        lexemes[i+1].append(keyword)
-                    
-                    if(i+1 not in types):
-                        types[i+1] = []
-                        types[i+1].append("and operator")
-                    else:
-                        types[i+1].append("and operator")
-                    
-                    keywordFound == False        # REINITIALIZE USED VARIABLES
-                    keyword = ""
-                    continue
+                    bothKeyword = bothKeyword + splitWords[j]
+
+                    if(bothKeyword == "BOTH OF"):
+                        if(i+1 not in lexemes):
+                            lexemes[i+1] = []
+                            lexemes[i+1].append(bothKeyword)
+                        else:
+                            lexemes[i+1].append(bothKeyword)
+                        
+                        if(i+1 not in types):
+                            types[i+1] = []
+                            types[i+1].append("and operator")
+                        else:
+                            types[i+1].append("and operator")
+                        
+                        bothKeyword = ""
+                        continue
                 elif (splitWords[j] == "SAEM"):
-                    keyword = keyword + " " + "SAEM"
+                    bothKeyword = bothKeyword + splitWords[j]
+
+                    if(bothKeyword == "BOTH SAEM"):
+                        if(i+1 not in lexemes):
+                            lexemes[i+1] = []
+                            lexemes[i+1].append(bothKeyword)
+                        else:
+                            lexemes[i+1].append(bothKeyword)
+                        
+                        if(i+1 not in types):
+                            types[i+1] = []
+                            types[i+1].append("is equal comparison operator")
+                        else:
+                            types[i+1].append("is equal comparison operator")
+                        
+                        bothKeyword = ""
+                        continue
+                else: #only BOTH (identifier)
                     if(i+1 not in lexemes):
                         lexemes[i+1] = []
-                        lexemes[i+1].append(keyword)
+                        lexemes[i+1].append("BOTH")
                     else:
-                        lexemes[i+1].append(keyword)
-                    
+                        lexemes[i+1].append("BOTH")
+
                     if(i+1 not in types):
                         types[i+1] = []
-                        types[i+1].append("is equal comparison operator")
+                        types[i+1].append("identifier")
                     else:
-                        types[i+1].append("is equal comparison operator")
-                    
-                    keywordFound == False        # REINITIALIZE USED VARIABLES
-                    keyword = ""
-                    continue
-                else:
-                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
-                    keyword = ""
-            
-            # EITHER OF KEYWORD
-            if (splitWords[j].strip() == "EITHER"):
-                keywordFound = True
-                keyword = keyword + splitWords[j]
+                        types[i+1].append("identifier")
+
+                    bothKeyword = ""
+
+            #catches EITHER OF
+            if (splitWords[j] == "EITHER"):
+                eitherOfKeyword = eitherOfKeyword + splitWords[j] + " "
                 continue
 
-            if (keywordFound == True and (keyword == "EITHER")):
+            if (eitherOfKeyword == "EITHER "):
                 if (splitWords[j] == "OF"):
-                    keyword = keyword + " " + "OF"
+                    eitherOfKeyword = eitherOfKeyword + splitWords[j]
+
+                    if(eitherOfKeyword == "EITHER OF"):
+                        if(i+1 not in lexemes):
+                            lexemes[i+1] = []
+                            lexemes[i+1].append(eitherOfKeyword)
+                        else:
+                            lexemes[i+1].append(eitherOfKeyword)
+                        
+                        if(i+1 not in types):
+                            types[i+1] = []
+                            types[i+1].append("or operator")
+                        else:
+                            types[i+1].append("or operator")
+                        
+                        eitherOfKeyword = ""
+                        continue
+                else: #only EITHER (identifier)
                     if(i+1 not in lexemes):
                         lexemes[i+1] = []
-                        lexemes[i+1].append(keyword)
+                        lexemes[i+1].append("EITHER")
                     else:
-                        lexemes[i+1].append(keyword)
-                    
+                        lexemes[i+1].append("EITHER")
+
                     if(i+1 not in types):
                         types[i+1] = []
-                        types[i+1].append("or operator")
+                        types[i+1].append("identifier")
                     else:
-                        types[i+1].append("or operator")
-                    
-                    keywordFound == False        # REINITIALIZE USED VARIABLES
-                    keyword = ""
-                    continue
-                else:
-                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
-                    keyword = ""
+                        types[i+1].append("identifier")
+
+                    eitherOfKeyword = ""
             
-            # WON OF KEYWORD
-            if (splitWords[j].strip() == "WON"):
-                keywordFound = True
-                keyword = keyword + splitWords[j]
+            #catches WON OF
+            if (splitWords[j] == "WON"):
+                wonOfKeyword = wonOfKeyword + splitWords[j] + " "
                 continue
 
-            if (keywordFound == True and (keyword == "WON")):
+            if (wonOfKeyword == "WON "):
                 if (splitWords[j] == "OF"):
-                    keyword = keyword + " " + "OF"
+                    wonOfKeyword = wonOfKeyword + splitWords[j]
+
+                    if(wonOfKeyword == "WON OF"):
+                        if(i+1 not in lexemes):
+                            lexemes[i+1] = []
+                            lexemes[i+1].append(wonOfKeyword)
+                        else:
+                            lexemes[i+1].append(wonOfKeyword)
+                        
+                        if(i+1 not in types):
+                            types[i+1] = []
+                            types[i+1].append("xor operator")
+                        else:
+                            types[i+1].append("xor operator")
+                        
+                        wonOfKeyword = ""
+                        continue
+                else: #only WON (identifier)
                     if(i+1 not in lexemes):
                         lexemes[i+1] = []
-                        lexemes[i+1].append(keyword)
+                        lexemes[i+1].append("WON")
                     else:
-                        lexemes[i+1].append(keyword)
-                    
+                        lexemes[i+1].append("WON")
+
                     if(i+1 not in types):
                         types[i+1] = []
-                        types[i+1].append("xor operator")
+                        types[i+1].append("identifier")
                     else:
-                        types[i+1].append("xor operator")
-                    
-                    keywordFound == False        # REINITIALIZE USED VARIABLES
-                    keyword = ""
-                    continue
-                else:
-                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
-                    keyword = ""
+                        types[i+1].append("identifier")
 
-            # NOT KEYWORD
-            notKeyword = re.findall("^(NOT)$", splitWords[j])                          # NOT (between)
+                    wonOfKeyword = ""
+
+            #catches NOT
+            notKeyword = re.findall("^(NOT)$", splitWords[j])
             if (notKeyword):
                 if(i+1 not in lexemes):
                     lexemes[i+1] = []
@@ -821,38 +911,88 @@ def findLexemes(lines):
                     types[i+1].append("not operator")
                 else:
                     types[i+1].append("not operator")
+
                 continue
             
-            # ANY OF KEYWORD
-            if (splitWords[j].strip() == "ANY"):
-                keywordFound = True
-                keyword = keyword + splitWords[j]
+            #catches ANY OF
+            if (splitWords[j] == "ANY"):
+                anyOfKeyword = anyOfKeyword + splitWords[j] + " "
                 continue
 
-            if (keywordFound == True and (keyword == "ANY")):
+            if (anyOfKeyword == "ANY "):
                 if (splitWords[j] == "OF"):
-                    keyword = keyword + " " + "OF"
+                    anyOfKeyword = anyOfKeyword + splitWords[j]
+
+                    if(anyOfKeyword == "ANY OF"):
+                        if(i+1 not in lexemes):
+                            lexemes[i+1] = []
+                            lexemes[i+1].append(anyOfKeyword)
+                        else:
+                            lexemes[i+1].append(anyOfKeyword)
+                        
+                        if(i+1 not in types):
+                            types[i+1] = []
+                            types[i+1].append("infinite arity OR operator")
+                        else:
+                            types[i+1].append("infinite arity OR operator")
+                        
+                        anyOfKeyword = ""
+                        continue
+                else: #only ANY (identifier)
                     if(i+1 not in lexemes):
                         lexemes[i+1] = []
-                        lexemes[i+1].append(keyword)
+                        lexemes[i+1].append("ANY")
                     else:
-                        lexemes[i+1].append(keyword)
-                    
+                        lexemes[i+1].append("ANY")
+
                     if(i+1 not in types):
                         types[i+1] = []
-                        types[i+1].append("infinite arity OR operator")
+                        types[i+1].append("identifier")
                     else:
-                        types[i+1].append("infinite arity OR operator")
-                    
-                    keywordFound == False        # REINITIALIZE USED VARIABLES
-                    keyword = ""
-                    continue
-                else:
-                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
-                    keyword = ""
+                        types[i+1].append("identifier")
+
+                    anyOfKeyword = ""
+
+            #catches ALL OF
+            if (splitWords[j] == "ALL"):
+                allOfKeyword = allOfKeyword + splitWords[j] + " "
+                continue
+
+            if (allOfKeyword == "ALL "):
+                if (splitWords[j] == "OF"):
+                    allOfKeyword = allOfKeyword + splitWords[j]
+
+                    if(allOfKeyword == "ALL OF"):
+                        if(i+1 not in lexemes):
+                            lexemes[i+1] = []
+                            lexemes[i+1].append(allOfKeyword)
+                        else:
+                            lexemes[i+1].append(allOfKeyword)
+                        
+                        if(i+1 not in types):
+                            types[i+1] = []
+                            types[i+1].append("infinite arity AND operator")
+                        else:
+                            types[i+1].append("infinite arity AND operator")
+                        
+                        allOfKeyword = ""
+                        continue
+                else: #only ALL (identifier)
+                    if(i+1 not in lexemes):
+                        lexemes[i+1] = []
+                        lexemes[i+1].append("ALL")
+                    else:
+                        lexemes[i+1].append("ALL")
+
+                    if(i+1 not in types):
+                        types[i+1] = []
+                        types[i+1].append("identifier")
+                    else:
+                        types[i+1].append("identifier")
+
+                    allOfKeyword = ""
             
-            
-            # DIFFRINT KEYWORD
+            #catches DIFFRINT
             diffrintKeyword = re.search("^(DIFFRINT)$", splitWords[j])
             if(diffrintKeyword):
                 if(i+1 not in lexemes):
@@ -866,13 +1006,11 @@ def findLexemes(lines):
                     types[i+1].append("not equal comparison operator")
                 else:
                     types[i+1].append("not equal comparison operator")
-                continue
-            else:
-                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
-                    keyword = ""
 
-            #MKAY Keyword
-            smooshKeyword = re.search("^(SMOOSH)$", splitWords[j])                              # SMOOSH
+                continue
+
+            #catches SMOOSH
+            smooshKeyword = re.search("^(SMOOSH)$", splitWords[j])
             if(smooshKeyword):
                 if(i+1 not in lexemes):
                     lexemes[i+1] = []
@@ -882,34 +1020,13 @@ def findLexemes(lines):
             
                 if(i+1 not in types):
                     types[i+1] = []
-                    types[i+1].append("concatenation delimiter")
+                    types[i+1].append("concatenation keyword")
                 else:
-                    types[i+1].append("concatenation delimiter")
+                    types[i+1].append("concatenation keyword")
+
                 continue
-            else:
-                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
-                    keyword = ""
             
-            #MKAY Keyword
-            mkayKeyword = re.search("^(MKAY)$", splitWords[j])                              # SMOOSH
-            if(mkayKeyword):
-                if(i+1 not in lexemes):
-                    lexemes[i+1] = []
-                    lexemes[i+1].append(splitWords[j])
-                else:
-                    lexemes[i+1].append(splitWords[j])
-            
-                if(i+1 not in types):
-                    types[i+1] = []
-                    types[i+1].append("concatenation delimiter")
-                else:
-                    types[i+1].append("concatenation delimiter")
-                continue
-            else:
-                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
-                    keyword = ""
-            
-            #MAEK Keyword
+            #catches MAEK
             maekKeyword = re.search("^(MAEK)$", splitWords[j])
             if(maekKeyword):
                 if(i+1 not in lexemes):
@@ -920,17 +1037,15 @@ def findLexemes(lines):
             
                 if(i+1 not in types):
                     types[i+1] = []
-                    types[i+1].append("typecasting operator")
+                    types[i+1].append("typecasting keyword")
                 else:
-                    types[i+1].append("typecasting operator")
+                    types[i+1].append("typecasting keyword")
+
                 continue
-            else:
-                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
-                    keyword = ""
             
-            #A Keyword 
+            #catches A
             aKeyword = re.search("^(A)$", splitWords[j])
-            if(aKeyword and isNowAKeyword == ""):
+            if(aKeyword and isNowAKeyword == "" and iHasAKeyword == ""):
                 if(i+1 not in lexemes):
                     lexemes[i+1] = []
                     lexemes[i+1].append(splitWords[j])
@@ -939,45 +1054,71 @@ def findLexemes(lines):
             
                 if(i+1 not in types):
                     types[i+1] = []
-                    types[i+1].append("type separator operator")
+                    types[i+1].append("typecasting delimiter")
                 else:
-                    types[i+1].append("type separator operator")
-                continue
-            else:
-                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
-                    keyword = ""
+                    types[i+1].append("typecasting delimiter")
 
-            # IS NOW A KEYWORD
-            if(splitWords[j] == "IS"):
+                continue
+
+            #catches IS NOW A
+            if (splitWords[j] == "IS"):
                 isNowAKeyword = isNowAKeyword + splitWords[j] + " "
                 continue
 
-
-            if(isNowAKeyword == "IS "):
-                if(splitWords[j] == "NOW"):
+            if (isNowAKeyword == "IS "):
+                if (splitWords[j] == "NOW"):
                     isNowAKeyword = isNowAKeyword + splitWords[j] + " "
                     continue
+                else: #case where IS is alone (identifier)
+                    if(i+1 not in lexemes):
+                        lexemes[i+1] = []
+                        lexemes[i+1].append("IS")
+                    else:
+                        lexemes[i+1].append("IS")
+
+                    if(i+1 not in types):
+                        types[i+1] = []
+                        types[i+1].append("identifier")
+                    else:
+                        types[i+1].append("identifier")
+
+                    isNowAKeyword = ""
 
             if(isNowAKeyword == "IS NOW "):
-                if(splitWords[j] == "A"):
+                if (splitWords[j] == "A"):
                     isNowAKeyword = isNowAKeyword + splitWords[j]
-
+                    
                     if(isNowAKeyword == "IS NOW A"):
                         if(i+1 not in lexemes):
                             lexemes[i+1] = []
                             lexemes[i+1].append(isNowAKeyword)
                         else:
                             lexemes[i+1].append(isNowAKeyword)
-                    
+                        
                         if(i+1 not in types):
                             types[i+1] = []
-                            types[i+1].append("typecast keyword")
+                            types[i+1].append("typecasting keyword")
                         else:
-                            types[i+1].append("typecast keyword")
+                            types[i+1].append("typecasting keyword")
                         
                         isNowAKeyword = ""
+                        continue
+                else: #case where it's only IS NOW (invalid)
+                    if(i+1 not in lexemes):
+                        lexemes[i+1] = []
+                        lexemes[i+1].append("IS NOW")
+                    else:
+                        lexemes[i+1].append("IS NOW")
 
-            #VISIBLE Keyword
+                    if(i+1 not in types):
+                        types[i+1] = []
+                        types[i+1].append("invalid keyword")
+                    else:
+                        types[i+1].append("invalid keyword")
+
+                    isNowAKeyword = ""
+
+            #catches VISIBLE
             visibleKeyword = re.search("^(VISIBLE)$", splitWords[j])
             if(visibleKeyword):
                 if(i+1 not in lexemes):
@@ -991,12 +1132,10 @@ def findLexemes(lines):
                     types[i+1].append("print keyword")
                 else:
                     types[i+1].append("print keyword")
-                continue
-            else:
-                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
-                    keyword = ""
 
-            #GIMMEH Keyword
+                continue
+
+            #catches GIMMEH
             gimmehKeyword = re.search("^(GIMMEH)$", splitWords[j])
             if(gimmehKeyword):
                 if(i+1 not in lexemes):
@@ -1010,56 +1149,88 @@ def findLexemes(lines):
                     types[i+1].append("input keyword")
                 else:
                     types[i+1].append("input keyword")
-                continue
-            else:
-                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
-                    keyword = ""
 
-            #O RLY? Keyword
+                continue
+
+            #catches O RLY?
             if (splitWords[j] == "O"):
-                oRlyKeyword = oRlyKeyword + splitWords[j] + " " 
+                oRlyKeyword = oRlyKeyword + splitWords[j] + " "
                 continue
+
             if (oRlyKeyword == "O "):
-                if (splitWords[j].strip() == "RLY?"):
-                    oRlyKeyword = oRlyKeyword + splitWords[j] + " "
+                if (splitWords[j] == "RLY?"):
+                    oRlyKeyword = oRlyKeyword + splitWords[j]
+
+                    if(oRlyKeyword == "O RLY?"):
+                        if(i+1 not in lexemes):
+                            lexemes[i+1] = []
+                            lexemes[i+1].append(oRlyKeyword)
+                        else:
+                            lexemes[i+1].append(oRlyKeyword)
+                        
+                        if(i+1 not in types):
+                            types[i+1] = []
+                            types[i+1].append("if delimiter")
+                        else:
+                            types[i+1].append("if delimiter")
+                        
+                        oRlyKeyword = ""
+                        continue
+                else: #only O (identifier)
                     if(i+1 not in lexemes):
                         lexemes[i+1] = []
-                        lexemes[i+1].append(oRlyKeyword)
+                        lexemes[i+1].append("O")
                     else:
-                        lexemes[i+1].append(oRlyKeyword)
-                    
+                        lexemes[i+1].append("O")
+
                     if(i+1 not in types):
                         types[i+1] = []
-                        types[i+1].append("ifthen demiliter")
+                        types[i+1].append("identifier")
                     else:
-                        types[i+1].append("ifthen demiliter")
-                    
+                        types[i+1].append("identifier")
+
                     oRlyKeyword = ""
-                    continue
 
-            #YA RLY? Keyword
+            #catches YA RLY
             if (splitWords[j] == "YA"):
-                yaRlyKeyword = yaRlyKeyword + splitWords[j] + " " 
+                yaRlyKeyword = yaRlyKeyword + splitWords[j] + " "
                 continue
+
             if (yaRlyKeyword == "YA "):
-                if (splitWords[j].strip() == "RLY"):
-                    yaRlyKeyword = yaRlyKeyword + splitWords[j] + " "
+                if (splitWords[j] == "RLY"):
+                    yaRlyKeyword = yaRlyKeyword + splitWords[j]
+
+                    if(yaRlyKeyword == "YA RLY"):
+                        if(i+1 not in lexemes):
+                            lexemes[i+1] = []
+                            lexemes[i+1].append(yaRlyKeyword)
+                        else:
+                            lexemes[i+1].append(yaRlyKeyword)
+                        
+                        if(i+1 not in types):
+                            types[i+1] = []
+                            types[i+1].append("if keyword")
+                        else:
+                            types[i+1].append("if keyword")
+                        
+                        yaRlyKeyword = ""
+                        continue
+                else: #only YA (identifier)
                     if(i+1 not in lexemes):
                         lexemes[i+1] = []
-                        lexemes[i+1].append(yaRlyKeyword)
+                        lexemes[i+1].append("YA")
                     else:
-                        lexemes[i+1].append(yaRlyKeyword)
-                    
+                        lexemes[i+1].append("YA")
+
                     if(i+1 not in types):
                         types[i+1] = []
-                        types[i+1].append("if win then operator")
+                        types[i+1].append("identifier")
                     else:
-                        types[i+1].append("if win then operator")
-                    
-                    yaRlyKeyword = ""
-                    continue
+                        types[i+1].append("identifier")
 
-            #MEBBE Keyword
+                    yaRlyKeyword = ""
+
+            #catches MEBBE
             mebbeKeyword = re.search("^(MEBBE)$", splitWords[j])
             if(mebbeKeyword):
                 if(i+1 not in lexemes):
@@ -1070,37 +1241,52 @@ def findLexemes(lines):
             
                 if(i+1 not in types):
                     types[i+1] = []
-                    types[i+1].append("then operator")
+                    types[i+1].append("else if keyword")
                 else:
-                    types[i+1].append("then operator")
-                continue
-            else:
-                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
-                    keyword = ""
+                    types[i+1].append("else if keyword")
 
-            #NO WAI Keyword
-            if (splitWords[j] == "NO"):
-                noWaiKeyword = noWaiKeyword + splitWords[j] + " " 
                 continue
+
+            #catches NO WAI
+            if (splitWords[j] == "NO"):
+                noWaiKeyword = noWaiKeyword + splitWords[j] + " "
+                continue
+
             if (noWaiKeyword == "NO "):
-                if (splitWords[j].strip() == "WAI"):
-                    noWaiKeyword = noWaiKeyword + splitWords[j] + " "
+                if (splitWords[j] == "WAI"):
+                    noWaiKeyword = noWaiKeyword + splitWords[j]
+
+                    if(noWaiKeyword == "NO WAI"):
+                        if(i+1 not in lexemes):
+                            lexemes[i+1] = []
+                            lexemes[i+1].append(noWaiKeyword)
+                        else:
+                            lexemes[i+1].append(noWaiKeyword)
+                        
+                        if(i+1 not in types):
+                            types[i+1] = []
+                            types[i+1].append("else keyword")
+                        else:
+                            types[i+1].append("else keyword")
+                        
+                        noWaiKeyword = ""
+                        continue
+                else: #only NO (identifier)
                     if(i+1 not in lexemes):
                         lexemes[i+1] = []
-                        lexemes[i+1].append(noWaiKeyword)
+                        lexemes[i+1].append("NO")
                     else:
-                        lexemes[i+1].append(noWaiKeyword)
-                    
+                        lexemes[i+1].append("NO")
+
                     if(i+1 not in types):
                         types[i+1] = []
-                        types[i+1].append("if fail then operator")
+                        types[i+1].append("identifier")
                     else:
-                        types[i+1].append("if fail then operator")
-                    
+                        types[i+1].append("identifier")
+
                     noWaiKeyword = ""
-                    continue
             
-            #OIC Keyword
+            #catches OIC
             oicKeyword = re.search("^(OIC)$", splitWords[j])
             if(oicKeyword):
                 if(i+1 not in lexemes):
@@ -1111,15 +1297,13 @@ def findLexemes(lines):
             
                 if(i+1 not in types):
                     types[i+1] = []
-                    types[i+1].append("ifthen delimiter")
+                    types[i+1].append("if/switch case delimiter")
                 else:
-                    types[i+1].append("ifthen delimiter")
-                continue
-            else:
-                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
-                    keyword = ""
+                    types[i+1].append("if/switch case delimiter")
 
-            #WTF Keyword
+                continue
+
+            #catches WTF?
             wtfKeyword = re.search("^(WTF\?)$", splitWords[j])
             if(wtfKeyword):
                 if(i+1 not in lexemes):
@@ -1130,15 +1314,13 @@ def findLexemes(lines):
             
                 if(i+1 not in types):
                     types[i+1] = []
-                    types[i+1].append("ifthen delimiter")
+                    types[i+1].append("switch case delimiter")
                 else:
-                    types[i+1].append("ifthen delimiter")
+                    types[i+1].append("switch case delimiter")
+
                 continue
-            else:
-                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
-                    keyword = ""
             
-            #OMG Keyword
+            #catches OMG
             omgKeyword = re.search("^(OMG)$", splitWords[j])
             if(omgKeyword):
                 if(i+1 not in lexemes):
@@ -1149,15 +1331,13 @@ def findLexemes(lines):
             
                 if(i+1 not in types):
                     types[i+1] = []
-                    types[i+1].append("comparison delimiter")
+                    types[i+1].append("case keyword")
                 else:
-                    types[i+1].append("comparison delimiter")
-                continue
-            else:
-                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
-                    keyword = ""
+                    types[i+1].append("case keyword")
 
-            #OMGWTF Keyword
+                continue
+
+            #catches OMGWTF
             omgwtfKeyword = re.search("^(OMGWTF)$", splitWords[j])
             if(omgwtfKeyword):
                 if(i+1 not in lexemes):
@@ -1168,125 +1348,40 @@ def findLexemes(lines):
             
                 if(i+1 not in types):
                     types[i+1] = []
-                    types[i+1].append("default case operator")
+                    types[i+1].append("default case keyword")
                 else:
-                    types[i+1].append("default case operator")
-                continue
-            else:
-                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
-                    keyword = ""
+                    types[i+1].append("default case keyword")
 
-            #UPPIN Keyword
-            uppinKeyword = re.search("^(UPPIN)$", splitWords[j])
-            if(uppinKeyword):
-                if(i+1 not in lexemes):
-                    lexemes[i+1] = []
-                    lexemes[i+1].append(splitWords[j])
-                else:
-                    lexemes[i+1].append(splitWords[j])
-            
-                if(i+1 not in types):
-                    types[i+1] = []
-                    types[i+1].append("increment operator")
-                else:
-                    types[i+1].append("increment operator")
                 continue
-            else:
-                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
-                    keyword = ""
 
-            #NERFIN Keyword
-            nerfinKeyword = re.search("^(NERFIN)$", splitWords[j])
-            if(nerfinKeyword):
-                if(i+1 not in lexemes):
-                    lexemes[i+1] = []
-                    lexemes[i+1].append(splitWords[j])
-                else:
-                    lexemes[i+1].append(splitWords[j])
-            
-                if(i+1 not in types):
-                    types[i+1] = []
-                    types[i+1].append("decrement operator")
-                else:
-                    types[i+1].append("decrement operator")
-                continue
-            else:
-                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
-                    keyword = ""
-
-            #YR Keyword
-            yrKeyword = re.search("^(YR)$", splitWords[j])
-            if(yrKeyword and imYrKeyword== ""):
-                if(i+1 not in lexemes):
-                    lexemes[i+1] = []
-                    lexemes[i+1].append(splitWords[j])
-                else:
-                    lexemes[i+1].append(splitWords[j])
-            
-                if(i+1 not in types):
-                    types[i+1] = []
-                    types[i+1].append("identifier delimiter operator")
-                else:
-                    types[i+1].append("identifier delimiter operator")
-                continue
-            else:
-                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
-                    keyword = ""
-
-            #TIL Keyword
-            tilKeyword = re.search("^(TIL)$", splitWords[j])
-            if(tilKeyword):
-                if(i+1 not in lexemes):
-                    lexemes[i+1] = []
-                    lexemes[i+1].append(splitWords[j])
-                else:
-                    lexemes[i+1].append(splitWords[j])
-            
-                if(i+1 not in types):
-                    types[i+1] = []
-                    types[i+1].append("loop fail condition operator")
-                else:
-                    types[i+1].append("loop fail condition operator")
-                continue
-            else:
-                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
-                    keyword = ""
-            
-            #WILE Keyword
-            wileKeyword = re.search("^(WILE)$", splitWords[j])
-            if(wileKeyword):
-                if(i+1 not in lexemes):
-                    lexemes[i+1] = []
-                    lexemes[i+1].append(splitWords[j])
-                else:
-                    lexemes[i+1].append(splitWords[j])
-            
-                if(i+1 not in types):
-                    types[i+1] = []
-                    types[i+1].append("loop win condition operator")
-                else:
-                    types[i+1].append("loop win condition operator")
-                continue
-            else:
-                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
-                    keyword = ""
-
-            #IM IN/OUTTA YR Keyword
+            #catches IM IN YR or IM OUTTA YR
             if(splitWords[j] == "IM"):
                 imYrKeyword = imYrKeyword + splitWords[j] + " "
                 continue
 
             if(imYrKeyword == "IM "):
-                if(splitWords[j] == "IN"):
+                if(splitWords[j] == "IN" or splitWords[j] == "OUTTA"):
                     imYrKeyword = imYrKeyword + splitWords[j] + " "
                     continue
-                elif(splitWords[j] == "OUTTA"):
-                    imYrKeyword = imYrKeyword + splitWords[j] + " " 
-                    continue
+                else: #case where IM is alone (identifier)
+                    if(i+1 not in lexemes):
+                        lexemes[i+1] = []
+                        lexemes[i+1].append("IM")
+                    else:
+                        lexemes[i+1].append("IM")
+
+                    if(i+1 not in types):
+                        types[i+1] = []
+                        types[i+1].append("identifier")
+                    else:
+                        types[i+1].append("identifier")
+
+                    imYrKeyword = ""
                
             if(imYrKeyword == "IM IN "):
                 if(splitWords[j] == "YR"):
                     imYrKeyword = imYrKeyword + splitWords[j]
+
                     if(imYrKeyword == "IM IN YR"):
                         if(i+1 not in lexemes):
                             lexemes[i+1] = []
@@ -1302,12 +1397,24 @@ def findLexemes(lines):
                         
                         imYrKeyword = ""
                         continue
-                        if(splitWords[j] == "YR"):
-                            imYrKeyword = imYrKeyword + splitWords[j]
+                else: #case where it's only IM IN (invalid)
+                    if(i+1 not in lexemes):
+                        lexemes[i+1] = []
+                        lexemes[i+1].append("IM IN")
+                    else:
+                        lexemes[i+1].append("IM IN")
+
+                    if(i+1 not in types):
+                        types[i+1] = []
+                        types[i+1].append("invalid keyword")
+                    else:
+                        types[i+1].append("invalid keyword")
+
+                    imYrKeyword = ""
             elif(imYrKeyword == "IM OUTTA "):
                 if(splitWords[j] == "YR"):
-                    print(splitWords[j])
                     imYrKeyword = imYrKeyword + splitWords[j]
+
                     if(imYrKeyword == "IM OUTTA YR"):
                         if(i+1 not in lexemes):
                             lexemes[i+1] = []
@@ -1322,10 +1429,108 @@ def findLexemes(lines):
                             types[i+1].append("loop delimiter")
                         
                         imYrKeyword = ""
+                        continue
+                else: #case where it's only IM OUTTA (invalid)
+                    if(i+1 not in lexemes):
+                        lexemes[i+1] = []
+                        lexemes[i+1].append("IM OUTTA")
                     else:
-                        imYrKeyword = ""
+                        lexemes[i+1].append("IM OUTTA")
 
-            #GTFO Keyword
+                    if(i+1 not in types):
+                        types[i+1] = []
+                        types[i+1].append("invalid keyword")
+                    else:
+                        types[i+1].append("invalid keyword")
+
+                    imYrKeyword = ""
+
+            #catches UPPIN
+            uppinKeyword = re.search("^(UPPIN)$", splitWords[j])
+            if(uppinKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("increment operator")
+                else:
+                    types[i+1].append("increment operator")
+
+                continue
+
+            #catches NERFIN
+            nerfinKeyword = re.search("^(NERFIN)$", splitWords[j])
+            if(nerfinKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("decrement operator")
+                else:
+                    types[i+1].append("decrement operator")
+
+                continue
+
+            #catches YR
+            yrKeyword = re.search("^(YR)$", splitWords[j])
+            if(yrKeyword and imYrKeyword== ""):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("loop operator delimiter")
+                else:
+                    types[i+1].append("loop operator delimiter")
+
+                continue
+
+            #catches TIL
+            tilKeyword = re.search("^(TIL)$", splitWords[j])
+            if(tilKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("for loop keyword")
+                else:
+                    types[i+1].append("for loop keyword")
+
+                continue
+            
+            #catches WILE
+            wileKeyword = re.search("^(WILE)$", splitWords[j])
+            if(wileKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("while loop keyword")
+                else:
+                    types[i+1].append("while loop keyword")
+
+                continue
+
+            #catches GTFO
             gtfoKeyword = re.search("^(GTFO)$", splitWords[j])
             if(gtfoKeyword):
                 if(i+1 not in lexemes):
@@ -1336,15 +1541,13 @@ def findLexemes(lines):
             
                 if(i+1 not in types):
                     types[i+1] = []
-                    types[i+1].append("break operator")
+                    types[i+1].append("break keyword")
                 else:
-                    types[i+1].append("break operator")
-                continue
-            else:
-                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
-                    keyword = ""
+                    types[i+1].append("break keyword")
 
-            #AN Keyword
+                continue
+
+            #catches AN
             anKeyword = re.search("^(AN)$", splitWords[j])
             if(anKeyword):
                 if(i+1 not in lexemes):
@@ -1358,15 +1561,27 @@ def findLexemes(lines):
                     types[i+1].append("argument separator keyword")
                 else:
                     types[i+1].append("argument separator keyword")
-                continue
-            else:
-                    keywordFound == False        # NOT FOUND -> WRONG SYNTAX
-                    keyword = ""
 
-            #catches identifiers
-            if(splitWords[j] in keywords): #will delete this block when keywords are added above (not neccesary anymore)
                 continue
+            
+            #catches MKAY
+            mkayKeyword = re.search("^(MKAY)$", splitWords[j])
+            if(mkayKeyword):
+                if(i+1 not in lexemes):
+                    lexemes[i+1] = []
+                    lexemes[i+1].append(splitWords[j])
+                else:
+                    lexemes[i+1].append(splitWords[j])
+            
+                if(i+1 not in types):
+                    types[i+1] = []
+                    types[i+1].append("infinite arity operation delimiter")
+                else:
+                    types[i+1].append("infinite arity operation delimiter")
 
+                continue
+            
+            #catches IDENTIFIERS
             identifier = re.search("^[a-zA-Z][a-zA-Z0-9_]*$", splitWords[j])
             if(identifier):
                 if(i+1 not in lexemes):
@@ -1386,14 +1601,6 @@ def findLexemes(lines):
 def printSymbolTable():
     space1 = 40
     space2 = 40
-    space3 = 10
-
-    # for typeTemp in symbolTable.keys():
-    #     for lexeme in symbolTable[typeTemp].keys():
-    #         print("Lexeme: " + lexeme, end=(" " * (space1 - len(lexeme))))
-    #         print("Type: " + typeTemp, end=(" " * (space2 - len(typeTemp))))
-    #         print("Count: " + str(symbolTable[typeTemp][lexeme][0]), end=(" " * (space3 - len(str(symbolTable[typeTemp][lexeme][0])))))
-    #         print("")
 
     for i in lexemes.keys():
         print("Line " + str(i))
@@ -1403,9 +1610,6 @@ def printSymbolTable():
             print("")
         print("")
 
-def getLines():
-    return lines
-
 def getLexemes():
     return lexemes
 
@@ -1413,73 +1617,10 @@ def getType():
     return types
 
 #MAIN CODE
-#cinomment ko lang para may reference kayo sa types na iaappend niyo pero idedelete ko rin mamaya
-# symbolTable = {
-#                 "comment": {},
-#                 "identifier": {},
-#                 "NUMBR literal": {},
-#                 "NUMBAR literal": {},
-#                 "YARN literal": {},
-#                 "string delimiter": {},
-#                 "TROOF literal": {},
-#                 "TYPE literal": {},
-#                 "code delimiter": {},
-#                 "single comment delimiter": {},
-#                 "multi comment delimiter": {},
-#                 "variable declaration": {},
-#                 "variable initialization": {},
-#                 "assignment operator": {},
-#                 "add operator": {},
-#                 "subtract operator": {},
-#                 "multiply operator": {},
-#                 "divide operator": {},
-#                 "modulo operator": {},
-#                 "max operator": {},
-#                 "min operator": {},
-#                 "and operator": {},
-#                 "or operator": {},
-#                 "xor operator": {},
-#                 "not operator": {},
-#                 "infinite arity OR operator": {},
-#                 "infinite arity AND operator": {},
-#                 "is equal comparison": {},
-#                 "not equal comparison": {},
-#                 "concatenation keyword":{},
-#                 "typecasting keyword":{},
-#                 "explicit cast keyword":{},
-#                 "print keyword":{},
-#                 "input keyword":{},
-#                 "ifthen keyword":{},
-#                 "ifthen win keyword":{},
-#                 "ifthen fail keyword": {},
-#                 "elseif keyword": {},
-#                 "ifthen exit keyword": {},
-#                 "switch case keyword": {},
-#                 "comparison start keyword": {},
-#                 "default case keyword": {},
-#                 "loop keyword": {},
-#                 "increment operator": {},
-#                 "decrement operator": {},
-#                 "iterator keyword": {},
-#                 "loop until operator": {},
-#                 "loop while operator": {},
-#                 "loop exit keyword": {},
-#                 "loop break keyword": {},
-#                 "infinite arity keyword": {},
-#                 "argument separator keyword": {},
-#                 "type keyword": {},
-#             }
-
 lexemes = {}
 types = {}
 
 lines = readFile(filename)
 findLexemes(lines)
 
-# for i in lexemes.keys():
-#     print("[" + str(i) + "] " + str(lexemes[i]))
-# print("")
-# for i in types.keys():
-#     print("[" + str(i) + "] " + str(types[i]))
-
-printSymbolTable()
+#printSymbolTable()
