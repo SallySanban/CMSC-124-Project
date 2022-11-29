@@ -25,18 +25,43 @@ def nextLineNumber(lineNumber):
 lineNumber = list(lexemes.keys())[0]
 lexemeIndex = 0
 
-while(True):
-    #print(lexemes[i])
+while(lineNumber):
     if(lexemes[lineNumber][lexemeIndex] == "I HAS A"):
         if("ITZ" in lexemes[lineNumber]):
-            if(types[lineNumber][lexemeIndex + 3] in literals):
+            if(types[lineNumber][lexemeIndex + 3] in literals or ["string delimiter"]):
                 if(newSymbolTable.get(lexemes[lineNumber][lexemeIndex + 1])):
+                    # TODO: If the identifier is existing, check if implicitly typecasted or not first before updating value
                     break
                 else: #check first if numbr
-                    newSymbolTable[lexemes[lineNumber][lexemeIndex + 1]] = int(lexemes[lineNumber][lexemeIndex + 3])
-                    break
+                    if (types[lineNumber][lexemeIndex + 3] == "NUMBR literal"):
+                        newSymbolTable[lexemes[lineNumber][lexemeIndex + 1]] = [int(lexemes[lineNumber][lexemeIndex + 3]), types[lineNumber][lexemeIndex + 3]]
+                    elif (types[lineNumber][lexemeIndex + 3] == "NUMBAR literal"):
+                        newSymbolTable[lexemes[lineNumber][lexemeIndex + 1]] = [float(lexemes[lineNumber][lexemeIndex + 3]), types[lineNumber][lexemeIndex + 3]]
+                    elif (types[lineNumber][lexemeIndex + 3] == "string delimiter"):        # YARN literal
+                        newSymbolTable[lexemes[lineNumber][lexemeIndex + 1]] = [lexemes[lineNumber][lexemeIndex + 4], types[lineNumber][lexemeIndex + 4]]
+                    elif (types[lineNumber][lexemeIndex + 3] == "TROOF literal"):
+                        newSymbolTable[lexemes[lineNumber][lexemeIndex + 1]] = [True if lexemes[lineNumber][lexemeIndex + 3] == "WIN" else False, types[lineNumber][lexemeIndex + 3]]
+                    else:
+                        # Change this 
+                        newSymbolTable[lexemes[lineNumber][lexemeIndex + 1]] = [lexemes[lineNumber][lexemeIndex + 3], types[lineNumber][lexemeIndex + 3]]
+                    
             else:
-                break
+                if(newSymbolTable.get(lexemes[lineNumber][lexemeIndex + 1])):
+                    # TODO: If the identifier is existing, check if implicitly typecasted or not first before updating value
+                    break
+                else:           # Check nested
+                    if (types[lineNumber][lexemeIndex + 3] == "NUMBR literal"):
+                        newSymbolTable[lexemes[lineNumber][lexemeIndex + 1]] = [int(lexemes[lineNumber][lexemeIndex + 3]), types[lineNumber][lexemeIndex + 3]]
+                    elif (types[lineNumber][lexemeIndex + 3] == "NUMBAR literal"):
+                        newSymbolTable[lexemes[lineNumber][lexemeIndex + 1]] = [float(lexemes[lineNumber][lexemeIndex + 3]), types[lineNumber][lexemeIndex + 3]]
+                    elif (types[lineNumber][lexemeIndex + 3] == "YARN literal"):
+                        newSymbolTable[lexemes[lineNumber][lexemeIndex + 1]] = [lexemes[lineNumber][lexemeIndex + 4], types[lineNumber][lexemeIndex + 4]]
+                    elif (types[lineNumber][lexemeIndex + 3] == "TROOF literal"):
+                        newSymbolTable[lexemes[lineNumber][lexemeIndex + 1]] = [True if lexemes[lineNumber][lexemeIndex + 3] == "WIN" else False, types[lineNumber][lexemeIndex + 3]]
+                    else:
+                        newSymbolTable[lexemes[lineNumber][lexemeIndex + 1]] = [lexemes[lineNumber][lexemeIndex + 3], types[lineNumber][lexemeIndex + 3]]
+        else:
+            newSymbolTable[lexemes[lineNumber][lexemeIndex + 1]] = [None, "NOOB"]
     lineNumber = nextLineNumber(lineNumber)
             
 print(newSymbolTable)

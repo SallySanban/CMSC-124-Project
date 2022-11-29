@@ -126,36 +126,6 @@ def multiCommentSyntax(lineNumber):
 
     return nextLineNumber(lineNumber)
 
-# def mathOperationSyntax(lineNumber):
-#     counter = 0
-#     for keyword in lexemes[lineNumber]:                 # Checks the n operation keywords
-#         if (keyword in ["SUM OF", "DIFF OF", "PRODUKT OF", "QUOSHUNT OF", "MOD OF", "BIGGR OF", "SMALLR OF"]):
-#             counter += 1
-#         else:
-#             break
-
-#     isNumber = False
-#     numberCnt = 0
-#     for k in range(counter, len(lexemes[lineNumber])):
-#         if (numberCnt < counter + 1):
-#             try:
-#                 isNumber = not isNumber
-#                 if isNumber:
-#                     if (isinstance(int(lexemes[lineNumber][k]), int) or isinstance(float(lexemes[lineNumber][k]), float)):
-#                         numberCnt += 1
-#                 else:
-#                     if (lexemes[lineNumber][k] != "AN"):
-#                         return "[Line " + str(lineNumber) + "] SyntaxError: Expected an AN keyword between the literals"
-#             except ValueError:
-#                 print(lexemes[lineNumber][k])
-#                 return "[Line " + str(lineNumber) + "] SyntaxError: Expected a numbr or numbar literal after arithmetic operator"
-#         else:
-#             # print(lexemes[lineNumber][k])       # Checker
-#             if(lexemes[lineNumber][k] == "BTW"):
-#                 return singleCommentSyntax(lineNumber)
-#             else:
-#                 return "[Line " + str(lineNumber) + "] SyntaxError: cannot have statements after arithmetic operation"
-
 def sumOfSyntax(lineNumber):
     sumOfIndex = lexemes[lineNumber].index("SUM OF")
 
