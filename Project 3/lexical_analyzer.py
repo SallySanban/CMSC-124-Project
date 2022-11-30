@@ -1,6 +1,6 @@
 import re
 
-filename = "Project 3/Test Files/project-examples/01_variables.lol"
+filename = "Project 3/Test Files/samplecodewrong.txt"
 
 #reads file and cleans each line in the file
 def readFile(filename):
@@ -667,7 +667,7 @@ def findLexemes(lines):
                         else:
                             types[i+1].append("modulo operator")
                         
-                        quoshuntOfKeyword = ""
+                        modOfKeyword = ""
                         continue
                 else: #only MOD (identifier)
                     if(i+1 not in lexemes):

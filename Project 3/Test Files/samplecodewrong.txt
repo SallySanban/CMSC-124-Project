@@ -48,9 +48,7 @@ BIGGR OF MOD OF 23 AN 53 AN 27      BTW max(23, 53)
 SMALLR OF 53 AN 45      BTW min(53, 45)
 
 BTW Binary notation:
-BOTH OF WIN AN WIN           BTW and: WIN if x=WIN, y=WIN
-EITHER OF FAIL AN WIN        BTW or: FAIL if x=FAIL, y=FAIL
-WON OF WIN AN FAIL           BTW xor: FAIL if x=y
+BOTH OF EITHER OF x AN y AN BOTH OF w AN z          BTW and: WIN if x=WIN, y=WIN
 
 BTW Comparison:
 
