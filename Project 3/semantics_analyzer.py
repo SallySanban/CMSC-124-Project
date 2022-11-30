@@ -149,9 +149,9 @@ while(lineNumber):
                                 elif (types[lineNumber][itzIndex + operatorCount] == "modulo operator"):
                                     tempVal[0] %= temp[0]
                             else:           # * Literal
-                                if (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "identifier"):
-                                    print(f"Line {lineNumber} Semantic Error: Uninitialized variable used in arithmetic expression")
-                                    break
+                                if (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "invalid"):
+                                print(f"Line {lineNumber} Semantic Error: Invalid identifier used in arithmetic expression")
+                                break
                                 # ! Check type
                                 temp = 0
                                 if (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "NUMBR literal"):
@@ -196,8 +196,8 @@ while(lineNumber):
 
                         # * 1st N
                         else:           # * Literal
-                            if (types[lineNumber][itzIndex + operatorCount + tempCount] == "identifier"):
-                                print(f"Line {lineNumber} Semantic Error: Uninitialized variable used in arithmetic expression")
+                            if (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "invalid"):
+                                print(f"Line {lineNumber} Semantic Error: Invalid identifier used in arithmetic expression")
                                 break
 
                             # ! Check type
@@ -266,8 +266,8 @@ while(lineNumber):
                                 elif (types[lineNumber][itzIndex + operatorCount] == "modulo operator"):
                                     tempVal[0] %= temp[0]
                             else:           # * Literal
-                                if (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "identifier"):
-                                    print(f"Line {lineNumber} Semantic Error: Uninitialized variable used in arithmetic expression")
+                                if (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "invalid"):
+                                    print(f"Line {lineNumber} Semantic Error: Invalid identifier used in arithmetic expression")
                                     break
 
                                 # ! Check type
@@ -362,8 +362,8 @@ while(lineNumber):
                             elif (types[lineNumber][itzIndex + operatorCount] == "modulo operator"):
                                 tempVal[0] %= temp[0]
                         else:           # * Literal
-                            if (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "identifier"):
-                                print(f"Line {lineNumber} Semantic Error: Uninitialized variable used in arithmetic expression")
+                            if (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "invalid"):
+                                print(f"Line {lineNumber} Semantic Error: Invalid identifier used in arithmetic expression")
                                 break
                             
                             # ! Check type
@@ -488,8 +488,8 @@ while(lineNumber):
                             elif (types[lineNumber][itzIndex + operatorCount] == "modulo operator"):
                                 tempVal[0] %= temp[0]
                         else:           # * Literal
-                            if (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "identifier"):
-                                print(f"Line {lineNumber} Semantic Error: Uninitialized variable used in arithmetic expression")
+                            if (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "invalid"):
+                                print(f"Line {lineNumber} Semantic Error: Invalid identifier used in arithmetic expression")
                                 break
                             
                             # ! Check type
@@ -536,8 +536,8 @@ while(lineNumber):
                                 tempVal[0] %= temp[0]
                     # * 1st N
                     else:           # * Literal
-                        if (types[lineNumber][itzIndex + operatorCount + tempCount] == "identifier"):
-                            print(f"Line {lineNumber} Semantic Error: Uninitialized variable used in arithmetic expression")
+                        if (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "invalid"):
+                            print(f"Line {lineNumber} Semantic Error: Invalid identifier used in arithmetic expression")
                             break
                         # ! Check type
 
@@ -594,8 +594,8 @@ while(lineNumber):
                                 print(f"Line {lineNumber} Semantic Error: NOOB type literal cannot be implicitly casted to NUMBR or NUMBAR literal")
                                 break
                         else:           # * Literal
-                            if (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "identifier"):
-                                print(f"Line {lineNumber} Semantic Error: Uninitialized variable used in arithmetic expression")
+                            if (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "invalid"):
+                                print(f"Line {lineNumber} Semantic Error: Invalid identifier used in arithmetic expression")
                                 break
                             
                             # ! Check type
@@ -644,7 +644,10 @@ while(lineNumber):
                     newSymbolTable[lexemes[lineNumber][1]] = [tempVal[0], tempVal[1]]
                 else:     
                     temp = 0
-
+                    print(lexemes[lineNumber])
+                    print(operatorCount)
+                    print(tempCount)
+                    print(lexemes[lineNumber][itzIndex + operatorCount + tempCount])
                     if (newSymbolTable.get(lexemes[lineNumber][itzIndex + operatorCount + tempCount])): # Existing Identifier
                         temp = 0
                         # ! Check type
@@ -687,8 +690,8 @@ while(lineNumber):
                         elif (types[lineNumber][itzIndex + operatorCount] == "modulo operator"):
                             tempVal[0] %= temp[0]
                     else:           # * Literal
-                        if (types[lineNumber][itzIndex + operatorCount + tempCount] == "identifier"):
-                            print(f"Line {lineNumber} Semantic Error: Uninitialized variable used in arithmetic expression")
+                        if (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "invalid"):
+                            print(f"Line {lineNumber} Semantic Error: Invalid identifier used in arithmetic expression")
                             break
                         
                         # ! Check type
