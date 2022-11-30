@@ -170,13 +170,8 @@ while(lineNumber):
                     # I HAS A sum ITZ SUM OF num AN 13                                  # 3
                     # I HAS A sum ITZ SUM OF DIFF OF num AN 13 AN 21                        # 6
                     # I HAS A sum ITZ SUM OF DIFF OF PRODUKT OF num AN 13 AN 21 AN 4            # 9
-                    # I HAS A sum ITZ SUM OF DIFF OF PRODUKT OF SUM OF num AN 13 AN 21 AN 4 AN 11          # 12
+                    # I HAS A sum ITZ SUM OF DIFF OF PRODUKT OF SUM OF num AN 13 AN 21 AN 4 AN 11   # 12
 
-
-                    # print(tempVal)
-                    # print(lexemes[lineNumber][itzIndex + operatorCount])
-                    # print(tempCount)
-                    # print(lexemes[lineNumber][itzIndex + operatorCount + tempCount - 2])
                     if (not boolNested):          # ! SINGLE OPERATION
                         # * 1ST N
                         if (newSymbolTable.get(lexemes[lineNumber][itzIndex + operatorCount + 1])):     # Existing identifier
@@ -210,18 +205,19 @@ while(lineNumber):
                         else:               # Literal or NOOB identifier
                             # * 1ST N
                             if (types[lineNumber][itzIndex + operatorCount + 1] in literals or types[lineNumber][itzIndex + operatorCount + 1 + 2] in ["string delimiter"]):
+                                # TYPE CAST HERE
                                 tempVal += int(lexemes[lineNumber][itzIndex + operatorCount + 1])
                                 
                                 # * 2ND N
                                 if (newSymbolTable.get(lexemes[lineNumber][itzIndex + operatorCount + 3])):     # Existing identifier
                                     if (types[lineNumber][itzIndex + operatorCount] == "add operator"):
-                                        tempVal += newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + 1]][0]
+                                        tempVal += newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + 3]][0]
                                     elif (types[lineNumber][itzIndex + operatorCount] == "subtract operator"):
-                                        tempVal -= newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + 1]][0]
+                                        tempVal -= newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + 3]][0]
                                     elif (types[lineNumber][itzIndex + operatorCount] == "multiply operator"):
-                                        tempVal *= newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + 1]][0]
+                                        tempVal *= newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + 3]][0]
                                     elif (types[lineNumber][itzIndex + operatorCount] == "divide operator"):
-                                        tempVal /= newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + 1]][0]
+                                        tempVal /= newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + 3]][0]
                                 else:
                                     if (types[lineNumber][itzIndex + operatorCount + 3] in literals or types[lineNumber][itzIndex + operatorCount + 3] in ["string delimiter"]):
                                         if (types[lineNumber][itzIndex + operatorCount] == "add operator"):
@@ -272,9 +268,10 @@ while(lineNumber):
                             # elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "TROOF literal"):
                             # elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "YARN literal"):
                             # elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "TYPE literal"):
+
+                    # * STORES THE FINAL VALUE OF TEMP HERE
                     print(tempVal)          # ! WORKING RIGHT NOW BUT NOT single operation
                     newSymbolTable[lexemes[lineNumber][1]] = [tempVal, "NUMBR literal"]
-                    break
                         # print(lexemes[lineNumber][itzIndex + operatorCount])
                         # print(lexemes[lineNumber][itzIndex + operatorCount + tempCount])
 
@@ -286,7 +283,8 @@ while(lineNumber):
         #     print(newSymbolTable[lexemes[lineNumber][lexemeIndex + 1]][0])
         # else:
         #     print(lexemes[lineNumber][lexemeIndex + 2])
-    # * NO ASSIGNMENT, GO NEXT
+
+    # * NO ASSIGNMENT, GO NEXT LINE
     lineNumber = nextLineNumber(lineNumber)
             
 print(newSymbolTable)
