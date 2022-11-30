@@ -1,6 +1,6 @@
 import re
 
-filename = "Project 3/Test Files/project-examples/01_variables.lol"
+filename = "Project 3/Test Files/project-examples/03_arith.lol"
 
 #reads file and cleans each line in the file
 def readFile(filename):
@@ -1623,4 +1623,4 @@ types = {}
 lines = readFile(filename)
 findLexemes(lines)
 
-#printSymbolTable()
+printSymbolTable()
