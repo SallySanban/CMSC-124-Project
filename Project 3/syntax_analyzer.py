@@ -1691,20 +1691,24 @@ def iHasASyntax(lineNumber):
 
 def rSyntax(lineNumber):
     rLexeme = lexemes[lineNumber].index("R")
-
+    print(rLexeme)
     if(len(lexemes[lineNumber]) <= 2):
-        return "[Line " + str(lineNumber) + "] SyntaxError: required identifier, literal, or expression"
+        return "[Line " + str(lineNumber) + "] SyntaxError: required identifier, literal, or expression "
 
     if(len(lexemes[lineNumber]) >= 3):
-        if(types[lineNumber][1] != "identifier"):
-            return "[Line " + str(lineNumber) + "] SyntaxError: required identifier"
+        if(types[lineNumber][rLexeme-1] != "identifier"):
+            if(types[lineNumber][rLexeme+1] not in literals):
+                if(lexemes[lineNumber][rLexeme + 1] not in ["SUM OF", "DIFF OF", "PRODUKT OF", "QUOSHUNT OF", "MOD OF", "SMALLR OF", "BIGGR OF"]):
+                    return "[Line " + str(lineNumber) + "] SyntaxError: required identifier, literal, or expression"
     
-    if(types[lineNumber][rLexeme + 1] in literals):
-        if(lexemes[lineNumber][rLexeme + 2] == "BTW"):
-            singleCommentSyntax(lineNumber)
-        else:
-            return "[Line " + str(lineNumber) + "] SyntaxError: cannot have statements after variable assignment"
+    if(lexemes[lineNumber][rLexeme + 2] == "BTW"):
+        syntaxError = singleCommentSyntax(lineNumber)
+
+        if(syntaxError != "OK"):
+            return syntaxError
+
     return "OK"
+
 
 def haiSyntax(lineNumber):
     if(len(lexemes[lineNumber]) != 1):
@@ -1971,13 +1975,12 @@ while(True):
 
         # START OF ZYRIL TAMARGO'S PART
 
-        elif(lexemes[lineNumber][lexemeIndex] == "R"):
+        elif("R" in lexemes[lineNumber]):
+            print("NOW CHECKING: " + lexemes[lineNumber][lexemeIndex] + " in line " + str(lineNumber))
             syntaxError = rSyntax(lineNumber)
-
             if(syntaxError != "OK"):
                 print(syntaxError)
                 break
-
             lineNumber = nextLineNumber(lineNumber)
             continue
 
