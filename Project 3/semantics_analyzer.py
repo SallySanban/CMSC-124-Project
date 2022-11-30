@@ -64,10 +64,13 @@ while(lineNumber):
                     
                     # Flow: Start sa innermost to outermost
                         # first operator appears +n from ITZ
-                    
+                        # Implicit typecasting for troof, 
+                        # Check if current type of identifier is numbar, numbr
+                        # Check if current type of literal is numbr, numbar
+
                     # I HAS A sum ITZ SUM OF DIFF OF num AN 13 AN 21
                     # I HAS A sum ITZ SUM OF DIFF OF PRODUKT OF num AN 13 AN 21 AN 4
-                        # Implicit typecasting for troof, 
+                        
                     tempVal = 0
                     tempCount = 1
                     boolNested = False
@@ -180,13 +183,13 @@ while(lineNumber):
                             # * 2ND N
                             if (newSymbolTable.get(lexemes[lineNumber][itzIndex + operatorCount + 3])):     # Existing identifier
                                 if (types[lineNumber][itzIndex + operatorCount] == "add operator"):
-                                    tempVal += newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + 1]][0]
+                                    tempVal += newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + 3]][0]
                                 elif (types[lineNumber][itzIndex + operatorCount] == "subtract operator"):
-                                    tempVal -= newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + 1]][0]
+                                    tempVal -= newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + 3]][0]
                                 elif (types[lineNumber][itzIndex + operatorCount] == "multiply operator"):
-                                    tempVal *= newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + 1]][0]
+                                    tempVal *= newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + 3]][0]
                                 elif (types[lineNumber][itzIndex + operatorCount] == "divide operator"):
-                                    tempVal /= newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + 1]][0]
+                                    tempVal /= newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + 3]][0]
                             else:
                                 if (types[lineNumber][itzIndex + operatorCount + 3] in literals or types[lineNumber][itzIndex + operatorCount + 3] in ["string delimiter"]):
                                     if (types[lineNumber][itzIndex + operatorCount] == "add operator"):
