@@ -1691,7 +1691,6 @@ def iHasASyntax(lineNumber):
 
 def rSyntax(lineNumber):
     rLexeme = lexemes[lineNumber].index("R")
-    print(rLexeme)
     if(len(lexemes[lineNumber]) <= 2):
         return "[Line " + str(lineNumber) + "] SyntaxError: required identifier, literal, or expression "
 
@@ -1708,6 +1707,41 @@ def rSyntax(lineNumber):
             return syntaxError
 
     return "OK"
+
+def orlySyntax(lineNumber):
+    global orlyFound
+    start = 1
+    comments = []
+
+    if(lexemes[lineNumber][0] == "O RLY?"):
+        orlyLexeme = lexemes[lineNumber][0]
+        print(orlyLexeme)
+        if(len(lexemes[lineNumber]) > 1):
+            return "[Line " + str(lineNumber) + "] SyntaxError: O RLY? have their own lines"
+        
+
+    while(orlyFound == True):
+        for i in range(start, len(types[lineNumber])):
+            if(lexemes[lineNumber][i] == "OIC"):
+                syntaxError = oicSyntax(lineNumber)
+
+                if(syntaxError != "OK"):
+                    return syntaxError
+
+                orlyFound = False
+                break
+
+
+        if(orlyFound == False):
+            break
+
+        start = 0
+        lineNumber = nextLineNumber(lineNumber)
+        
+        if(lineNumber == None):
+            return "[Line " + str(lineNumber) + "] SyntaxError: missing OIC"
+
+    return nextLineNumber(lineNumber)
 
 
 def haiSyntax(lineNumber):
@@ -1976,7 +2010,6 @@ while(True):
         # START OF ZYRIL TAMARGO'S PART
 
         elif("R" in lexemes[lineNumber]):
-            print("NOW CHECKING: " + lexemes[lineNumber][lexemeIndex] + " in line " + str(lineNumber))
             syntaxError = rSyntax(lineNumber)
             if(syntaxError != "OK"):
                 print(syntaxError)
@@ -1984,15 +2017,17 @@ while(True):
             lineNumber = nextLineNumber(lineNumber)
             continue
 
-        # elif(lexemes[lineNumber][lexemeIndex] == "O RLY?"):
-        #     syntaxError = sumOfSyntax(lineNumber)
+        elif(lexemes[lineNumber][lexemeIndex] == "O RLY?"):
+            print("NOW CHECKING: " + lexemes[lineNumber][lexemeIndex] + " in line " + str(lineNumber))
+            orlyFound = True
+            syntaxError = orlySyntax(lineNumber)
 
-        #     if(syntaxError != "OK"):
-        #         print(syntaxError)
-        #         break
-
-        #     lineNumber = nextLineNumber(lineNumber)
-        #     continue
+            if(isinstance(syntaxError, int)):
+                lineNumber = syntaxError
+                continue
+            else:
+                print(syntaxError)
+                break
 
         # elif(lexemes[lineNumber][lexemeIndex] == "YA RLY"):
         #     syntaxError = sumOfSyntax(lineNumber)
