@@ -1773,7 +1773,7 @@ sameBoolOperator = 0
 
 while(True):
     #toPrint = lexemes[lineNumber][lexemeIndex]
-    #print("NOW CHECKING: " + lexemes[lineNumber][lexemeIndex] + " in line " + str(lineNumber))
+    print("NOW CHECKING: " + lexemes[lineNumber][lexemeIndex] + " in line " + str(lineNumber))
     if(codeStarted == False):
         if(lexemes[lineNumber][lexemeIndex] != "HAI"):
             if(lexemes[lineNumber][lexemeIndex] == "BTW"):
