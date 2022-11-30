@@ -104,6 +104,7 @@ while(lineNumber):
 
                             # * 2nd N
                             if (newSymbolTable.get(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2])): # Existing Identifier
+                                break
                                 temp = 0
                                 # ! Check type
                                 if (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][1] == "NUMBR literal"):
@@ -115,7 +116,7 @@ while(lineNumber):
                                         temp = [int(newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][0]), "NUMBR literal"]
                                     except ValueError:
                                         try:
-                                            temp = [float(newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][0]), "NUMBR literal"]
+                                            temp = [float(newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][0]), "NUMBAR literal"]
                                         except ValueError:
                                             print(f"Line {lineNumber} Semantic Error: YARN literal cannot be converted to NUMBR or NUMBAR literal")
                                             break
@@ -358,9 +359,8 @@ while(lineNumber):
                             elif (types[lineNumber][itzIndex + operatorCount] == "modulo operator"):
                                 tempVal[0] %= temp[0]
                         else:           # * Literal
-                            if (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "identifier"):
-                                print(f"Line {lineNumber} Semantic Error: Uninitialized variable used in arithmetic expression")
-                                break
+                            print(f"Line {lineNumber} Semantic Error: Invalid number")
+                            break
                             
                             # ! Check type
                             temp = 0
@@ -529,7 +529,7 @@ while(lineNumber):
                                 tempVal[0] %= temp[0]
 
                     break
-                else:       # ! BALIKAN
+                else:     
                     temp = 0
 
                     if (newSymbolTable.get(lexemes[lineNumber][itzIndex + operatorCount + tempCount])): # Existing Identifier
@@ -621,10 +621,7 @@ while(lineNumber):
                             tempVal[0] %= temp[0]
 
                 # * STORES THE FINAL VALUE OF TEMP HERE
-                print(tempVal)          # ! WORKING RIGHT NOW BUT NOT single operation
                 newSymbolTable[lexemes[lineNumber][1]] = [tempVal[0], tempVal[1]]
-                    # print(lexemes[lineNumber][itzIndex + operatorCount])
-                    # print(lexemes[lineNumber][itzIndex + operatorCount + tempCount])
 
          # * FOUND NO ITZ keyword 
         else:      
@@ -632,8 +629,6 @@ while(lineNumber):
     elif(lexemes[lineNumber][lexemeIndex] == "VISIBLE"):
         visibleIndex = lexemes[lineNumber].index("VISIBLE")
 
-        # for lexeme in range(visibleIndex + 1, len(lexemes[lineNumber]) - 1):
-        #     print(lexeme)
 
         # if types[lineNumber][lexemeIndex + 1] != "string delimiter":
         #     print(newSymbolTable[lexemes[lineNumber][lexemeIndex + 1]][0])
