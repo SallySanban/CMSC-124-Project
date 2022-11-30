@@ -11,6 +11,29 @@ literals = ["NUMBR literal",
             "TYPE literal"
             ]
 
+expressionKeywords = {
+                        "arithmetic":
+                            ["SUM OF",
+                            "DIFF OF",
+                            "PRODUKT OF",
+                            "QUOSHUNT OF",
+                            "MOD OF",
+                            "BIGGR OF",
+                            "SMALLR OF"],
+                        "boolean":
+                            ["BOTH OF",
+                            "EITHER OF",
+                            "WON OF",
+                            "NOT",
+                            "ANY OF",
+                            "ALL OF"],
+                        "comparison":
+                            ["BOTH SAEM",
+                            "DIFFRINT"],
+                        "concatenation":
+                            ["SMOOSH"]
+                    }
+
 def nextLineNumber(lineNumber):
     found = False
 
@@ -22,32 +45,76 @@ def nextLineNumber(lineNumber):
         if(found):
             return i
 
+#takes line number, index of the value of variable (which also has the type), and name of variable
+def updateSymbolTable(lineNumber, valueIndex, variable):
+    if(valueIndex == None):
+        newSymbolTable[variable] = [None, "NOOB"]
+    else:
+        if(types[lineNumber][valueIndex] == "NUMBR literal"):  #value is numbr
+            newSymbolTable[variable] = [int(lexemes[lineNumber][valueIndex]), "NUMBR literal"]
+        elif(types[lineNumber][valueIndex] == "NUMBAR literal"):   #value is numbar
+            newSymbolTable[variable] = [float(lexemes[lineNumber][valueIndex]), "NUMBAR literal"]
+        elif(types[lineNumber][valueIndex] == "YARN literal"): #value is yarn
+            newSymbolTable[variable] = [str(lexemes[lineNumber][valueIndex]), "YARN literal"]
+        elif(types[lineNumber][valueIndex] == "TROOF literal"):    #value is troof
+            if(lexemes[lineNumber][valueIndex] == "WIN"):
+                newSymbolTable[variable] = [True, "TROOF literal"]
+            elif(lexemes[lineNumber][valueIndex] == "FAIL"):
+                newSymbolTable[variable] = [False, "TROOF literal"]
+        else:   #value is type
+            return "[Line " + str(lineNumber) + "] SemanticError: cannot store TYPE in identifier"
+    
+    return "OK"
+
+def expressionSemantics(lineNumber, variable):
+    return "OK"
+
+def iHasASemantics(lineNumber):
+    if("variable initialization keyword" in types[lineNumber]): #variable has value
+        itzLexeme = lexemes[lineNumber].index("ITZ")
+
+        if(types[lineNumber][itzLexeme + 1] in literals): #checks if value is literal
+            semanticsError = updateSymbolTable(lineNumber, itzLexeme + 1, lexemes[lineNumber][itzLexeme - 1])
+
+            if(semanticsError != "OK"):
+                return semanticsError
+
+        elif(types[lineNumber][itzLexeme + 1] == "string delimiter" and types[lineNumber][itzLexeme + 2] == "YARN literal" and types[lineNumber][itzLexeme + 3] == "string delimiter"): #checks if string
+            semanticsError = updateSymbolTable(lineNumber, itzLexeme + 2, lexemes[lineNumber][itzLexeme - 1])
+
+            if(semanticsError != "OK"):
+                return semanticsError
+
+        elif(lexemes[lineNumber][itzLexeme + 1] in expressionKeywords["arithmetic"] or lexemes[lineNumber][itzLexeme + 1] in expressionKeywords["boolean"] or lexemes[lineNumber][itzLexeme + 1] in expressionKeywords["comparison"] or lexemes[lineNumber][itzLexeme + 1] in expressionKeywords["concatenation"]): #if expression
+            newSymbolTable[lexemes[lineNumber][itzLexeme - 1]] = lexemes[lineNumber][itzLexeme + 1]
+            expressionSemantics(lineNumber, lexemes[lineNumber][itzLexeme - 1])
+    else:   #variable has no value
+        iHasALexeme = lexemes[lineNumber].index("I HAS A")
+
+        semanticsError = updateSymbolTable(lineNumber, None, lexemes[lineNumber][iHasALexeme + 1])
+
+        if(semanticsError != "OK"):
+            return semanticsError
+
+    return "OK"
+
+def visibleSemantics(lineNumber):
+    print("owo")
+
 lineNumber = list(lexemes.keys())[0]
 lexemeIndex = 0
 
 while(lineNumber):
     if(lexemes[lineNumber][lexemeIndex] == "I HAS A"):
-        if("ITZ" in lexemes[lineNumber]):
-            
-            # * TYPE LITERALS
-            if(types[lineNumber][lexemeIndex + 3] in literals or types[lineNumber][lexemeIndex + 3] == "string delimiter"):
-                if(newSymbolTable.get(lexemes[lineNumber][lexemeIndex + 1])):
-                    # TODO: If the identifier is existing, check if implicitly typecasted or not first before updating value
-                    break
-                else: #check first if numbr
-                    if (types[lineNumber][lexemeIndex + 3] == "NUMBR literal"):
-                        newSymbolTable[lexemes[lineNumber][lexemeIndex + 1]] = [int(lexemes[lineNumber][lexemeIndex + 3]), types[lineNumber][lexemeIndex + 3]]
-                    elif (types[lineNumber][lexemeIndex + 3] == "NUMBAR literal"):
-                        newSymbolTable[lexemes[lineNumber][lexemeIndex + 1]] = [float(lexemes[lineNumber][lexemeIndex + 3]), types[lineNumber][lexemeIndex + 3]]
-                    elif (types[lineNumber][lexemeIndex + 3] == "string delimiter"):        # YARN literal
-                        newSymbolTable[lexemes[lineNumber][lexemeIndex + 1]] = [lexemes[lineNumber][lexemeIndex + 4], types[lineNumber][lexemeIndex + 4]]
-                    elif (types[lineNumber][lexemeIndex + 3] == "TROOF literal"):
-                        newSymbolTable[lexemes[lineNumber][lexemeIndex + 1]] = [True if lexemes[lineNumber][lexemeIndex + 3] == "WIN" else False, types[lineNumber][lexemeIndex + 3]]
-                    else:
-                        # ! type is TYPE literal or "NOOB"
-                        # Change this 
-                        newSymbolTable[lexemes[lineNumber][lexemeIndex + 1]] = [lexemes[lineNumber][lexemeIndex + 3], types[lineNumber][lexemeIndex + 3]]
-                        
+        semanticsError = iHasASemantics(lineNumber)
+
+        if(semanticsError != "OK"):
+            print(semanticsError)
+            break
+        
+        lineNumber = nextLineNumber(lineNumber)
+    elif(lexemes[lineNumber][lexemeIndex] == "VISIBLE"):
+        visibleSemantics(lineNumber)
             # * OPERATIONS   
             else:
                 operatorCount = 0    
@@ -108,6 +175,7 @@ while(lineNumber):
 
                             # * 2nd N
                             if (newSymbolTable.get(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2])): # Existing Identifier
+                                break
                                 temp = 0
                                 # ! Check type
                                 if (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][1] == "NUMBR literal"):
@@ -742,16 +810,7 @@ while(lineNumber):
          # * FOUND NO ITZ keyword 
         else:      
             newSymbolTable[lexemes[lineNumber][lexemeIndex + 1]] = [None, "TYPE literal"]   # * No Value but initialized
-    elif(lexemes[lineNumber][lexemeIndex] == "VISIBLE"):
-        visibleIndex = lexemes[lineNumber].index("VISIBLE")
 
-        # for lexeme in range(visibleIndex + 1, len(lexemes[lineNumber]) - 1):
-        #     print(lexeme)
-
-        # if types[lineNumber][lexemeIndex + 1] != "string delimiter":
-        #     print(newSymbolTable[lexemes[lineNumber][lexemeIndex + 1]][0])
-        # else:
-        #     print(lexemes[lineNumber][lexemeIndex + 2])
     elif(lexemes[lineNumber][lexemeIndex] == "GIMMEH"):
         print(f"variable: {newSymbolTable[lexemes[lineNumber][lexemeIndex + 1]]} = ")
         newSymbolTable[lexemes[lineNumber][lexemeIndex + 1]] = [input(), "YARN literal"]
@@ -760,7 +819,8 @@ while(lineNumber):
 
     # * GO NEXT LINE
     lineNumber = nextLineNumber(lineNumber)
-            
-print(newSymbolTable)
+
+for i in newSymbolTable.keys():         
+    print(str(i) + ": " + str(newSymbolTable[i]))
         
         
