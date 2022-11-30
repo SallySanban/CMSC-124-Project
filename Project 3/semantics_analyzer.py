@@ -59,7 +59,7 @@ while(lineNumber):
                 else:           # Check nested
                     itzIndex = lexemes[lineNumber].index("ITZ")
                     
-                    for typeLiteral in ['add operator', 'subtract operator', 'multiply operator', 'divide operator']:
+                    for typeLiteral in ['add operator', 'subtract operator', 'multiply operator', 'divide operator', 'modulo operator']:
                         operatorCount += types[lineNumber].count(typeLiteral)
                     
                     # Flow: Start sa innermost to outermost
@@ -94,6 +94,8 @@ while(lineNumber):
                                         tempVal *= newSymbolTable.get(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2])
                                     elif (newSymbolTable[type[lineNumber][itzIndex + operatorCount]] == "divide operator"):
                                         tempVal /= newSymbolTable.get(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2])
+                                    elif (newSymbolTable[type[lineNumber][itzIndex + operatorCount]] == "modulo operator"):
+                                        tempVal %= newSymbolTable.get(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2])
                                 else:           # Literal
                                     # ! FOR TYPECASTING
                                     # if (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "NUMBR literal"):
@@ -111,6 +113,8 @@ while(lineNumber):
                                             tempVal *= int(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2])
                                         elif (types[lineNumber][itzIndex + operatorCount] == "divide operator"):
                                             tempVal /= int(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2])
+                                        elif (types[lineNumber][itzIndex + operatorCount] == "modulo operator"):
+                                            tempVal %= int(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2])
                                         # print(tempVal)
                                     else:
                                         print(types[lineNumber][itzIndex + operatorCount + tempCount])
@@ -125,6 +129,12 @@ while(lineNumber):
                             else:           # Literal
                                 if (types[lineNumber][itzIndex + operatorCount + tempCount] in literals or types[lineNumber][itzIndex + operatorCount + tempCount] == "string delimiter"):
                                     tempVal = lexemes[lineNumber][itzIndex + operatorCount + tempCount]
+
+
+                                else:
+                                    print(types[lineNumber][itzIndex + operatorCount + tempCount])
+                                    print("Semantics Error: Invalid type for arithmetic operation")
+                                    break
                                 
                                     # ! FOR TYPECASTING
                                     # if (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "NUMBR literal"):
@@ -145,6 +155,8 @@ while(lineNumber):
                                     tempVal *= newSymbolTable.get(lexemes[lineNumber][itzIndex + operatorCount + tempCount])
                                 elif (newSymbolTable[type[lineNumber][itzIndex + operatorCount]] == "divide operator"):
                                     tempVal /= newSymbolTable.get(lexemes[lineNumber][itzIndex + operatorCount + tempCount])
+                                elif (newSymbolTable[type[lineNumber][itzIndex + operatorCount]] == "modulo operator"):
+                                    tempVal %= newSymbolTable.get(lexemes[lineNumber][itzIndex + operatorCount + tempCount])
                             else:               # Literal or NOOB identifier
                                 if (types[lineNumber][itzIndex + operatorCount + tempCount] in literals or types[lineNumber][itzIndex + operatorCount + tempCount + 2] in ["string delimiter"]):
                                     if (types[lineNumber][itzIndex + operatorCount] == "add operator"):
@@ -156,6 +168,8 @@ while(lineNumber):
                                         tempVal *= int(lexemes[lineNumber][itzIndex + operatorCount + tempCount])
                                     elif (types[lineNumber][itzIndex + operatorCount] == "divide operator"):
                                         tempVal /= int(lexemes[lineNumber][itzIndex + operatorCount + tempCount])
+                                    elif (types[lineNumber][itzIndex + operatorCount] == "modulo operator"):
+                                        tempVal %= int(lexemes[lineNumber][itzIndex + operatorCount + tempCount])
                                 else:
                                     print(types[lineNumber][itzIndex + operatorCount + tempCount])
                                     print("Semantics Error: Invalid type for arithmetic operation")
@@ -190,6 +204,8 @@ while(lineNumber):
                                     tempVal *= newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + 3]][0]
                                 elif (types[lineNumber][itzIndex + operatorCount] == "divide operator"):
                                     tempVal /= newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + 3]][0]
+                                elif (types[lineNumber][itzIndex + operatorCount] == "modulo operator"):
+                                    tempVal %= newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + 3]][0]
                             else:
                                 if (types[lineNumber][itzIndex + operatorCount + 3] in literals or types[lineNumber][itzIndex + operatorCount + 3] in ["string delimiter"]):
                                     if (types[lineNumber][itzIndex + operatorCount] == "add operator"):
@@ -201,6 +217,8 @@ while(lineNumber):
                                         tempVal *= int(lexemes[lineNumber][itzIndex + operatorCount + 3])
                                     elif (types[lineNumber][itzIndex + operatorCount] == "divide operator"):
                                         tempVal /= int(lexemes[lineNumber][itzIndex + operatorCount + 3])
+                                    elif (types[lineNumber][itzIndex + operatorCount] == "modulo operator"):
+                                        tempVal %= int(lexemes[lineNumber][itzIndex + operatorCount + 3])
                                 else:
                                     print(types[lineNumber][itzIndex + operatorCount + tempCount])
                                     print("Semantics Error: Invalid type for arithmetic operation")
@@ -221,6 +239,8 @@ while(lineNumber):
                                         tempVal *= newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + 3]][0]
                                     elif (types[lineNumber][itzIndex + operatorCount] == "divide operator"):
                                         tempVal /= newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + 3]][0]
+                                    elif (types[lineNumber][itzIndex + operatorCount] == "modulo operator"):
+                                        tempVal %= newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + 3]][0]
                                 else:
                                     if (types[lineNumber][itzIndex + operatorCount + 3] in literals or types[lineNumber][itzIndex + operatorCount + 3] in ["string delimiter"]):
                                         if (types[lineNumber][itzIndex + operatorCount] == "add operator"):
@@ -232,6 +252,8 @@ while(lineNumber):
                                             tempVal *= int(lexemes[lineNumber][itzIndex + operatorCount + 3])
                                         elif (types[lineNumber][itzIndex + operatorCount] == "divide operator"):
                                             tempVal /= int(lexemes[lineNumber][itzIndex + operatorCount + 3])
+                                        elif (types[lineNumber][itzIndex + operatorCount] == "modulo operator"):
+                                            tempVal %= int(lexemes[lineNumber][itzIndex + operatorCount + 3])
                                     else:
                                         print(types[lineNumber][itzIndex + operatorCount + tempCount])
                                         print("Semantics Error: Invalid type for arithmetic operation")
@@ -250,6 +272,8 @@ while(lineNumber):
                                 tempVal *= newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][0]
                             elif (types[lineNumber][itzIndex + operatorCount] == "divide operator"):
                                 tempVal /= newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][0]
+                            elif (types[lineNumber][itzIndex + operatorCount] == "modulo operator"):
+                                tempVal %= newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][0]
                         else:               # Literal or NOOB identifier
                             if (types[lineNumber][itzIndex + operatorCount + tempCount] in literals or types[lineNumber][itzIndex + operatorCount + tempCount + 2] in ["string delimiter"]):
                                 if (types[lineNumber][itzIndex + operatorCount] == "add operator"):
@@ -262,6 +286,8 @@ while(lineNumber):
                                     tempVal *= int(lexemes[lineNumber][itzIndex + operatorCount + tempCount])
                                 elif (types[lineNumber][itzIndex + operatorCount] == "divide operator"):
                                     tempVal /= int(lexemes[lineNumber][itzIndex + operatorCount + tempCount])
+                                elif (types[lineNumber][itzIndex + operatorCount] == "modulo operator"):
+                                    tempVal %= int(lexemes[lineNumber][itzIndex + operatorCount + tempCount])
                             else:
                                 print(types[lineNumber][itzIndex + operatorCount + tempCount])
                                 print("Semantics Error: Invalid type for arithmetic operation")
@@ -273,7 +299,7 @@ while(lineNumber):
                             # elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "TYPE literal"):
 
                     # * STORES THE FINAL VALUE OF TEMP HERE
-                    print(tempVal)          # ! WORKING RIGHT NOW BUT NOT single operation
+                    # print(tempVal)          # ! WORKING RIGHT NOW BUT NOT single operation
                     newSymbolTable[lexemes[lineNumber][1]] = [tempVal, "NUMBR literal"]
                         # print(lexemes[lineNumber][itzIndex + operatorCount])
                         # print(lexemes[lineNumber][itzIndex + operatorCount + tempCount])
@@ -287,7 +313,7 @@ while(lineNumber):
         # else:
         #     print(lexemes[lineNumber][lexemeIndex + 2])
 
-    # * NO ASSIGNMENT, GO NEXT LINE
+    # * GO NEXT LINE
     lineNumber = nextLineNumber(lineNumber)
             
 print(newSymbolTable)
