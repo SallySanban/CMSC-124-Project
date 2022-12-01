@@ -791,7 +791,11 @@ def visibleSemantics(lineNumber):
         print(lexemes[lineNumber][visibleLexeme + 2])
         return "OK"
     elif(lexemes[lineNumber][visibleLexeme + 1] in expressionKeywords["arithmetic"] or lexemes[lineNumber][visibleLexeme + 1] in expressionKeywords["boolean"] or lexemes[lineNumber][visibleLexeme + 1] in expressionKeywords["comparison"] or lexemes[lineNumber][visibleLexeme + 1] in expressionKeywords["concatenation"]):
-        expressionSemantics(lineNumber, "IT")
+        semanticError = expressionSemantics(lineNumber, "IT")
+
+        if(semanticError != "OK"):
+            return semanticError
+            
         print(newSymbolTable['IT'][0])
         return "OK"
 
@@ -840,8 +844,8 @@ while(lineNumber):
         lineNumber = nextLineNumber(lineNumber)
         continue
 
-print()
-for i in newSymbolTable.keys():         
-    print(str(i) + ": " + str(newSymbolTable[i]))
+# print()
+# for i in newSymbolTable.keys():         
+#     print(str(i) + ": " + str(newSymbolTable[i]))
         
         
