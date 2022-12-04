@@ -1598,6 +1598,21 @@ def findLexemes(lines):
 
                 continue
 
+            #every other case
+            if(i+1 not in lexemes):
+                lexemes[i+1] = []
+                lexemes[i+1].append(splitWords[j])
+            else:
+                lexemes[i+1].append(splitWords[j])
+
+            if(i+1 not in types):
+                types[i+1] = []
+                types[i+1].append("invalid keyword")
+            else:
+                types[i+1].append("invalid keyword")
+
+            continue
+
 def printSymbolTable():
     space1 = 40
     space2 = 40

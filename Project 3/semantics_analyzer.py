@@ -47,8 +47,8 @@ def nextLineNumber(lineNumber):
 
 #takes line number, index of the value of variable (which also has the type), and name of variable
 def updateSymbolTable(lineNumber, value, variable):
-    if(value == None):
-        newSymbolTable[variable] = [None, "NOOB"]
+    if(value == "NOOB"):
+        newSymbolTable[variable] = ["NOOB", "NOOB"]
     elif(isinstance(value, list)):
         newSymbolTable[variable] = value
     else:
@@ -68,709 +68,678 @@ def updateSymbolTable(lineNumber, value, variable):
     
     return "OK"
 
-def expressionSemantics(lineNumber, keywordIndex, variable):
-    visibleSemantics(lineNumber)
-            # * OPERATIONS   
-            else:
-                operatorCount = 0    
+def expressionSemantics(lineNumber, variable):
+    operatorCount = 0    
 
-                # * Gets the index of ITZ
-                itzIndex = lexemes[lineNumber].index("ITZ")        
-                
-                # * Counts the number of operations in the arithmetic expression
-                for typeLiteral in ['add operator', 'subtract operator', 'multiply operator', 'divide operator', 'modulo operator']:
-                    operatorCount += types[lineNumber].count(typeLiteral)
-                
-                # print(lexemes[lineNumber])
-                # print(types[lineNumber])
-                # print(operatorCount)
-                
-                # Flow: Start sa innermost to outermost
-                    # first operator appears +n from ITZ
-                    # Implicit typecasting for troof, 
-                    # Check if current type of identifier is numbar, numbr
-                    # Check if current type of literal is numbr, numbar
+    # * Gets the index of ITZ
+    if("variable initialization keyword" in types[lineNumber]):
+        expressionIndex = lexemes[lineNumber].index("ITZ")
+    #put other cases where the arithmetic expression might be
+    elif("print keyword" in types[lineNumber]):
+        expressionIndex = lexemes[lineNumber].index("VISIBLE")
+    else:
+        expressionIndex = -1       
+    
+    # * Counts the number of operations in the arithmetic expression
+    for typeLiteral in ['add operator', 'subtract operator', 'multiply operator', 'divide operator', 'modulo operator']:
+        operatorCount += types[lineNumber].count(typeLiteral)
+    
+    # print(lexemes[lineNumber])
+    # print(types[lineNumber])
+    # print(operatorCount)
+    
+    # Flow: Start sa innermost to outermost
+        # first operator appears +n from ITZ
+        # Implicit typecasting for troof, 
+        # Check if current type of identifier is numbar, numbr
+        # Check if current type of literal is numbr, numbar
 
-                # I HAS A sum ITZ SUM OF DIFF OF num AN 13 AN 21
-                # I HAS A sum ITZ SUM OF DIFF OF PRODUKT OF num AN 13 AN 21 AN 4
+    # I HAS A sum ITZ SUM OF DIFF OF num AN 13 AN 21
+    # I HAS A sum ITZ SUM OF DIFF OF PRODUKT OF num AN 13 AN 21 AN 4
 
-                # ! CHECKLIST CASES:
-                #  ! SUM OF SUM OF <x> AN <y> AN <z>
-                    
-                tempVal = 0         # Accumulator
-                tempCount = 1           # Index for the source operands
-                boolNested = False      # Flag if nested arithmetic operation
-                while operatorCount > 1:
-                    boolNested = True
-                    if tempCount == 1:          # Innermost operation
-                        # * 1st N
-                        if (newSymbolTable.get(lexemes[lineNumber][itzIndex + operatorCount + tempCount])):         # Existing Identifier
-                            # ! Check type
-                            if (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "NUMBR literal"):
-                                tempVal = [newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][0], "NUMBR literal"]
-                            elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "NUMBAR literal"):
-                                tempVal = [newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][0], "NUMBAR literal"]
-                            elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "YARN literal"):
-                                try:
-                                    tempVal = [int(newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][0]), "NUMBR literal"]
-                                except ValueError:
-                                    try:
-                                        tempVal = [float(newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][0]), "NUMBR literal"]
-                                    except ValueError:
-                                        print(f"Line {lineNumber} Semantic Error: YARN literal cannot be converted to NUMBR or NUMBAR literal")
-                                        break
-                            elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "TROOF literal"):
-                                if (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][0]):
-                                    tempVal = [1, "NUMBR literal"]
-                                else:
-                                    tempVal = [0, "NUMBR literal"]
-                            elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "TYPE literal"):
-                                print(f"Line {lineNumber} Semantic Error: NOOB type literal cannot be implicitly casted to NUMBR or NUMBAR literal")
-                                break
+    # ! CHECKLIST CASES:
+    #  ! SUM OF SUM OF <x> AN <y> AN <z>
+        
+    tempVal = 0         # Accumulator
+    tempCount = 1           # Index for the source operands
+    boolNested = False      # Flag if nested arithmetic operation
+    while operatorCount > 1:
+        boolNested = True
+        if tempCount == 1:          # Innermost operation
+            # * 1st N
+            if (newSymbolTable.get(lexemes[lineNumber][expressionIndex + operatorCount + tempCount])):         # Existing Identifier
+                # ! Check type
+                if (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][1] == "NUMBR literal"):
+                    tempVal = [newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][0], "NUMBR literal"]
+                elif (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][1] == "NUMBAR literal"):
+                    tempVal = [newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][0], "NUMBAR literal"]
+                elif (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][1] == "YARN literal"):
+                    try:
+                        tempVal = [int(newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][0]), "NUMBR literal"]
+                    except ValueError:
+                        try:
+                            tempVal = [float(newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][0]), "NUMBR literal"]
+                        except ValueError:
+                            return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
+                elif (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][1] == "TROOF literal"):
+                    if (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][0]):
+                        tempVal = [1, "NUMBR literal"]
+                    else:
+                        tempVal = [0, "NUMBR literal"]
+                elif (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][1] == "NOOB"):
+                    return "[Line " + str(lineNumber) + "] SemanticError: NOOB type literal cannot be implicitly casted to NUMBR or NUMBAR literal"
 
-                            # * 2nd N
-                            if (newSymbolTable.get(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2])): # Existing Identifier
-                                break
-                                temp = 0
-                                # ! Check type
-                                if (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][1] == "NUMBR literal"):
-                                    temp = [newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][0], "NUMBR literal"]
-                                elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][1] == "NUMBAR literal"):
-                                    temp = [newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][0], "NUMBAR literal"]
-                                elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][1] == "YARN literal"):
-                                    try:
-                                        temp = [int(newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][0]), "NUMBR literal"]
-                                    except ValueError:
-                                        try:
-                                            temp = [float(newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][0]), "NUMBAR literal"]
-                                        except ValueError:
-                                            print(f"Line {lineNumber} Semantic Error: YARN literal cannot be converted to NUMBR or NUMBAR literal")
-                                            break
-                                elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][1] == "TROOF literal"):
-                                    if (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][0]):
-                                        if (tempVal[1] == "NUMBR literal"):
-                                            temp = [1, "NUMBR literal"]
-                                        else:
-                                            temp = [1.0, "NUMBAR literal"]
-                                    else:
-                                        if (tempVal[1] == "NUMBR literal"):
-                                            temp = [0, "NUMBR literal"]
-                                        else:
-                                            temp = [0.0, "NUMBAR literal"]
-                                elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][1] == "TYPE literal"):
-                                    print(f"Line {lineNumber} Semantic Error: NOOB type literal cannot be implicitly casted to NUMBR or NUMBAR literal")
-                                    break
-
-                                if (types[lineNumber][itzIndex + operatorCount] == "add operator"):
-                                    tempVal[0] += temp[0]
-                                elif (types[lineNumber][itzIndex + operatorCount] == "subtract operator"):
-                                    tempVal[0] -= temp[0]
-                                elif (types[lineNumber][itzIndex + operatorCount] == "multiply operator"):
-                                    tempVal[0] *= temp[0]
-                                elif (types[lineNumber][itzIndex + operatorCount] == "divide operator"):
-                                    tempVal[0] /= temp[0]
-                                elif (types[lineNumber][itzIndex + operatorCount] == "modulo operator"):
-                                    tempVal[0] %= temp[0]
-                            else:           # * Literal
-                                if (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "invalid"):
-                                print(f"Line {lineNumber} Semantic Error: Invalid identifier used in arithmetic expression")
-                                break
-                                # ! Check type
-                                temp = 0
-                                if (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "NUMBR literal"):
-                                    temp = [int(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]), "NUMBR literal"]
-                                elif (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "NUMBAR literal"):
-                                    temp = [float(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]), "NUMBAR literal"]
-                                elif (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "YARN literal"):
-                                    try:
-                                        temp = [int(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]), "NUMBR literal"]
-                                    except ValueError:
-                                        try:
-                                            temp = [float(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]), "NUMBR literal"]
-                                        except ValueError:
-                                            print(f"Line {lineNumber} Semantic Error: YARN literal cannot be converted to NUMBR or NUMBAR literal")
-                                            break
-                                elif (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "TROOF literal"):
-                                    if (lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2] == "WIN"):
-                                        if (tempVal[1] == "NUMBR literal"):
-                                            temp = [1, "NUMBR literal"]
-                                        else:
-                                            temp = [1.0, "NUMBAR literal"]
-                                    else:
-                                        if (tempVal[1] == "NUMBR literal"):
-                                            temp = [0, "NUMBR literal"]
-                                        else:
-                                            temp = [0.0, "NUMBAR literal"]
-                                elif (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "TYPE literal"):
-                                    print(f"Line {lineNumber} Semantic Error: NOOB type literal cannot be implicitly casted to NUMBR or NUMBAR literal")
-                                    break
-
-
-                                if (types[lineNumber][itzIndex + operatorCount] == "add operator"):
-                                    tempVal[0] += temp[0]
-                                elif (types[lineNumber][itzIndex + operatorCount] == "subtract operator"):
-                                    tempVal[0] -= temp[0]
-                                elif (types[lineNumber][itzIndex + operatorCount] == "multiply operator"):
-                                    tempVal[0] *= temp[0]
-                                elif (types[lineNumber][itzIndex + operatorCount] == "divide operator"):
-                                    tempVal[0] /= temp[0]
-                                elif (types[lineNumber][itzIndex + operatorCount] == "modulo operator"):
-                                    tempVal[0] %= temp[0]
-
-                        # * 1st N
-                        else:           # * Literal
-                            if (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "invalid"):
-                                print(f"Line {lineNumber} Semantic Error: Invalid identifier used in arithmetic expression")
-                                break
-
-                            # ! Check type
-                            if (types[lineNumber][itzIndex + operatorCount + tempCount] == "NUMBR literal"):
-                                tempVal = [int(lexemes[lineNumber][itzIndex + operatorCount + tempCount]), "NUMBR literal"]
-                            elif (types[lineNumber][itzIndex + operatorCount + tempCount] == "NUMBAR literal"):
-                                tempVal = [float(lexemes[lineNumber][itzIndex + operatorCount + tempCount]), "NUMBAR literal"]
-                            elif (types[lineNumber][itzIndex + operatorCount + tempCount] == "YARN literal"):
-                                try:
-                                    tempVal = [int(lexemes[lineNumber][itzIndex + operatorCount + tempCount]), "NUMBR literal"]
-                                except ValueError:
-                                    try:
-                                        tempVal = [float(lexemes[lineNumber][itzIndex + operatorCount + tempCount]), "NUMBR literal"]
-                                    except ValueError:
-                                        print(f"Line {lineNumber} Semantic Error: YARN literal cannot be converted to NUMBR or NUMBAR literal")
-                                        break
-                            elif (types[lineNumber][itzIndex + operatorCount + tempCount] == "TROOF literal"):
-                                if (lexemes[lineNumber][itzIndex + operatorCount + tempCount] == "WIN"):
-                                    tempVal = [1, "NUMBR literal"]
-                                else:
-                                    tempVal = [0, "NUMBR literal"]
-                            elif (types[lineNumber][itzIndex + operatorCount + tempCount] == "TYPE literal"):
-                                print(f"Line {lineNumber} Semantic Error: NOOB type literal cannot be implicitly casted to NUMBR or NUMBAR literal")
-                                break
-                            
-                            # * 2nd N
-                            if (newSymbolTable.get(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2])): # Existing Identifier
-                                temp = 0
-                                # ! Check type
-                                if (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][1] == "NUMBR literal"):
-                                    temp = [newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][0], "NUMBR literal"]
-                                elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][1] == "NUMBAR literal"):
-                                    temp = [newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][0], "NUMBAR literal"]
-                                elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][1] == "YARN literal"):
-                                    try:
-                                        temp = [int(newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][0]), "NUMBR literal"]
-                                    except ValueError:
-                                        try:
-                                            temp = [float(newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][0]), "NUMBR literal"]
-                                        except ValueError:
-                                            print(f"Line {lineNumber} Semantic Error: YARN literal cannot be converted to NUMBR or NUMBAR literal")
-                                            break
-                                elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][1] == "TROOF literal"):
-                                    if (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][0]):
-                                        if (tempVal[1] == "NUMBR literal"):
-                                            temp = [1, "NUMBR literal"]
-                                        else:
-                                            temp = [1.0, "NUMBAR literal"]
-                                    else:
-                                        if (tempVal[1] == "NUMBR literal"):
-                                            temp = [0, "NUMBR literal"]
-                                        else:
-                                            temp = [0.0, "NUMBAR literal"]
-                                elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][1] == "TYPE literal"):
-                                    print(f"Line {lineNumber} Semantic Error: NOOB type literal cannot be implicitly casted to NUMBR or NUMBAR literal")
-                                    break
-                                
-                                if (types[lineNumber][itzIndex + operatorCount] == "add operator"):
-                                    tempVal[0] += temp[0]
-                                elif (types[lineNumber][itzIndex + operatorCount] == "subtract operator"):
-                                    tempVal[0] -= temp[0]
-                                elif (types[lineNumber][itzIndex + operatorCount] == "multiply operator"):
-                                    tempVal[0] *= temp[0]
-                                elif (types[lineNumber][itzIndex + operatorCount] == "divide operator"):
-                                    tempVal[0] /= temp[0]
-                                elif (types[lineNumber][itzIndex + operatorCount] == "modulo operator"):
-                                    tempVal[0] %= temp[0]
-                            else:           # * Literal
-                                if (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "invalid"):
-                                    print(f"Line {lineNumber} Semantic Error: Invalid identifier used in arithmetic expression")
-                                    break
-
-                                # ! Check type
-                                temp = 0
-                                if (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "NUMBR literal"):
-                                    temp = [int(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]), "NUMBR literal"]
-                                elif (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "NUMBAR literal"):
-                                    temp = [float(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]), "NUMBAR literal"]
-                                elif (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "YARN literal"):
-                                    try:
-                                        temp = [int(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]), "NUMBR literal"]
-                                    except ValueError:
-                                        try:
-                                            temp = [float(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]), "NUMBR literal"]
-                                        except ValueError:
-                                            print(f"Line {lineNumber} Semantic Error: YARN literal cannot be converted to NUMBR or NUMBAR literal")
-                                            break
-                                elif (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "TROOF literal"):
-                                    if (lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2] == "WIN"):
-                                        if (tempVal[1] == "NUMBR literal"):
-                                            temp = [1, "NUMBR literal"]
-                                        else:
-                                            temp = [1.0, "NUMBAR literal"]
-                                    else:
-                                        if (tempVal[1] == "NUMBR literal"):
-                                            temp = [0, "NUMBR literal"]
-                                        else:
-                                            temp = [0.0, "NUMBAR literal"]
-                                elif (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "TYPE literal"):
-                                    print(f"Line {lineNumber} Semantic Error: NOOB type literal cannot be implicitly casted to NUMBR or NUMBAR literal")
-                                    break
-
-
-                                if (types[lineNumber][itzIndex + operatorCount] == "add operator"):
-                                    tempVal[0] += temp[0]
-                                elif (types[lineNumber][itzIndex + operatorCount] == "subtract operator"):
-                                    tempVal[0] -= temp[0]
-                                elif (types[lineNumber][itzIndex + operatorCount] == "multiply operator"):
-                                    tempVal[0] *= temp[0]
-                                elif (types[lineNumber][itzIndex + operatorCount] == "divide operator"):
-                                    tempVal[0] /= temp[0]
-                                elif (types[lineNumber][itzIndex + operatorCount] == "modulo operator"):
-                                    tempVal[0] %= temp[0]
-
-
-                        operatorCount -= 1
-                        tempCount += 5
-                        continue
-                    else:   # * More nested expressions
-                        # ! Check type 
-                        temp = 0
-
-                        if (newSymbolTable.get(lexemes[lineNumber][itzIndex + operatorCount + tempCount])): # Existing Identifier
-                            temp = 0
-                            # ! Check type
-                            if (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "NUMBR literal"):
-                                temp = [newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][0], "NUMBR literal"]
-                            elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "NUMBAR literal"):
-                                temp = [newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][0], "NUMBAR literal"]
-                            elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "YARN literal"):
-                                try:
-                                    temp = [int(newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][0]), "NUMBR literal"]
-                                except ValueError:
-                                    try:
-                                        temp = [float(newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][0]), "NUMBR literal"]
-                                    except ValueError:
-                                        print(f"Line {lineNumber} Semantic Error: YARN literal cannot be converted to NUMBR or NUMBAR literal")
-                                        break
-                            elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "TROOF literal"):
-                                if (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][0]):
-                                    if (tempVal[1] == "NUMBR literal"):
-                                        temp = [1, "NUMBR literal"]
-                                    else:
-                                        temp = [1.0, "NUMBAR literal"]
-                                else:
-                                    if (tempVal[1] == "NUMBR literal"):
-                                        temp = [0, "NUMBR literal"]
-                                    else:
-                                        temp = [0.0, "NUMBAR literal"]
-                            elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "TYPE literal"):
-                                print(f"Line {lineNumber} Semantic Error: NOOB type literal cannot be implicitly casted to NUMBR or NUMBAR literal")
-                                break
-
-                            if (types[lineNumber][itzIndex + operatorCount] == "add operator"):
-                                tempVal[0] += temp[0]
-                            elif (types[lineNumber][itzIndex + operatorCount] == "subtract operator"):
-                                tempVal[0] -= temp[0]
-                            elif (types[lineNumber][itzIndex + operatorCount] == "multiply operator"):
-                                tempVal[0] *= temp[0]
-                            elif (types[lineNumber][itzIndex + operatorCount] == "divide operator"):
-                                tempVal[0] /= temp[0]
-                            elif (types[lineNumber][itzIndex + operatorCount] == "modulo operator"):
-                                tempVal[0] %= temp[0]
-                        else:           # * Literal
-                            if (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "invalid"):
-                                print(f"Line {lineNumber} Semantic Error: Invalid identifier used in arithmetic expression")
-                                break
-                            
-                            # ! Check type
-                            temp = 0
-                            if (types[lineNumber][itzIndex + operatorCount + tempCount] == "NUMBR literal"):
-                                temp = [int(lexemes[lineNumber][itzIndex + operatorCount + tempCount]), "NUMBR literal"]
-                            elif (types[lineNumber][itzIndex + operatorCount + tempCount] == "NUMBAR literal"):
-                                temp = [float(lexemes[lineNumber][itzIndex + operatorCount + tempCount]), "NUMBAR literal"]
-                            elif (types[lineNumber][itzIndex + operatorCount + tempCount] == "YARN literal"):
-                                try:
-                                    temp = [int(lexemes[lineNumber][itzIndex + operatorCount + tempCount]), "NUMBR literal"]
-                                except ValueError:
-                                    try:
-                                        temp = [float(lexemes[lineNumber][itzIndex + operatorCount + tempCount]), "NUMBR literal"]
-                                    except ValueError:
-                                        print(f"Line {lineNumber} Semantic Error: YARN literal cannot be converted to NUMBR or NUMBAR literal")
-                                        break
-                            elif (types[lineNumber][itzIndex + operatorCount + tempCount] == "TROOF literal"):
-                                if (lexemes[lineNumber][itzIndex + operatorCount + tempCount] == "WIN"):
-                                    if (tempVal[1] == "NUMBR literal"):
-                                        temp = [1, "NUMBR literal"]
-                                    else:
-                                        temp = [1.0, "NUMBAR literal"]
-                                else:
-                                    if (tempVal[1] == "NUMBR literal"):
-                                        temp = [0, "NUMBR literal"]
-                                    else:
-                                        temp = [0.0, "NUMBAR literal"]
-                            elif (types[lineNumber][itzIndex + operatorCount + tempCount] == "TYPE literal"):
-                                print(f"Line {lineNumber} Semantic Error: NOOB type literal cannot be implicitly casted to NUMBR or NUMBAR literal")
-                                break
-
-
-                            if (types[lineNumber][itzIndex + operatorCount] == "add operator"):
-                                tempVal[0] += temp[0]
-                            elif (types[lineNumber][itzIndex + operatorCount] == "subtract operator"):
-                                tempVal[0] -= temp[0]
-                            elif (types[lineNumber][itzIndex + operatorCount] == "multiply operator"):
-                                tempVal[0] *= temp[0]
-                            elif (types[lineNumber][itzIndex + operatorCount] == "divide operator"):
-                                tempVal[0] /= temp[0]
-                            elif (types[lineNumber][itzIndex + operatorCount] == "modulo operator"):
-                                tempVal[0] %= temp[0]
-
-
-                    operatorCount -= 1
-                    tempCount += 3
-
-                
-                # * ONLY REACHES HERE IF THIS IS THE OUTERMOST OPERATION
-                # I HAS A sum ITZ SUM OF num AN 13                                  # 3
-                # I HAS A sum ITZ SUM OF DIFF OF num AN 13 AN 21                        # 6
-                # I HAS A sum ITZ SUM OF DIFF OF PRODUKT OF num AN 13 AN 21 AN 4            # 9
-                # I HAS A sum ITZ SUM OF DIFF OF PRODUKT OF SUM OF num AN 13 AN 21 AN 4 AN 11   # 12
-
-                if (not boolNested):          # ! SINGLE OPERATION
-                    # * 1st N
-                    if (newSymbolTable.get(lexemes[lineNumber][itzIndex + operatorCount + tempCount])):         # Existing Identifier
-                        # ! Check type
-                        if (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "NUMBR literal"):
-                            tempVal = [newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][0], "NUMBR literal"]
-                        elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "NUMBAR literal"):
-                            tempVal = [newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][0], "NUMBAR literal"]
-                        elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "YARN literal"):
-                            try:
-                                tempVal = [int(newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][0]), "NUMBR literal"]
-                            except ValueError:
-                                try:
-                                    tempVal = [float(newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][0]), "NUMBR literal"]
-                                except ValueError:
-                                    print(f"Line {lineNumber} Semantic Error: YARN literal cannot be converted to NUMBR or NUMBAR literal")
-                                    break
-                        elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "TROOF literal"):
-                            if (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][0]):
-                                tempVal = [1, "NUMBR literal"]
-                            else:
-                                tempVal = [0, "NUMBR literal"]
-                        elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "TYPE literal"):
-                            print(f"Line {lineNumber} Semantic Error: NOOB type literal cannot be implicitly casted to NUMBR or NUMBAR literal")
-                            break
-
-                        # * 2nd N
-                        if (newSymbolTable.get(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2])): # Existing Identifier
-                            temp = 0
-                            # ! Check type
-                            if (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][1] == "NUMBR literal"):
-                                temp = [newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][0], "NUMBR literal"]
-                            elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][1] == "NUMBAR literal"):
-                                temp = [newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][0], "NUMBAR literal"]
-                            elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][1] == "YARN literal"):
-                                try:
-                                    temp = [int(newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][0]), "NUMBR literal"]
-                                except ValueError:
-                                    try:
-                                        temp = [float(newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][0]), "NUMBR literal"]
-                                    except ValueError:
-                                        print(f"Line {lineNumber} Semantic Error: YARN literal cannot be converted to NUMBR or NUMBAR literal")
-                                        break
-                            elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][1] == "TROOF literal"):
-                                if (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][0]):
-                                    if (tempVal[1] == "NUMBR literal"):
-                                        temp = [1, "NUMBR literal"]
-                                    else:
-                                        temp = [1.0, "NUMBAR literal"]
-                                else:
-                                    if (tempVal[1] == "NUMBR literal"):
-                                        temp = [0, "NUMBR literal"]
-                                    else:
-                                        temp = [0.0, "NUMBAR literal"]
-                            elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][1] == "TYPE literal"):
-                                print(f"Line {lineNumber} Semantic Error: NOOB type literal cannot be implicitly casted to NUMBR or NUMBAR literal")
-                                break
-
-                            if (types[lineNumber][itzIndex + operatorCount] == "add operator"):
-                                tempVal[0] += temp[0]
-                            elif (types[lineNumber][itzIndex + operatorCount] == "subtract operator"):
-                                tempVal[0] -= temp[0]
-                            elif (types[lineNumber][itzIndex + operatorCount] == "multiply operator"):
-                                tempVal[0] *= temp[0]
-                            elif (types[lineNumber][itzIndex + operatorCount] == "divide operator"):
-                                tempVal[0] /= temp[0]
-                            elif (types[lineNumber][itzIndex + operatorCount] == "modulo operator"):
-                                tempVal[0] %= temp[0]
-                        else:           # * Literal
-                            if (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "invalid"):
-                                print(f"Line {lineNumber} Semantic Error: Invalid identifier used in arithmetic expression")
-                                break
-                            
-                            # ! Check type
-                            temp = 0
-                            if (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "NUMBR literal"):
-                                temp = [int(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]), "NUMBR literal"]
-                            elif (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "NUMBAR literal"):
-                                temp = [float(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]), "NUMBAR literal"]
-                            elif (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "YARN literal"):
-                                try:
-                                    temp = [int(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]), "NUMBR literal"]
-                                except ValueError:
-                                    try:
-                                        temp = [float(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]), "NUMBR literal"]
-                                    except ValueError:
-                                        print(f"Line {lineNumber} Semantic Error: YARN literal cannot be converted to NUMBR or NUMBAR literal")
-                                        break
-                            elif (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "TROOF literal"):
-                                if (lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2] == "WIN"):
-                                    if (tempVal[1] == "NUMBR literal"):
-                                        temp = [1, "NUMBR literal"]
-                                    else:
-                                        temp = [1.0, "NUMBAR literal"]
-                                else:
-                                    if (tempVal[1] == "NUMBR literal"):
-                                        temp = [0, "NUMBR literal"]
-                                    else:
-                                        temp = [0.0, "NUMBAR literal"]
-                            elif (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "TYPE literal"):
-                                print(f"Line {lineNumber} Semantic Error: NOOB type literal cannot be implicitly casted to NUMBR or NUMBAR literal")
-                                break
-
-                            print(tempVal)
-                            print(temp)
-                            if (types[lineNumber][itzIndex + operatorCount] == "add operator"):
-                                tempVal[0] += temp[0]
-                            elif (types[lineNumber][itzIndex + operatorCount] == "subtract operator"):
-                                tempVal[0] -= temp[0]
-                            elif (types[lineNumber][itzIndex + operatorCount] == "multiply operator"):
-                                tempVal[0] *= temp[0]
-                            elif (types[lineNumber][itzIndex + operatorCount] == "divide operator"):
-                                tempVal[0] /= temp[0]
-                            elif (types[lineNumber][itzIndex + operatorCount] == "modulo operator"):
-                                tempVal[0] %= temp[0]
-                    # * 1st N
-                    else:           # * Literal
-                        if (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "invalid"):
-                            print(f"Line {lineNumber} Semantic Error: Invalid identifier used in arithmetic expression")
-                            break
-                        # ! Check type
-
-                        if (types[lineNumber][itzIndex + operatorCount + tempCount] == "NUMBR literal"):
-                            tempVal = [int(lexemes[lineNumber][itzIndex + operatorCount + tempCount]), "NUMBR literal"]
-                        elif (types[lineNumber][itzIndex + operatorCount + tempCount] == "NUMBAR literal"):
-                            tempVal = [float(lexemes[lineNumber][itzIndex + operatorCount + tempCount]), "NUMBAR literal"]
-                        elif (types[lineNumber][itzIndex + operatorCount + tempCount] == "YARN literal"):
-                            try:
-                                tempVal = [int(lexemes[lineNumber][itzIndex + operatorCount + tempCount]), "NUMBR literal"]
-                            except ValueError:
-                                try:
-                                    tempVal = [float(lexemes[lineNumber][itzIndex + operatorCount + tempCount]), "NUMBR literal"]
-                                except ValueError:
-                                    print(f"Line {lineNumber} Semantic Error: YARN literal cannot be converted to NUMBR or NUMBAR literal")
-                        elif (types[lineNumber][itzIndex + operatorCount + tempCount] == "TROOF literal"):
-                            if (lexemes[lineNumber][itzIndex + operatorCount + tempCount] == "WIN"):
-                                tempVal = [1, "NUMBR literal"]
-                            else:
-                                tempVal = [0, "NUMBR literal"]
-                        elif (types[lineNumber][itzIndex + operatorCount + tempCount] == "TYPE literal"):
-                            print(f"Line {lineNumber} Semantic Error: NOOB type literal cannot be implicitly casted to NUMBR or NUMBAR literal")
-                            break
-
-                        # * 2nd N
-                        if (newSymbolTable.get(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2])): # Existing Identifier
-                            temp = 0
-                            # ! Check type
-                            if (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][1] == "NUMBR literal"):
-                                temp = [newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][0], "NUMBR literal"]
-                            elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][1] == "NUMBAR literal"):
-                                temp = [newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][0], "NUMBAR literal"]
-                            elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][1] == "YARN literal"):
-                                try:
-                                    temp = [int(newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][0]), "NUMBR literal"]
-                                except ValueError:
-                                    try:
-                                        temp = [float(newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][0]), "NUMBR literal"]
-                                    except ValueError:
-                                        print(f"Line {lineNumber} Semantic Error: YARN literal cannot be converted to NUMBR or NUMBAR literal")
-                                        break
-                            elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][1] == "TROOF literal"):
-                                if (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][0]):
-                                    if (tempVal[1] == "NUMBR literal"):
-                                        temp = [1, "NUMBR literal"]
-                                    else:
-                                        temp = [1.0, "NUMBAR literal"]
-                                else:
-                                    if (tempVal[1] == "NUMBR literal"):
-                                        temp = [0, "NUMBR literal"]
-                                    else:
-                                        temp = [0.0, "NUMBAR literal"]
-                            elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]][1] == "TYPE literal"):
-                                print(f"Line {lineNumber} Semantic Error: NOOB type literal cannot be implicitly casted to NUMBR or NUMBAR literal")
-                                break
-                        else:           # * Literal
-                            if (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "invalid"):
-                                print(f"Line {lineNumber} Semantic Error: Invalid identifier used in arithmetic expression")
-                                break
-                            
-                            # ! Check type
-                            temp = 0
-                            if (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "NUMBR literal"):
-                                temp = [int(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]), "NUMBR literal"]
-                            elif (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "NUMBAR literal"):
-                                temp = [float(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]), "NUMBAR literal"]
-                            elif (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "YARN literal"):
-                                try:
-                                    temp = [int(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]), "NUMBR literal"]
-                                except ValueError:
-                                    try:
-                                        temp = [float(lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2]), "NUMBR literal"]
-                                    except ValueError:
-                                        print(f"Line {lineNumber} Semantic Error: YARN literal cannot be converted to NUMBR or NUMBAR literal")
-                                        break
-                            elif (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "TROOF literal"):
-                                if (lexemes[lineNumber][itzIndex + operatorCount + tempCount + 2] == "WIN"):
-                                    if (tempVal[1] == "NUMBR literal"):
-                                        temp = [1, "NUMBR literal"]
-                                    else:
-                                        temp = [1.0, "NUMBAR literal"]
-                                else:
-                                    if (tempVal[1] == "NUMBR literal"):
-                                        temp = [0, "NUMBR literal"]
-                                    else:
-                                        temp = [0.0, "NUMBAR literal"]
-                            elif (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "TYPE literal"):
-                                print(f"Line {lineNumber} Semantic Error: NOOB type literal cannot be implicitly casted to NUMBR or NUMBAR literal")
-                                break
-
-
-                        if (types[lineNumber][itzIndex + operatorCount] == "add operator"):
-                            tempVal[0] += temp[0]
-                        elif (types[lineNumber][itzIndex + operatorCount] == "subtract operator"):
-                            tempVal[0] -= temp[0]
-                        elif (types[lineNumber][itzIndex + operatorCount] == "multiply operator"):
-                            tempVal[0] *= temp[0]
-                        elif (types[lineNumber][itzIndex + operatorCount] == "divide operator"):
-                            tempVal[0] /= temp[0]
-                        elif (types[lineNumber][itzIndex + operatorCount] == "modulo operator"):
-                            tempVal[0] %= temp[0]
-                    
-                    # * STORES THE FINAL VALUE OF TEMP HERE
-                    newSymbolTable[lexemes[lineNumber][1]] = [tempVal[0], tempVal[1]]
-                else:     
+                # * 2nd N
+                if (newSymbolTable.get(lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2])): # Existing Identifier
                     temp = 0
-                    print(lexemes[lineNumber])
-                    print(operatorCount)
-                    print(tempCount)
-                    print(lexemes[lineNumber][itzIndex + operatorCount + tempCount])
-                    if (newSymbolTable.get(lexemes[lineNumber][itzIndex + operatorCount + tempCount])): # Existing Identifier
-                        temp = 0
-                        # ! Check type
-                        if (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "NUMBR literal"):
-                            temp = [newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][0], "NUMBR literal"]
-                        elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "NUMBAR literal"):
-                            temp = [newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][0], "NUMBAR literal"]
-                        elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "YARN literal"):
+                    # ! Check type
+                    if (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][1] == "NUMBR literal"):
+                        temp = [newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][0], "NUMBR literal"]
+                    elif (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][1] == "NUMBAR literal"):
+                        temp = [newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][0], "NUMBAR literal"]
+                    elif (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][1] == "YARN literal"):
+                        try:
+                            temp = [int(newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][0]), "NUMBR literal"]
+                        except ValueError:
                             try:
-                                temp = [int(newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][0]), "NUMBR literal"]
+                                temp = [float(newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][0]), "NUMBAR literal"]
                             except ValueError:
-                                try:
-                                    temp = [float(newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][0]), "NUMBR literal"]
-                                except ValueError:
-                                    print(f"Line {lineNumber} Semantic Error: YARN literal cannot be converted to NUMBR or NUMBAR literal")
-                                    break
-                        elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "TROOF literal"):
-                            if (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][0]):
-                                if (tempVal[1] == "NUMBR literal"):
-                                    temp = [1, "NUMBR literal"]
-                                else:
-                                    temp = [1.0, "NUMBAR literal"]
+                                return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
+                    elif (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][1] == "TROOF literal"):
+                        if (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][0]):
+                            if (tempVal[1] == "NUMBR literal"):
+                                temp = [1, "NUMBR literal"]
                             else:
-                                if (tempVal[1] == "NUMBR literal"):
-                                    temp = [0, "NUMBR literal"]
-                                else:
-                                    temp = [0.0, "NUMBAR literal"]
-                        elif (newSymbolTable[lexemes[lineNumber][itzIndex + operatorCount + tempCount]][1] == "TYPE literal"):
-                            print(f"Line {lineNumber} Semantic Error: NOOB type literal cannot be implicitly casted to NUMBR or NUMBAR literal")
-                            break
+                                temp = [1.0, "NUMBAR literal"]
+                        else:
+                            if (tempVal[1] == "NUMBR literal"):
+                                temp = [0, "NUMBR literal"]
+                            else:
+                                temp = [0.0, "NUMBAR literal"]
+                    elif (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][1] == "NOOB"):
+                        return "[Line " + str(lineNumber) + "] SemanticError: NOOB type literal cannot be implicitly casted to NUMBR or NUMBAR literal"
 
-                        if (types[lineNumber][itzIndex + operatorCount] == "add operator"):
-                            tempVal[0] += temp[0]
-                        elif (types[lineNumber][itzIndex + operatorCount] == "subtract operator"):
-                            tempVal[0] -= temp[0]
-                        elif (types[lineNumber][itzIndex + operatorCount] == "multiply operator"):
-                            tempVal[0] *= temp[0]
-                        elif (types[lineNumber][itzIndex + operatorCount] == "divide operator"):
-                            tempVal[0] /= temp[0]
-                        elif (types[lineNumber][itzIndex + operatorCount] == "modulo operator"):
-                            tempVal[0] %= temp[0]
-                    else:           # * Literal
-                        if (types[lineNumber][itzIndex + operatorCount + tempCount + 2] == "invalid"):
-                            print(f"Line {lineNumber} Semantic Error: Invalid identifier used in arithmetic expression")
-                            break
-                        
-                        # ! Check type
-                        temp = 0
-                        if (types[lineNumber][itzIndex + operatorCount + tempCount] == "NUMBR literal"):
-                            temp = [int(lexemes[lineNumber][itzIndex + operatorCount + tempCount]), "NUMBR literal"]
-                        elif (types[lineNumber][itzIndex + operatorCount + tempCount] == "NUMBAR literal"):
-                            temp = [float(lexemes[lineNumber][itzIndex + operatorCount + tempCount]), "NUMBAR literal"]
-                        elif (types[lineNumber][itzIndex + operatorCount + tempCount] == "YARN literal"):
+                    if (types[lineNumber][expressionIndex + operatorCount] == "add operator"):
+                        tempVal[0] += temp[0]
+                    elif (types[lineNumber][expressionIndex + operatorCount] == "subtract operator"):
+                        tempVal[0] -= temp[0]
+                    elif (types[lineNumber][expressionIndex + operatorCount] == "multiply operator"):
+                        tempVal[0] *= temp[0]
+                    elif (types[lineNumber][expressionIndex + operatorCount] == "divide operator"):
+                        tempVal[0] /= temp[0]
+                    elif (types[lineNumber][expressionIndex + operatorCount] == "modulo operator"):
+                        tempVal[0] %= temp[0]
+                else:           # * Literal
+                    # if (types[lineNumber][expressionIndex + operatorCount + tempCount + 2] == "invalid keyword"):
+                    #     print(f"[Line " + str(lineNumber) + "] SemanticError: Invalid identifier used in arithmetic expression")
+                    #     break
+                    # ! Check type
+                    temp = 0
+                    if (types[lineNumber][expressionIndex + operatorCount + tempCount + 2] == "NUMBR literal"):
+                        temp = [int(lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]), "NUMBR literal"]
+                    elif (types[lineNumber][expressionIndex + operatorCount + tempCount + 2] == "NUMBAR literal"):
+                        temp = [float(lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]), "NUMBAR literal"]
+                    elif (types[lineNumber][expressionIndex + operatorCount + tempCount + 2] == "YARN literal"):
+                        try:
+                            temp = [int(lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]), "NUMBR literal"]
+                        except ValueError:
                             try:
-                                temp = [int(lexemes[lineNumber][itzIndex + operatorCount + tempCount]), "NUMBR literal"]
+                                temp = [float(lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]), "NUMBR literal"]
                             except ValueError:
-                                try:
-                                    temp = [float(lexemes[lineNumber][itzIndex + operatorCount + tempCount]), "NUMBR literal"]
-                                except ValueError:
-                                    print(f"Line {lineNumber} Semantic Error: YARN literal cannot be converted to NUMBR or NUMBAR literal")
-                                    break
-                        elif (types[lineNumber][itzIndex + operatorCount + tempCount] == "TROOF literal"):
-                            if (lexemes[lineNumber][itzIndex + operatorCount + tempCount] == "WIN"):
-                                if (tempVal[1] == "NUMBR literal"):
-                                    temp = [1, "NUMBR literal"]
-                                else:
-                                    temp = [1.0, "NUMBAR literal"]
+                                return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
+                    elif (types[lineNumber][expressionIndex + operatorCount + tempCount + 2] == "TROOF literal"):
+                        if (lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2] == "WIN"):
+                            if (tempVal[1] == "NUMBR literal"):
+                                temp = [1, "NUMBR literal"]
                             else:
-                                if (tempVal[1] == "NUMBR literal"):
-                                    temp = [0, "NUMBR literal"]
-                                else:
-                                    temp = [0.0, "NUMBAR literal"]
-                        elif (types[lineNumber][itzIndex + operatorCount + tempCount] == "TYPE literal"):
-                            print(f"Line {lineNumber} Semantic Error: NOOB type literal cannot be implicitly casted to NUMBR or NUMBAR literal")
-                            break
+                                temp = [1.0, "NUMBAR literal"]
+                        else:
+                            if (tempVal[1] == "NUMBR literal"):
+                                temp = [0, "NUMBR literal"]
+                            else:
+                                temp = [0.0, "NUMBAR literal"]
+                    elif (types[lineNumber][expressionIndex + operatorCount + tempCount + 2] == "NOOB"):
+                        return "[Line " + str(lineNumber) + "] SemanticError: NOOB type literal cannot be implicitly casted to NUMBR or NUMBAR literal"
 
 
-                        if (types[lineNumber][itzIndex + operatorCount] == "add operator"):
-                            tempVal[0] += temp[0]
-                        elif (types[lineNumber][itzIndex + operatorCount] == "subtract operator"):
-                            tempVal[0] -= temp[0]
-                        elif (types[lineNumber][itzIndex + operatorCount] == "multiply operator"):
-                            tempVal[0] *= temp[0]
-                        elif (types[lineNumber][itzIndex + operatorCount] == "divide operator"):
-                            tempVal[0] /= temp[0]
-                        elif (types[lineNumber][itzIndex + operatorCount] == "modulo operator"):
-                            tempVal[0] %= temp[0]
+                    if (types[lineNumber][expressionIndex + operatorCount] == "add operator"):
+                        tempVal[0] += temp[0]
+                    elif (types[lineNumber][expressionIndex + operatorCount] == "subtract operator"):
+                        tempVal[0] -= temp[0]
+                    elif (types[lineNumber][expressionIndex + operatorCount] == "multiply operator"):
+                        tempVal[0] *= temp[0]
+                    elif (types[lineNumber][expressionIndex + operatorCount] == "divide operator"):
+                        tempVal[0] /= temp[0]
+                    elif (types[lineNumber][expressionIndex + operatorCount] == "modulo operator"):
+                        tempVal[0] %= temp[0]
 
-                    # * STORES THE FINAL VALUE OF TEMP HERE
-                    newSymbolTable[lexemes[lineNumber][1]] = [tempVal[0], tempVal[1]]
+            # * 1st N
+            else:           # * Literal
+                # if (types[lineNumber][expressionIndex + operatorCount + tempCount + 2] == "invalid keyword"):
+                #     print(f"[Line " + str(lineNumber) + "] SemanticError: Invalid identifier used in arithmetic expression")
+                #     break
 
-         # * FOUND NO ITZ keyword 
-        else:      
-            newSymbolTable[lexemes[lineNumber][lexemeIndex + 1]] = [None, "TYPE literal"]   # * No Value but initialized
+                # ! Check type
+                if (types[lineNumber][expressionIndex + operatorCount + tempCount] == "NUMBR literal"):
+                    tempVal = [int(lexemes[lineNumber][expressionIndex + operatorCount + tempCount]), "NUMBR literal"]
+                elif (types[lineNumber][expressionIndex + operatorCount + tempCount] == "NUMBAR literal"):
+                    tempVal = [float(lexemes[lineNumber][expressionIndex + operatorCount + tempCount]), "NUMBAR literal"]
+                elif (types[lineNumber][expressionIndex + operatorCount + tempCount] == "YARN literal"):
+                    try:
+                        tempVal = [int(lexemes[lineNumber][expressionIndex + operatorCount + tempCount]), "NUMBR literal"]
+                    except ValueError:
+                        try:
+                            tempVal = [float(lexemes[lineNumber][expressionIndex + operatorCount + tempCount]), "NUMBR literal"]
+                        except ValueError:
+                            return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
+                elif (types[lineNumber][expressionIndex + operatorCount + tempCount] == "TROOF literal"):
+                    if (lexemes[lineNumber][expressionIndex + operatorCount + tempCount] == "WIN"):
+                        tempVal = [1, "NUMBR literal"]
+                    else:
+                        tempVal = [0, "NUMBR literal"]
+                elif (types[lineNumber][expressionIndex + operatorCount + tempCount] == "NOOB"):
+                    return "[Line " + str(lineNumber) + "] SemanticError: NOOB type literal cannot be implicitly casted to NUMBR or NUMBAR literal"
+                
+                # * 2nd N
+                if (newSymbolTable.get(lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2])): # Existing Identifier
+                    temp = 0
+                    # ! Check type
+                    if (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][1] == "NUMBR literal"):
+                        temp = [newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][0], "NUMBR literal"]
+                    elif (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][1] == "NUMBAR literal"):
+                        temp = [newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][0], "NUMBAR literal"]
+                    elif (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][1] == "YARN literal"):
+                        try:
+                            temp = [int(newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][0]), "NUMBR literal"]
+                        except ValueError:
+                            try:
+                                temp = [float(newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][0]), "NUMBR literal"]
+                            except ValueError:
+                                return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
+                    elif (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][1] == "TROOF literal"):
+                        if (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][0]):
+                            if (tempVal[1] == "NUMBR literal"):
+                                temp = [1, "NUMBR literal"]
+                            else:
+                                temp = [1.0, "NUMBAR literal"]
+                        else:
+                            if (tempVal[1] == "NUMBR literal"):
+                                temp = [0, "NUMBR literal"]
+                            else:
+                                temp = [0.0, "NUMBAR literal"]
+                    elif (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][1] == "NOOB"):
+                        return "[Line " + str(lineNumber) + "] SemanticError: NOOB type literal cannot be implicitly casted to NUMBR or NUMBAR literal"
+                    
+                    if (types[lineNumber][expressionIndex + operatorCount] == "add operator"):
+                        tempVal[0] += temp[0]
+                    elif (types[lineNumber][expressionIndex + operatorCount] == "subtract operator"):
+                        tempVal[0] -= temp[0]
+                    elif (types[lineNumber][expressionIndex + operatorCount] == "multiply operator"):
+                        tempVal[0] *= temp[0]
+                    elif (types[lineNumber][expressionIndex + operatorCount] == "divide operator"):
+                        tempVal[0] /= temp[0]
+                    elif (types[lineNumber][expressionIndex + operatorCount] == "modulo operator"):
+                        tempVal[0] %= temp[0]
+                else:           # * Literal
+                    # if (types[lineNumber][expressionIndex + operatorCount + tempCount + 2] == "invalid keyword"):
+                    #     print(f"[Line " + str(lineNumber) + "] SemanticError: Invalid identifier used in arithmetic expression")
+                    #     break
+
+                    # ! Check type
+                    temp = 0
+                    if (types[lineNumber][expressionIndex + operatorCount + tempCount + 2] == "NUMBR literal"):
+                        temp = [int(lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]), "NUMBR literal"]
+                    elif (types[lineNumber][expressionIndex + operatorCount + tempCount + 2] == "NUMBAR literal"):
+                        temp = [float(lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]), "NUMBAR literal"]
+                    elif (types[lineNumber][expressionIndex + operatorCount + tempCount + 2] == "YARN literal"):
+                        try:
+                            temp = [int(lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]), "NUMBR literal"]
+                        except ValueError:
+                            try:
+                                temp = [float(lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]), "NUMBR literal"]
+                            except ValueError:
+                                return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
+                    elif (types[lineNumber][expressionIndex + operatorCount + tempCount + 2] == "TROOF literal"):
+                        if (lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2] == "WIN"):
+                            if (tempVal[1] == "NUMBR literal"):
+                                temp = [1, "NUMBR literal"]
+                            else:
+                                temp = [1.0, "NUMBAR literal"]
+                        else:
+                            if (tempVal[1] == "NUMBR literal"):
+                                temp = [0, "NUMBR literal"]
+                            else:
+                                temp = [0.0, "NUMBAR literal"]
+                    elif (types[lineNumber][expressionIndex + operatorCount + tempCount + 2] == "NOOB"):
+                        return "[Line " + str(lineNumber) + "] SemanticError: NOOB type literal cannot be implicitly casted to NUMBR or NUMBAR literal"
+
+
+                    if (types[lineNumber][expressionIndex + operatorCount] == "add operator"):
+                        tempVal[0] += temp[0]
+                    elif (types[lineNumber][expressionIndex + operatorCount] == "subtract operator"):
+                        tempVal[0] -= temp[0]
+                    elif (types[lineNumber][expressionIndex + operatorCount] == "multiply operator"):
+                        tempVal[0] *= temp[0]
+                    elif (types[lineNumber][expressionIndex + operatorCount] == "divide operator"):
+                        tempVal[0] /= temp[0]
+                    elif (types[lineNumber][expressionIndex + operatorCount] == "modulo operator"):
+                        tempVal[0] %= temp[0]
+
+
+            operatorCount -= 1
+            tempCount += 5
+            continue
+        else:   # * More nested expressions
+            # ! Check type 
+            temp = 0
+
+            if (newSymbolTable.get(lexemes[lineNumber][expressionIndex + operatorCount + tempCount])): # Existing Identifier
+                temp = 0
+                # ! Check type
+                if (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][1] == "NUMBR literal"):
+                    temp = [newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][0], "NUMBR literal"]
+                elif (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][1] == "NUMBAR literal"):
+                    temp = [newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][0], "NUMBAR literal"]
+                elif (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][1] == "YARN literal"):
+                    try:
+                        temp = [int(newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][0]), "NUMBR literal"]
+                    except ValueError:
+                        try:
+                            temp = [float(newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][0]), "NUMBR literal"]
+                        except ValueError:
+                            return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
+                elif (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][1] == "TROOF literal"):
+                    if (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][0]):
+                        if (tempVal[1] == "NUMBR literal"):
+                            temp = [1, "NUMBR literal"]
+                        else:
+                            temp = [1.0, "NUMBAR literal"]
+                    else:
+                        if (tempVal[1] == "NUMBR literal"):
+                            temp = [0, "NUMBR literal"]
+                        else:
+                            temp = [0.0, "NUMBAR literal"]
+                elif (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][1] == "NOOB"):
+                    return "[Line " + str(lineNumber) + "] SemanticError: NOOB type literal cannot be implicitly casted to NUMBR or NUMBAR literal"
+
+                if (types[lineNumber][expressionIndex + operatorCount] == "add operator"):
+                    tempVal[0] += temp[0]
+                elif (types[lineNumber][expressionIndex + operatorCount] == "subtract operator"):
+                    tempVal[0] -= temp[0]
+                elif (types[lineNumber][expressionIndex + operatorCount] == "multiply operator"):
+                    tempVal[0] *= temp[0]
+                elif (types[lineNumber][expressionIndex + operatorCount] == "divide operator"):
+                    tempVal[0] /= temp[0]
+                elif (types[lineNumber][expressionIndex + operatorCount] == "modulo operator"):
+                    tempVal[0] %= temp[0]
+            else:           # * Literal
+                # if (types[lineNumber][expressionIndex + operatorCount + tempCount + 2] == "invalid keyword"):
+                #     print(f"[Line " + str(lineNumber) + "] SemanticError: Invalid identifier used in arithmetic expression")
+                #     break
+                
+                # ! Check type
+                temp = 0
+                if (types[lineNumber][expressionIndex + operatorCount + tempCount] == "NUMBR literal"):
+                    temp = [int(lexemes[lineNumber][expressionIndex + operatorCount + tempCount]), "NUMBR literal"]
+                elif (types[lineNumber][expressionIndex + operatorCount + tempCount] == "NUMBAR literal"):
+                    temp = [float(lexemes[lineNumber][expressionIndex + operatorCount + tempCount]), "NUMBAR literal"]
+                elif (types[lineNumber][expressionIndex + operatorCount + tempCount] == "YARN literal"):
+                    try:
+                        temp = [int(lexemes[lineNumber][expressionIndex + operatorCount + tempCount]), "NUMBR literal"]
+                    except ValueError:
+                        try:
+                            temp = [float(lexemes[lineNumber][expressionIndex + operatorCount + tempCount]), "NUMBR literal"]
+                        except ValueError:
+                            return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
+                elif (types[lineNumber][expressionIndex + operatorCount + tempCount] == "TROOF literal"):
+                    if (lexemes[lineNumber][expressionIndex + operatorCount + tempCount] == "WIN"):
+                        if (tempVal[1] == "NUMBR literal"):
+                            temp = [1, "NUMBR literal"]
+                        else:
+                            temp = [1.0, "NUMBAR literal"]
+                    else:
+                        if (tempVal[1] == "NUMBR literal"):
+                            temp = [0, "NUMBR literal"]
+                        else:
+                            temp = [0.0, "NUMBAR literal"]
+                elif (types[lineNumber][expressionIndex + operatorCount + tempCount] == "NOOB"):
+                    return "[Line " + str(lineNumber) + "] SemanticError: NOOB type literal cannot be implicitly casted to NUMBR or NUMBAR literal"
+
+
+                if (types[lineNumber][expressionIndex + operatorCount] == "add operator"):
+                    tempVal[0] += temp[0]
+                elif (types[lineNumber][expressionIndex + operatorCount] == "subtract operator"):
+                    tempVal[0] -= temp[0]
+                elif (types[lineNumber][expressionIndex + operatorCount] == "multiply operator"):
+                    tempVal[0] *= temp[0]
+                elif (types[lineNumber][expressionIndex + operatorCount] == "divide operator"):
+                    tempVal[0] /= temp[0]
+                elif (types[lineNumber][expressionIndex + operatorCount] == "modulo operator"):
+                    tempVal[0] %= temp[0]
+
+
+        operatorCount -= 1
+        tempCount += 3
+
+    
+    # * ONLY REACHES HERE IF THIS IS THE OUTERMOST OPERATION
+    # I HAS A sum ITZ SUM OF num AN 13                                  # 3
+    # I HAS A sum ITZ SUM OF DIFF OF num AN 13 AN 21                        # 6
+    # I HAS A sum ITZ SUM OF DIFF OF PRODUKT OF num AN 13 AN 21 AN 4            # 9
+    # I HAS A sum ITZ SUM OF DIFF OF PRODUKT OF SUM OF num AN 13 AN 21 AN 4 AN 11   # 12
+
+    if (not boolNested):          # ! SINGLE OPERATION
+        # * 1st N
+        if (newSymbolTable.get(lexemes[lineNumber][expressionIndex + operatorCount + tempCount])):         # Existing Identifier
+            # ! Check type
+            if (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][1] == "NUMBR literal"):
+                tempVal = [newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][0], "NUMBR literal"]
+            elif (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][1] == "NUMBAR literal"):
+                tempVal = [newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][0], "NUMBAR literal"]
+            elif (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][1] == "YARN literal"):
+                try:
+                    tempVal = [int(newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][0]), "NUMBR literal"]
+                except ValueError:
+                    try:
+                        tempVal = [float(newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][0]), "NUMBR literal"]
+                    except ValueError:
+                        return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
+            elif (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][1] == "TROOF literal"):
+                if (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][0]):
+                    tempVal = [1, "NUMBR literal"]
+                else:
+                    tempVal = [0, "NUMBR literal"]
+            elif (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][1] == "NOOB"):
+                return "[Line " + str(lineNumber) + "] SemanticError: NOOB type literal cannot be implicitly casted to NUMBR or NUMBAR literal"
+
+            # * 2nd N
+            if (newSymbolTable.get(lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2])): # Existing Identifier
+                temp = 0
+                # ! Check type
+                if (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][1] == "NUMBR literal"):
+                    temp = [newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][0], "NUMBR literal"]
+                elif (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][1] == "NUMBAR literal"):
+                    temp = [newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][0], "NUMBAR literal"]
+                elif (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][1] == "YARN literal"):
+                    try:
+                        temp = [int(newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][0]), "NUMBR literal"]
+                    except ValueError:
+                        try:
+                            temp = [float(newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][0]), "NUMBR literal"]
+                        except ValueError:
+                            return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
+                elif (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][1] == "TROOF literal"):
+                    if (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][0]):
+                        if (tempVal[1] == "NUMBR literal"):
+                            temp = [1, "NUMBR literal"]
+                        else:
+                            temp = [1.0, "NUMBAR literal"]
+                    else:
+                        if (tempVal[1] == "NUMBR literal"):
+                            temp = [0, "NUMBR literal"]
+                        else:
+                            temp = [0.0, "NUMBAR literal"]
+                elif (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][1] == "NOOB"):
+                    return "[Line " + str(lineNumber) + "] SemanticError: NOOB type literal cannot be implicitly casted to NUMBR or NUMBAR literal"
+
+                if (types[lineNumber][expressionIndex + operatorCount] == "add operator"):
+                    tempVal[0] += temp[0]
+                elif (types[lineNumber][expressionIndex + operatorCount] == "subtract operator"):
+                    tempVal[0] -= temp[0]
+                elif (types[lineNumber][expressionIndex + operatorCount] == "multiply operator"):
+                    tempVal[0] *= temp[0]
+                elif (types[lineNumber][expressionIndex + operatorCount] == "divide operator"):
+                    tempVal[0] /= temp[0]
+                elif (types[lineNumber][expressionIndex + operatorCount] == "modulo operator"):
+                    tempVal[0] %= temp[0]
+            else:           # * Literal
+                # if (types[lineNumber][expressionIndex + operatorCount + tempCount + 2] == "invalid keyword"):
+                #     print(f"[Line " + str(lineNumber) + "] SemanticError: Invalid identifier used in arithmetic expression")
+                #     break
+                
+                # ! Check type
+                temp = 0
+                if (types[lineNumber][expressionIndex + operatorCount + tempCount + 2] == "NUMBR literal"):
+                    temp = [int(lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]), "NUMBR literal"]
+                elif (types[lineNumber][expressionIndex + operatorCount + tempCount + 2] == "NUMBAR literal"):
+                    temp = [float(lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]), "NUMBAR literal"]
+                elif (types[lineNumber][expressionIndex + operatorCount + tempCount + 2] == "YARN literal"):
+                    try:
+                        temp = [int(lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]), "NUMBR literal"]
+                    except ValueError:
+                        try:
+                            temp = [float(lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]), "NUMBR literal"]
+                        except ValueError:
+                            return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
+                elif (types[lineNumber][expressionIndex + operatorCount + tempCount + 2] == "TROOF literal"):
+                    if (lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2] == "WIN"):
+                        if (tempVal[1] == "NUMBR literal"):
+                            temp = [1, "NUMBR literal"]
+                        else:
+                            temp = [1.0, "NUMBAR literal"]
+                    else:
+                        if (tempVal[1] == "NUMBR literal"):
+                            temp = [0, "NUMBR literal"]
+                        else:
+                            temp = [0.0, "NUMBAR literal"]
+                elif (types[lineNumber][expressionIndex + operatorCount + tempCount + 2] == "NOOB"):
+                    return "[Line " + str(lineNumber) + "] SemanticError: NOOB type literal cannot be implicitly casted to NUMBR or NUMBAR literal"
+
+                if (types[lineNumber][expressionIndex + operatorCount] == "add operator"):
+                    tempVal[0] += temp[0]
+                elif (types[lineNumber][expressionIndex + operatorCount] == "subtract operator"):
+                    tempVal[0] -= temp[0]
+                elif (types[lineNumber][expressionIndex + operatorCount] == "multiply operator"):
+                    tempVal[0] *= temp[0]
+                elif (types[lineNumber][expressionIndex + operatorCount] == "divide operator"):
+                    tempVal[0] /= temp[0]
+                elif (types[lineNumber][expressionIndex + operatorCount] == "modulo operator"):
+                    tempVal[0] %= temp[0]
+        # * 1st N
+        else:           # * Literal
+            # if (types[lineNumber][expressionIndex + operatorCount + tempCount + 2] == "invalid keyword"):
+            #     print(f"[Line " + str(lineNumber) + "] SemanticError: Invalid identifier used in arithmetic expression")
+            #     break
+            # ! Check type
+
+            if (types[lineNumber][expressionIndex + operatorCount + tempCount] == "NUMBR literal"):
+                tempVal = [int(lexemes[lineNumber][expressionIndex + operatorCount + tempCount]), "NUMBR literal"]
+            elif (types[lineNumber][expressionIndex + operatorCount + tempCount] == "NUMBAR literal"):
+                tempVal = [float(lexemes[lineNumber][expressionIndex + operatorCount + tempCount]), "NUMBAR literal"]
+            elif (types[lineNumber][expressionIndex + operatorCount + tempCount] == "YARN literal"):
+                try:
+                    tempVal = [int(lexemes[lineNumber][expressionIndex + operatorCount + tempCount]), "NUMBR literal"]
+                except ValueError:
+                    try:
+                        tempVal = [float(lexemes[lineNumber][expressionIndex + operatorCount + tempCount]), "NUMBR literal"]
+                    except ValueError:
+                        return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
+            elif (types[lineNumber][expressionIndex + operatorCount + tempCount] == "TROOF literal"):
+                if (lexemes[lineNumber][expressionIndex + operatorCount + tempCount] == "WIN"):
+                    tempVal = [1, "NUMBR literal"]
+                else:
+                    tempVal = [0, "NUMBR literal"]
+            elif (types[lineNumber][expressionIndex + operatorCount + tempCount] == "NOOB"):
+                return "[Line " + str(lineNumber) + "] SemanticError: NOOB type literal cannot be implicitly casted to NUMBR or NUMBAR literal"
+
+            # * 2nd N
+            if (newSymbolTable.get(lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2])): # Existing Identifier
+                temp = 0
+                # ! Check type
+                if (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][1] == "NUMBR literal"):
+                    temp = [newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][0], "NUMBR literal"]
+                elif (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][1] == "NUMBAR literal"):
+                    temp = [newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][0], "NUMBAR literal"]
+                elif (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][1] == "YARN literal"):
+                    try:
+                        temp = [int(newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][0]), "NUMBR literal"]
+                    except ValueError:
+                        try:
+                            temp = [float(newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][0]), "NUMBR literal"]
+                        except ValueError:
+                            return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
+                elif (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][1] == "TROOF literal"):
+                    if (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][0]):
+                        if (tempVal[1] == "NUMBR literal"):
+                            temp = [1, "NUMBR literal"]
+                        else:
+                            temp = [1.0, "NUMBAR literal"]
+                    else:
+                        if (tempVal[1] == "NUMBR literal"):
+                            temp = [0, "NUMBR literal"]
+                        else:
+                            temp = [0.0, "NUMBAR literal"]
+                elif (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]][1] == "NOOB"):
+                    return "[Line " + str(lineNumber) + "] SemanticError: NOOB type literal cannot be implicitly casted to NUMBR or NUMBAR literal"
+            else:           # * Literal
+                # if (types[lineNumber][expressionIndex + operatorCount + tempCount + 2] == "invalid keyword"):
+                #     print(f"[Line " + str(lineNumber) + "] SemanticError: Invalid identifier used in arithmetic expression")
+                #     break
+                
+                # ! Check type
+                temp = 0
+                if (types[lineNumber][expressionIndex + operatorCount + tempCount + 2] == "NUMBR literal"):
+                    temp = [int(lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]), "NUMBR literal"]
+                elif (types[lineNumber][expressionIndex + operatorCount + tempCount + 2] == "NUMBAR literal"):
+                    temp = [float(lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]), "NUMBAR literal"]
+                elif (types[lineNumber][expressionIndex + operatorCount + tempCount + 2] == "YARN literal"):
+                    try:
+                        temp = [int(lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]), "NUMBR literal"]
+                    except ValueError:
+                        try:
+                            temp = [float(lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2]), "NUMBR literal"]
+                        except ValueError:
+                            return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
+                elif (types[lineNumber][expressionIndex + operatorCount + tempCount + 2] == "TROOF literal"):
+                    if (lexemes[lineNumber][expressionIndex + operatorCount + tempCount + 2] == "WIN"):
+                        if (tempVal[1] == "NUMBR literal"):
+                            temp = [1, "NUMBR literal"]
+                        else:
+                            temp = [1.0, "NUMBAR literal"]
+                    else:
+                        if (tempVal[1] == "NUMBR literal"):
+                            temp = [0, "NUMBR literal"]
+                        else:
+                            temp = [0.0, "NUMBAR literal"]
+                elif (types[lineNumber][expressionIndex + operatorCount + tempCount + 2] == "NOOB"):
+                    return "[Line " + str(lineNumber) + "] SemanticError: NOOB type literal cannot be implicitly casted to NUMBR or NUMBAR literal"
+
+
+            if (types[lineNumber][expressionIndex + operatorCount] == "add operator"):
+                tempVal[0] += temp[0]
+            elif (types[lineNumber][expressionIndex + operatorCount] == "subtract operator"):
+                tempVal[0] -= temp[0]
+            elif (types[lineNumber][expressionIndex + operatorCount] == "multiply operator"):
+                tempVal[0] *= temp[0]
+            elif (types[lineNumber][expressionIndex + operatorCount] == "divide operator"):
+                tempVal[0] /= temp[0]
+            elif (types[lineNumber][expressionIndex + operatorCount] == "modulo operator"):
+                tempVal[0] %= temp[0]
+        
+        # * STORES THE FINAL VALUE OF TEMP HERE
+        if(variable != "IT"):
+            variable = lexemes[lineNumber][1]
+
+        updateSymbolTable(lineNumber, [tempVal[0], tempVal[1]], variable)
+    else:     
+        temp = 0
+        if (newSymbolTable.get(lexemes[lineNumber][expressionIndex + operatorCount + tempCount])): # Existing Identifier
+            temp = 0
+            # ! Check type
+            if (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][1] == "NUMBR literal"):
+                temp = [newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][0], "NUMBR literal"]
+            elif (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][1] == "NUMBAR literal"):
+                temp = [newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][0], "NUMBAR literal"]
+            elif (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][1] == "YARN literal"):
+                try:
+                    temp = [int(newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][0]), "NUMBR literal"]
+                except ValueError:
+                    try:
+                        temp = [float(newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][0]), "NUMBR literal"]
+                    except ValueError:
+                        return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
+            elif (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][1] == "TROOF literal"):
+                if (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][0]):
+                    if (tempVal[1] == "NUMBR literal"):
+                        temp = [1, "NUMBR literal"]
+                    else:
+                        temp = [1.0, "NUMBAR literal"]
+                else:
+                    if (tempVal[1] == "NUMBR literal"):
+                        temp = [0, "NUMBR literal"]
+                    else:
+                        temp = [0.0, "NUMBAR literal"]
+            elif (newSymbolTable[lexemes[lineNumber][expressionIndex + operatorCount + tempCount]][1] == "NOOB"):
+                return "[Line " + str(lineNumber) + "] SemanticError: NOOB type literal cannot be implicitly casted to NUMBR or NUMBAR literal"
+
+            if (types[lineNumber][expressionIndex + operatorCount] == "add operator"):
+                tempVal[0] += temp[0]
+            elif (types[lineNumber][expressionIndex + operatorCount] == "subtract operator"):
+                tempVal[0] -= temp[0]
+            elif (types[lineNumber][expressionIndex + operatorCount] == "multiply operator"):
+                tempVal[0] *= temp[0]
+            elif (types[lineNumber][expressionIndex + operatorCount] == "divide operator"):
+                tempVal[0] /= temp[0]
+            elif (types[lineNumber][expressionIndex + operatorCount] == "modulo operator"):
+                tempVal[0] %= temp[0]
+        else:           # * Literal
+            # if (types[lineNumber][expressionIndex + operatorCount + tempCount + 2] == "invalid keyword"):
+            #     print(f"[Line " + str(lineNumber) + "] SemanticError: Invalid identifier used in arithmetic expression")
+            #     break
+            
+            # ! Check type
+            temp = 0
+            if (types[lineNumber][expressionIndex + operatorCount + tempCount] == "NUMBR literal"):
+                temp = [int(lexemes[lineNumber][expressionIndex + operatorCount + tempCount]), "NUMBR literal"]
+            elif (types[lineNumber][expressionIndex + operatorCount + tempCount] == "NUMBAR literal"):
+                temp = [float(lexemes[lineNumber][expressionIndex + operatorCount + tempCount]), "NUMBAR literal"]
+            elif (types[lineNumber][expressionIndex + operatorCount + tempCount] == "YARN literal"):
+                try:
+                    temp = [int(lexemes[lineNumber][expressionIndex + operatorCount + tempCount]), "NUMBR literal"]
+                except ValueError:
+                    try:
+                        temp = [float(lexemes[lineNumber][expressionIndex + operatorCount + tempCount]), "NUMBR literal"]
+                    except ValueError:
+                        return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
+            elif (types[lineNumber][expressionIndex + operatorCount + tempCount] == "TROOF literal"):
+                if (lexemes[lineNumber][expressionIndex + operatorCount + tempCount] == "WIN"):
+                    if (tempVal[1] == "NUMBR literal"):
+                        temp = [1, "NUMBR literal"]
+                    else:
+                        temp = [1.0, "NUMBAR literal"]
+                else:
+                    if (tempVal[1] == "NUMBR literal"):
+                        temp = [0, "NUMBR literal"]
+                    else:
+                        temp = [0.0, "NUMBAR literal"]
+            elif (types[lineNumber][expressionIndex + operatorCount + tempCount] == "NOOB"):
+                return "[Line " + str(lineNumber) + "] SemanticError: NOOB type literal cannot be implicitly casted to NUMBR or NUMBAR literal"
+
+
+            if (types[lineNumber][expressionIndex + operatorCount] == "add operator"):
+                tempVal[0] += temp[0]
+            elif (types[lineNumber][expressionIndex + operatorCount] == "subtract operator"):
+                tempVal[0] -= temp[0]
+            elif (types[lineNumber][expressionIndex + operatorCount] == "multiply operator"):
+                tempVal[0] *= temp[0]
+            elif (types[lineNumber][expressionIndex + operatorCount] == "divide operator"):
+                tempVal[0] /= temp[0]
+            elif (types[lineNumber][expressionIndex + operatorCount] == "modulo operator"):
+                tempVal[0] %= temp[0]
+
+        # * STORES THE FINAL VALUE OF TEMP HERE
+        if(variable != "IT"):
+            variable = lexemes[lineNumber][1]
+
+        updateSymbolTable(lineNumber, [tempVal[0], tempVal[1]], variable)
 
     return "OK"
 
 def iHasASemantics(lineNumber):
     if("variable initialization keyword" in types[lineNumber]): #variable has value
         itzLexeme = lexemes[lineNumber].index("ITZ")
+
+        # TODO (Eikou): doesnt accept if assigns to variable
 
         if(types[lineNumber][itzLexeme + 1] in literals): #checks if value is literal
             semanticsError = updateSymbolTable(lineNumber, itzLexeme + 1, lexemes[lineNumber][itzLexeme - 1])
@@ -785,12 +754,15 @@ def iHasASemantics(lineNumber):
                 return semanticsError
 
         elif(lexemes[lineNumber][itzLexeme + 1] in expressionKeywords["arithmetic"] or lexemes[lineNumber][itzLexeme + 1] in expressionKeywords["boolean"] or lexemes[lineNumber][itzLexeme + 1] in expressionKeywords["comparison"] or lexemes[lineNumber][itzLexeme + 1] in expressionKeywords["concatenation"]): #if expression
-            expressionSemantics(lineNumber, itzLexeme + 1, lexemes[lineNumber][itzLexeme - 1])
-            return "Done"
+            semanticsError = expressionSemantics(lineNumber, lexemes[lineNumber][itzLexeme - 1])
+
+            if(semanticsError != "OK"):
+                return semanticsError
+
     else:   #variable has no value
         iHasALexeme = lexemes[lineNumber].index("I HAS A")
 
-        semanticsError = updateSymbolTable(lineNumber, None, lexemes[lineNumber][iHasALexeme + 1])
+        semanticsError = updateSymbolTable(lineNumber, "NOOB", lexemes[lineNumber][iHasALexeme + 1])
 
         if(semanticsError != "OK"):
             return semanticsError
@@ -800,15 +772,35 @@ def iHasASemantics(lineNumber):
 def visibleSemantics(lineNumber):
     visibleLexeme = lexemes[lineNumber].index("VISIBLE")
 
-    #doesnt catch when more than one arity
-    for i in newSymbolTable.keys():
-        if(i == lexemes[lineNumber][visibleLexeme + 1]):
-            print(newSymbolTable[i])
-            return "OK"
-    
+    # TODO: doesnt catch when more than one arity
+    if(types[lineNumber][visibleLexeme + 1] == "identifier"):
+        for i in newSymbolTable.keys():
+            if(i == lexemes[lineNumber][visibleLexeme + 1]):
+                if(newSymbolTable[i][1] == "TROOF literal"):
+                    if(newSymbolTable[i][0] == True):
+                        print("WIN")
+                    else:
+                        print("FAIL")
+                else:
+                    print(newSymbolTable[i][0])
+                return "OK"
+    elif(types[lineNumber][visibleLexeme + 1] in literals):
+        print(lexemes[lineNumber][visibleLexeme + 1])
+        return "OK"
+    elif(types[lineNumber][visibleLexeme + 1] == "string delimiter" and types[lineNumber][visibleLexeme + 2] == "YARN literal" and types[lineNumber][visibleLexeme + 3] == "string delimiter"):
+        print(lexemes[lineNumber][visibleLexeme + 2])
+        return "OK"
+    elif(lexemes[lineNumber][visibleLexeme + 1] in expressionKeywords["arithmetic"] or lexemes[lineNumber][visibleLexeme + 1] in expressionKeywords["boolean"] or lexemes[lineNumber][visibleLexeme + 1] in expressionKeywords["comparison"] or lexemes[lineNumber][visibleLexeme + 1] in expressionKeywords["concatenation"]):
+        semanticError = expressionSemantics(lineNumber, "IT")
+
+        if(semanticError != "OK"):
+            return semanticError
+            
+        print(newSymbolTable['IT'][0])
+        return "OK"
+
     return "[Line " + str(lineNumber) + "] SemanticError: identifier not found"
     
-
 def gimmehSemantics(lineNumber):
     gimmehLexeme = lexemes[lineNumber].index("GIMMEH")
 
@@ -855,7 +847,8 @@ def semantics():
     
     return newSymbolTable
 
-for i in newSymbolTable.keys():         
-    print(str(i) + ": " + str(newSymbolTable[i]))
+# print()
+# for i in newSymbolTable.keys():         
+#     print(str(i) + ": " + str(newSymbolTable[i]))
         
         
