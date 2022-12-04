@@ -10,7 +10,12 @@ symbolTable = semantics_analyzer.semantics()
 BACKGROUND_COLOR = "#e0e0de"
 
 def openFile():
-    print("open file")
+    fileButton = ttk.Button(
+        screen,
+        text='Open File',
+        command=lambda:print("open file")
+    )
+    fileButton.place(x=20, y=715)
 
 def textEditor():
     textEditorLabel = ttk.Label(screen, text="Text Editor", background=BACKGROUND_COLOR)
@@ -54,6 +59,7 @@ screen.resizable(False, False)
 style = ttk.Style()
 style.theme_use('vista')
 
+openFile()
 textEditor()
 listOfTokens()
 symbolTable()
