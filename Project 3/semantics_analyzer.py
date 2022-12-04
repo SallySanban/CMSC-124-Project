@@ -819,38 +819,41 @@ def gimmehSemantics(lineNumber):
 
     return "OK"
 
-lineNumber = list(lexemes.keys())[0]
-lexemeIndex = 0
+def semantics():
+    lineNumber = list(lexemes.keys())[0]
+    lexemeIndex = 0
 
-while(lineNumber):
-    if(lexemes[lineNumber][lexemeIndex] == "I HAS A"):
-        semanticsError = iHasASemantics(lineNumber)
+    while(lineNumber):
+        if(lexemes[lineNumber][lexemeIndex] == "I HAS A"):
+            semanticsError = iHasASemantics(lineNumber)
 
-        if(semanticsError != "OK"):
-            print(semanticsError)
-            break
-        
-        lineNumber = nextLineNumber(lineNumber)
-        continue
-    elif(lexemes[lineNumber][lexemeIndex] == "VISIBLE"):
-        semanticsError = visibleSemantics(lineNumber)
+            if(semanticsError != "OK"):
+                print(semanticsError)
+                break
+            
+            lineNumber = nextLineNumber(lineNumber)
+            continue
+        elif(lexemes[lineNumber][lexemeIndex] == "VISIBLE"):
+            semanticsError = visibleSemantics(lineNumber)
 
-        if(semanticsError != "OK"):
-            print(semanticsError)
-            break
+            if(semanticsError != "OK"):
+                print(semanticsError)
+                break
 
-        lineNumber = nextLineNumber(lineNumber)
-        continue
-    elif(lexemes[lineNumber][lexemeIndex] == "GIMMEH"):
-        gimmehSemantics(lineNumber)
+            lineNumber = nextLineNumber(lineNumber)
+            continue
+        elif(lexemes[lineNumber][lexemeIndex] == "GIMMEH"):
+            gimmehSemantics(lineNumber)
 
-        lineNumber = nextLineNumber(lineNumber)
-        continue
+            lineNumber = nextLineNumber(lineNumber)
+            continue
 
-    # * GO NEXT LINE
-    else:
-        lineNumber = nextLineNumber(lineNumber)
-        continue
+        # * GO NEXT LINE
+        else:
+            lineNumber = nextLineNumber(lineNumber)
+            continue
+    
+    return newSymbolTable
 
 for i in newSymbolTable.keys():         
     print(str(i) + ": " + str(newSymbolTable[i]))
