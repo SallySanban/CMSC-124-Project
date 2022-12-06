@@ -1690,6 +1690,20 @@ def iHasASyntax(lineNumber):
 
     return "OK"
 
+def maekSyntax(lineNumber):
+    maekIndex = lexemes[lineNumber].index("MAEK")
+
+    if(types[lineNumber][maekIndex+1] != "identifier"):
+        return "[Line " + str(lineNumber) + "] SyntaxError: required identifier after MAEK keyword"
+    if(lexemes[lineNumber][maekIndex+2] == "A"):
+        if(types[lineNumber][maekIndex + 3] not in literals):
+            return "[Line " + str(lineNumber) + "] SyntaxError: Expected literal at: End of line"
+    elif(types[lineNumber][maekIndex + 2] not in literals):
+            return "[Line " + str(lineNumber) + "] SyntaxError: Expected literal at: End of line"
+    
+
+    return "OK"
+
 def rSyntax(lineNumber):
     rLexeme = lexemes[lineNumber].index("R")
     if(len(lexemes[lineNumber]) <= 2):
@@ -1761,6 +1775,7 @@ def orlySyntax(lineNumber):
 
       
     return "OK"
+
 
 def haiSyntax(lineNumber):
     if(len(lexemes[lineNumber]) != 1):
@@ -2026,6 +2041,13 @@ while(True):
 
 
         # START OF ZYRIL TAMARGO'S PART
+        elif("MAEK" in lexemes[lineNumber]):
+            syntaxError = maekSyntax(lineNumber)
+            if(syntaxError != "OK"):
+                print(syntaxError)
+                break
+            lineNumber = nextLineNumber(lineNumber)
+            continue
 
         elif("R" in lexemes[lineNumber]):
             syntaxError = rSyntax(lineNumber)

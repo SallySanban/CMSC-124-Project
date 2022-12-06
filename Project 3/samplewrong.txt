@@ -1,9 +1,8 @@
 HAI
-NUM R 3 BTW sdfg
+I HAS A var1 ITZ 12 BTW var1 is a NUMBR
+MAEK var1 A NUMBAR  BTW returns NUMBAR equivalent of var1 to IT (12.0)
+                    BTW var1 is still a NUMBR
 
-O RLY? 
-    YA RLY
-        VISIBLE "Invalid input is > 3."
-OIC
-
+MAEK var1 YARN      BTW returns YARN equivalent of var1 to IT (“12”)
+                    BTW var1 is still a NUMBR
 KTHXBYE

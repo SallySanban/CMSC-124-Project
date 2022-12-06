@@ -1,6 +1,6 @@
 import re
 
-filename = "Project 3/samplewrong.txt"
+filename = "Project 3\samplewrong.txt"
 
 #reads file and cleans each line in the file
 def readFile(filename):
