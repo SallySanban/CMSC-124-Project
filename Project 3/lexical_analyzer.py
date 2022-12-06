@@ -667,7 +667,7 @@ def findLexemes(lines):
                         else:
                             types[i+1].append("modulo operator")
                         
-                        quoshuntOfKeyword = ""
+                        modOfKeyword = ""
                         continue
                 else: #only MOD (identifier)
                     if(i+1 not in lexemes):
@@ -1597,6 +1597,21 @@ def findLexemes(lines):
                     types[i+1].append("identifier")
 
                 continue
+
+            #every other case
+            if(i+1 not in lexemes):
+                lexemes[i+1] = []
+                lexemes[i+1].append(splitWords[j])
+            else:
+                lexemes[i+1].append(splitWords[j])
+
+            if(i+1 not in types):
+                types[i+1] = []
+                types[i+1].append("invalid keyword")
+            else:
+                types[i+1].append("invalid keyword")
+
+            continue
 
 def printSymbolTable():
     space1 = 40
