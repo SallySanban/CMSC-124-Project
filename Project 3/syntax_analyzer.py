@@ -161,6 +161,7 @@ def sumOfSyntax(lineNumber):
             else:
                 # print(lexemes[lineNumber][k])                 # CHECKER
                 return "[Line " + str(lineNumber) + "] SyntaxError: cannot have statements after arithmetic operation"
+    return "OK"
 
 def diffOfSyntax(lineNumber):
     diffOfIndex = lexemes[lineNumber].index("DIFF OF")
@@ -1708,41 +1709,58 @@ def rSyntax(lineNumber):
 
     return "OK"
 
-def orlySyntax(lineNumber):
-    global orlyFound
-    start = 1
-    comments = []
+def yaRlySyntax(lineNumber):
+    yaRlyDelimiter = lexemes[lineNumber].index("YA RLY")
+    
+    if(lexemes[yaRlyDelimiter+1] == "BTW"):
+        syntaxError = singleCommentSyntax(lineNumber)
 
-    if(lexemes[lineNumber][0] == "O RLY?"):
-        orlyLexeme = lexemes[lineNumber][0]
-        print(orlyLexeme)
-        if(len(lexemes[lineNumber]) > 1):
-            return "[Line " + str(lineNumber) + "] SyntaxError: O RLY? have their own lines"
-        
+        if(syntaxError != "OK"):
+            return syntaxError
 
-    while(orlyFound == True):
-        for i in range(start, len(types[lineNumber])):
-            if(lexemes[lineNumber][i] == "OIC"):
-                syntaxError = oicSyntax(lineNumber)
+    return "OK"
 
-                if(syntaxError != "OK"):
-                    return syntaxError
+def oicSyntax(lineNumber):
+    oicDelimiter = lexemes[lineNumber].index("OIC")
+    
+    if(oicDelimiter != len(lexemes[lineNumber])-1):
+        return "[Line " + str(lineNumber) + "] SyntaxError: OIC cannot be together with other statements"
 
-                orlyFound = False
-                break
+    return "OK"
 
-
-        if(orlyFound == False):
-            break
-
-        start = 0
-        lineNumber = nextLineNumber(lineNumber)
-        
-        if(lineNumber == None):
-            return "[Line " + str(lineNumber) + "] SyntaxError: missing OIC"
+    if(lineNumber == None):
+        return "[Line " + str(lineNumber) + "] SyntaxError: missing OIC"
 
     return nextLineNumber(lineNumber)
 
+def orlySyntax(lineNumber):
+    global orlyFound
+    start = 1
+
+    if(lexemes[lineNumber][0] == "O RLY?"):
+        orlyLexeme = lexemes[lineNumber][0]
+        if(lexemes[lineNumber-1][0] in ["SUM OF", "DIFF OF", "PRODUKT OF", "QUOSHUNT OF", "MOD OF", "BIGGR OF", "SMALLR OF"] ):
+            if(len(lexemes[lineNumber]) > 1 and lexemes[lineNumber][len(lexemes[lineNumber])-1] == "OIC"):
+                return "[Line " + str(lineNumber) + "] SyntaxError: O RLY? and OIC must have their own lines"
+        else:
+            return "[Line " + str(lineNumber) + "] SyntaxError: Need expression in [Line " + str(lineNumber-1) + "] before O RLY?"
+    
+        lineNumber = nextLineNumber(lineNumber)
+        while(orlyFound == True):
+
+            if(lexemes[lineNumber][0] != "YA RLY"):
+                print(lexemes[lineNumber][0])
+                return "[Line " + str(lineNumber+1) + "] Expected YA RLY Keyword"
+            
+            syntaxError = yaRlySyntax(lineNumber)
+            if(syntaxError != "OK"):
+                return syntaxError
+                
+            orlyFound = False
+            break
+
+      
+    return "OK"
 
 def haiSyntax(lineNumber):
     if(len(lexemes[lineNumber]) != 1):
@@ -2017,8 +2035,7 @@ while(True):
             lineNumber = nextLineNumber(lineNumber)
             continue
 
-        elif(lexemes[lineNumber][lexemeIndex] == "O RLY?"):
-            print("NOW CHECKING: " + lexemes[lineNumber][lexemeIndex] + " in line " + str(lineNumber))
+        elif(lexemes[lineNumber][0] == "O RLY?"):
             orlyFound = True
             syntaxError = orlySyntax(lineNumber)
 

@@ -1,6 +1,9 @@
 HAI
+NUM R 3 BTW sdfg
 
-I HAS A Name
-Name R 3 BTW
+O RLY? 
+    YA RLY
+        VISIBLE "Invalid input is > 3."
+OIC
 
 KTHXBYE
