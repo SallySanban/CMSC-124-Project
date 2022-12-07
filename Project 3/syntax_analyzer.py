@@ -1713,16 +1713,16 @@ def itzSyntax(lineNumber):
 
         if(syntaxError != "OK"):
             return syntaxError
-    elif(lexemes[lineNumber][itzLexeme + 1] == "BIGGR OF"):
-        syntaxError = biggrOfSyntax(lineNumber)
+    # elif(lexemes[lineNumber][itzLexeme + 1] == "BIGGR OF"):
+    #     syntaxError = biggrOfSyntax(lineNumber)
 
-        if(syntaxError != "OK"):
-            return syntaxError
-    elif(lexemes[lineNumber][itzLexeme + 1] == "SMALLR OF"):
-        syntaxError = smallrOfSyntax(lineNumber)
+    #     if(syntaxError != "OK"):
+    #         return syntaxError
+    # elif(lexemes[lineNumber][itzLexeme + 1] == "SMALLR OF"):
+    #     syntaxError = smallrOfSyntax(lineNumber)
 
-        if(syntaxError != "OK"):
-            return syntaxError
+    #     if(syntaxError != "OK"):
+    #         return syntaxError
     elif(lexemes[lineNumber][itzLexeme + 1] == "SMOOSH"):
         syntaxError = smooshSyntax(lineNumber)
 
