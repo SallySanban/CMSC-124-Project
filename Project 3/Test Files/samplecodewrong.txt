@@ -44,8 +44,6 @@ DIFF OF 90 AN 10        BTW 90 - 10
 PRODUKT OF 12 AN 13     BTW 12 * 13
 QUOSHUNT OF 32 AN 43    BTW 32 / 43
 MOD OF 43 AN 64         BTW 43 modulo 64
-BIGGR OF MOD OF 23 AN 53 AN 27      BTW max(23, 53)
-SMALLR OF 53 AN 45      BTW min(53, 45)
 
 BTW Binary notation:
 BOTH OF WIN AN WIN           BTW and: WIN if x=WIN, y=WIN
@@ -55,7 +53,7 @@ WON OF WIN AN FAIL           BTW xor: FAIL if x=y
 BTW Comparison:
 BOTH SAEM x AN SMALLR OF x AN y
 DIFFRINT BIGGR OF x AN y AN x
-DIFFRINT x AN y 
+DIFFRINT 75 AN BIGGR OF 75 AN 643
 
 OBTW
      ==========================================================================
