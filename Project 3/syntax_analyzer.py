@@ -1700,7 +1700,10 @@ def maekSyntax(lineNumber):
             return "[Line " + str(lineNumber) + "] SyntaxError: Expected literal at: End of line"
     elif(types[lineNumber][maekIndex + 2] not in literals):
             return "[Line " + str(lineNumber) + "] SyntaxError: Expected literal at: End of line"
-    
+    if(lexemes[lineNumber][len(lexemes[lineNumber])-1] == "BTW"):
+        syntaxError = singleCommentSyntax(lineNumber)
+        if(syntaxError != "OK"):
+            return syntaxError
 
     return "OK"
 
