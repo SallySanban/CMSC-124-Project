@@ -53,6 +53,9 @@ EITHER OF FAIL AN WIN        BTW or: FAIL if x=FAIL, y=FAIL
 WON OF WIN AN FAIL           BTW xor: FAIL if x=y
 
 BTW Comparison:
+BOTH SAEM x AN SMALLR OF x AN y
+DIFFRINT BIGGR OF x AN y AN x
+DIFFRINT x AN y 
 
 OBTW
      ==========================================================================
