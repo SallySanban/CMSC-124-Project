@@ -1507,7 +1507,6 @@ def anyOfSyntax(lineNumber):
 def bothSaemSyntax(lineNumber):
     bothSaemIndex = lexemes[lineNumber].index("BOTH SAEM")
 
-
     # Based on the documentation, "Comparisons are done using integer math if the operands are NUMBRs, and floating point math if the operands are NUMBARs"
 
     if (types[lineNumber][bothSaemIndex + 1] not in ["identifier", "NUMBR literal", "NUMBAR literal", "min operator", "max operator"]):

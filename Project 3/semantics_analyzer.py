@@ -747,7 +747,7 @@ def comparisonExpressionSemantics(lineNumber, variable):
     else:
         expressionIndex = -1    
     
-    print(lexemes[lineNumber][expressionIndex])
+    # print(lexemes[lineNumber][expressionIndex])
     anIndices = []
     for index in range(len(lexemes[lineNumber])):
         if lexemes[lineNumber][index] == "AN":
@@ -1226,6 +1226,73 @@ def comparisonExpressionSemantics(lineNumber, variable):
 
     return "OK"
 
+def concatenationExpressionSemantics(lineNumber, variable):
+    # * AUTOMATICALLY TYPECAST INTO YARN EVERY DATA TYPE
+    # ! NO OPERATIONS AS OPERANDS YET
+
+    # * Gets the index of ITZ
+    if("variable initialization keyword" in types[lineNumber]):
+        expressionIndex = lexemes[lineNumber].index("ITZ")
+    #put other cases where the arithmetic expression might be
+    elif("print keyword" in types[lineNumber]):
+        expressionIndex = lexemes[lineNumber].index("VISIBLE")
+    else:
+        expressionIndex = -1    
+    
+    print(lexemes[lineNumber][expressionIndex])
+    anIndices = []
+    for index in range(len(lexemes[lineNumber])):
+        if lexemes[lineNumber][index] == "AN":
+            anIndices.append(index)
+    
+    counter = 0
+    tempVal = ''
+    while True:
+        if (counter == len(anIndices) - 1):
+            if (types[lineNumber][anIndices[counter] - 1] == "identifier"):
+                if (newSymbolTable.get(lexemes[lineNumber][anIndices[counter] - 1])):
+                    tempVal += str(newSymbolTable[lexemes[lineNumber][anIndices[counter] - 1]][0])
+                else:
+                    return "[Line " + str(lineNumber) + "] SemanticsError: Uninitialized identifier"
+            else:
+                tempVal += str(lexemes[lineNumber][anIndices[counter] - 1])
+            
+            if (types[lineNumber][anIndices[counter] + 1] == "identifier"):
+                if (newSymbolTable.get(lexemes[lineNumber][anIndices[counter] + 1])):
+                    tempVal += str(newSymbolTable[lexemes[lineNumber][anIndices[counter] + 1]][0])
+                else:
+                    return "[Line " + str(lineNumber) + "] SemanticsError: Uninitialized identifier"
+            else:
+                tempVal += str(lexemes[lineNumber][anIndices[counter] + 1])
+
+            break
+        
+        if (types[lineNumber][anIndices[counter] - 1] == "identifier"):
+            if (newSymbolTable.get(lexemes[lineNumber][anIndices[counter] - 1])):
+                tempVal += str(newSymbolTable[lexemes[lineNumber][anIndices[counter] - 1]][0])
+            else:
+                return "[Line " + str(lineNumber) + "] SemanticsError: Uninitialized identifier"
+        else:
+            tempVal += str(lexemes[lineNumber][anIndices[counter] - 1])
+
+
+        counter += 1
+    
+    # * STORES THE FINAL VALUE OF TEMP HERE
+    if(variable != "IT"):
+        variable = lexemes[lineNumber][1]
+    
+    tempVal = [tempVal, "YARN literal"]
+
+    updateSymbolTable(lineNumber, [tempVal[0], tempVal[1]], variable)
+
+    return "OK"
+        
+
+    
+
+
+
 def iHasASemantics(lineNumber):
     if("variable initialization keyword" in types[lineNumber]): #variable has value
         itzLexeme = lexemes[lineNumber].index("ITZ")
@@ -1288,8 +1355,8 @@ def visibleSemantics(lineNumber):
         #     semanticError = expressionSemantics(lineNumber, "IT")
         if (lexemes[lineNumber][visibleLexeme + 1] in expressionKeywords["comparison"]):
             semanticError = comparisonExpressionSemantics(lineNumber, "IT")
-        # if (lexemes[lineNumber][visibleLexeme + 1] in expressionKeywords["concatenation"]):
-        #     semanticError = expressionSemantics(lineNumber, "IT")
+        if (lexemes[lineNumber][visibleLexeme + 1] in expressionKeywords["concatenation"]):
+            semanticError = concatenationExpressionSemantics(lineNumber, "IT")
 
         if(semanticError != "OK"):
             return semanticError
