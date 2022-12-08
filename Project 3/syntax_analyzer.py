@@ -161,6 +161,7 @@ def sumOfSyntax(lineNumber):
             else:
                 # print(lexemes[lineNumber][k])                 # CHECKER
                 return "[Line " + str(lineNumber) + "] SyntaxError: cannot have statements after arithmetic operation"
+    return "OK"
 
 def diffOfSyntax(lineNumber):
     diffOfIndex = lexemes[lineNumber].index("DIFF OF")
@@ -1788,6 +1789,96 @@ def iHasASyntax(lineNumber):
 
     return "OK"
 
+def maekSyntax(lineNumber):
+    maekIndex = lexemes[lineNumber].index("MAEK")
+
+    if(types[lineNumber][maekIndex+1] != "identifier"):
+        return "[Line " + str(lineNumber) + "] SyntaxError: required identifier after MAEK keyword"
+    if(lexemes[lineNumber][maekIndex+2] == "A"):
+        if(types[lineNumber][maekIndex + 3] not in literals):
+            return "[Line " + str(lineNumber) + "] SyntaxError: Expected literal at: End of line"
+    elif(types[lineNumber][maekIndex + 2] not in literals):
+            return "[Line " + str(lineNumber) + "] SyntaxError: Expected literal at: End of line"
+    if(lexemes[lineNumber][len(lexemes[lineNumber])-1] == "BTW"):
+        syntaxError = singleCommentSyntax(lineNumber)
+        if(syntaxError != "OK"):
+            return syntaxError
+
+    return "OK"
+
+def rSyntax(lineNumber):
+    rLexeme = lexemes[lineNumber].index("R")
+    if(len(lexemes[lineNumber]) <= 2):
+        return "[Line " + str(lineNumber) + "] SyntaxError: required identifier, literal, or expression "
+
+    if(len(lexemes[lineNumber]) >= 3):
+        if(types[lineNumber][rLexeme-1] != "identifier"):
+            if(types[lineNumber][rLexeme+1] not in literals):
+                if(lexemes[lineNumber][rLexeme + 1] not in ["SUM OF", "DIFF OF", "PRODUKT OF", "QUOSHUNT OF", "MOD OF", "SMALLR OF", "BIGGR OF"]):
+                    return "[Line " + str(lineNumber) + "] SyntaxError: required identifier, literal, or expression"
+    
+    if(lexemes[lineNumber][rLexeme + 2] == "BTW"):
+        syntaxError = singleCommentSyntax(lineNumber)
+
+        if(syntaxError != "OK"):
+            return syntaxError
+
+    return "OK"
+
+def yaRlySyntax(lineNumber):
+    yaRlyDelimiter = lexemes[lineNumber].index("YA RLY")
+    
+    if(lexemes[yaRlyDelimiter+1] == "BTW"):
+        syntaxError = singleCommentSyntax(lineNumber)
+
+        if(syntaxError != "OK"):
+            return syntaxError
+
+    return "OK"
+
+def oicSyntax(lineNumber):
+    oicDelimiter = lexemes[lineNumber].index("OIC")
+    
+    if(oicDelimiter != len(lexemes[lineNumber])-1):
+        return "[Line " + str(lineNumber) + "] SyntaxError: OIC cannot be together with other statements"
+
+    return "OK"
+
+    if(lineNumber == None):
+        return "[Line " + str(lineNumber) + "] SyntaxError: missing OIC"
+
+    return nextLineNumber(lineNumber)
+
+def orlySyntax(lineNumber):
+    global orlyFound
+    start = 1
+
+    if(lexemes[lineNumber][0] == "O RLY?"):
+        orlyLexeme = lexemes[lineNumber][0]
+        if(lexemes[lineNumber-1][0] in ["SUM OF", "DIFF OF", "PRODUKT OF", "QUOSHUNT OF", "MOD OF", "BIGGR OF", "SMALLR OF"] ):
+            if(len(lexemes[lineNumber]) > 1 and lexemes[lineNumber][len(lexemes[lineNumber])-1] == "OIC"):
+                return "[Line " + str(lineNumber) + "] SyntaxError: O RLY? and OIC must have their own lines"
+        else:
+            return "[Line " + str(lineNumber) + "] SyntaxError: Need expression in [Line " + str(lineNumber-1) + "] before O RLY?"
+    
+        lineNumber = nextLineNumber(lineNumber)
+        while(orlyFound == True):
+
+            if(lexemes[lineNumber][0] != "YA RLY"):
+                print(lexemes[lineNumber][0])
+                return "[Line " + str(lineNumber+1) + "] Expected YA RLY Keyword"
+            
+            syntaxError = yaRlySyntax(lineNumber)
+            if(syntaxError != "OK"):
+                return syntaxError
+                
+            orlyFound = False
+            break
+
+      
+    return "OK"
+
+
 def haiSyntax(lineNumber):
     if(len(lexemes[lineNumber]) != 1):
         if(lexemes[lineNumber][1] == "BTW"):
@@ -2032,6 +2123,175 @@ while(True):
         # ! END OF RIO DUCUSIN'S PART
 
 
+        # START OF ZYRIL TAMARGO'S PART
+        elif("MAEK" in lexemes[lineNumber]):
+            syntaxError = maekSyntax(lineNumber)
+            if(syntaxError != "OK"):
+                print(syntaxError)
+                break
+            lineNumber = nextLineNumber(lineNumber)
+            continue
+
+        elif("R" in lexemes[lineNumber]):
+            syntaxError = rSyntax(lineNumber)
+            if(syntaxError != "OK"):
+                print(syntaxError)
+                break
+            lineNumber = nextLineNumber(lineNumber)
+            continue
+
+        elif(lexemes[lineNumber][0] == "O RLY?"):
+            orlyFound = True
+            syntaxError = orlySyntax(lineNumber)
+
+            if(isinstance(syntaxError, int)):
+                lineNumber = syntaxError
+                continue
+            else:
+                print(syntaxError)
+                break
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "YA RLY"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "MEBBE"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "NO WAI"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "WTF?"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "OMG"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "OMGWTF"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "OIC"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "IM IN YR"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+        # elif(lexemes[lineNumber][lexemeIndex] == "IM OUTTA YR"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "UPPIN"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+        # elif(lexemes[lineNumber][lexemeIndex] == "NERFIN"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "GTFO"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+        # elif(lexemes[lineNumber][lexemeIndex] == "TIL"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "WILE"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+        # END OF ZYRIL TAMARGO'S PART
+
         elif(lexemes[lineNumber][lexemeIndex] == "KTHXBYE"):
             codeEnded = True
             syntaxError = kthxbyeSyntax(lineNumber)
@@ -2047,7 +2307,7 @@ while(True):
             else:
                 break
 
-     
+        
                 
                 
 

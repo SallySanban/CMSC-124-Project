@@ -68,6 +68,11 @@ BTW Case statement:
 I HAS A COLOR
         BTW Since there is no `GTFO` the next statements will also be tested
 
+O RLY?
+     YA RLY
+          VISIBLE "Enter birth year: "
+          GIMMEH input
+          VISIBLE DIFF OF 2022 AN input
 
 BTW For loop:
 I HAS A TEMPERATURE
