@@ -2122,7 +2122,7 @@ while(True):
         # ! END OF RIO DUCUSIN'S PART
 
 
-        # START OF ZYRIL TAMARGO'S PART
+        # ! START OF ZYRIL TAMARGO'S PART
         elif("MAEK" in lexemes[lineNumber]):
             syntaxError = maekSyntax(lineNumber)
             if(syntaxError != "OK"):
@@ -2289,7 +2289,7 @@ while(True):
 
         #     lineNumber = nextLineNumber(lineNumber)
         #     continue
-        # END OF ZYRIL TAMARGO'S PART
+        # ! END OF ZYRIL TAMARGO'S PART
 
         elif(lexemes[lineNumber][lexemeIndex] == "KTHXBYE"):
             codeEnded = True
