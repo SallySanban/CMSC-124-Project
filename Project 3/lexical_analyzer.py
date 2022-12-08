@@ -1614,17 +1614,17 @@ def findLexemes(lines, lexemes, types):
 
             continue
 
-def printSymbolTable():
-    space1 = 40
-    space2 = 40
+# def printSymbolTable():
+#     space1 = 40
+#     space2 = 40
 
-    for i in lexemes.keys():
-        print("Line " + str(i))
-        for j in range(0, len(lexemes[i])):
-            print("Lexeme: " + lexemes[i][j], end=(" " * (space1 - len(lexemes[i][j]))))
-            print("Type: " + types[i][j], end=(" " * (space2 - len(types[i][j]))))
-            print("")
-        print("")
+#     for i in lexemes.keys():
+#         print("Line " + str(i))
+#         for j in range(0, len(lexemes[i])):
+#             print("Lexeme: " + lexemes[i][j], end=(" " * (space1 - len(lexemes[i][j]))))
+#             print("Type: " + types[i][j], end=(" " * (space2 - len(types[i][j]))))
+#             print("")
+#         print("")
 
 # def getLexemes():
 #     return lexemes

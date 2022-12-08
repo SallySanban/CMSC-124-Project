@@ -113,18 +113,18 @@ def run():
         lines = lexical_analyzer.readFile(listOfLines)
         lexical_analyzer.findLexemes(lines, lexemes, types)
 
-        syntaxError = syntax_analyzer.syntax(lexemes, types)
+        #syntaxError = syntax_analyzer.syntax(lexemes, types)
 
-        if("SyntaxError" in syntaxError):
-            messagebox.showinfo('Syntax Error', syntaxError)
+        # if("SyntaxError" in syntaxError):
+        #     messagebox.showinfo('Syntax Error', syntaxError)
+        # else:
+        semanticError = semantics()
+
+        if("SemanticError" in semanticError):
+            messagebox.showinfo('Semantic Error', semanticError)
         else:
-            semanticError = semantics()
-
-            if("SemanticError" in syntaxError):
-                messagebox.showinfo('Semantic Error', semanticError)
-            else:
-                makeTokens()
-                makeSymbolTable(semanticError)
+            makeTokens()
+            makeSymbolTable(semanticError)
     else:
         textEditor.insert(END, "Please open a file or type some code")
 
