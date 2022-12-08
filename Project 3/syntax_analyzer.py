@@ -161,6 +161,7 @@ def sumOfSyntax(lineNumber):
             else:
                 # print(lexemes[lineNumber][k])                 # CHECKER
                 return "[Line " + str(lineNumber) + "] SyntaxError: cannot have statements after arithmetic operation"
+    return "OK"
 
 def diffOfSyntax(lineNumber):
     diffOfIndex = lexemes[lineNumber].index("DIFF OF")
@@ -302,75 +303,8 @@ def modOfSyntax(lineNumber):
                 # print(lexemes[lineNumber][k])                 # CHECKER
                 return "[Line " + str(lineNumber) + "] SyntaxError: cannot have statements after arithmetic operation"
 
-def biggrOfSyntax(lineNumber):
-    biggrOfIndex = lexemes[lineNumber].index("BIGGR OF")
-
-    counter = 0
-    for keyword in range(biggrOfIndex, len(lexemes[lineNumber])):                 # Checks the n operation keywords
-        if (lexemes[lineNumber][keyword] in ["SUM OF", "DIFF OF", "PRODUKT OF", "QUOSHUNT OF", "MOD OF", "BIGGR OF", "SMALLR OF"]):
-            counter += 1
-        else:
-            break
-    
-    isNumber = False
-    numberCnt = 0
-    for k in range(biggrOfIndex + counter, len(lexemes[lineNumber])):
-        if (numberCnt < counter + 1):
-            isNumber = not isNumber
-            if isNumber:
-                if (types[lineNumber][k] in ["NUMBR literal", "NUMBAR literal"]):
-                    numberCnt += 1
-                else:
-                    return "[Line " + str(lineNumber) + "] SyntaxError: Expected a numbr or numbar literal"
-            else:
-                if (lexemes[lineNumber][k] != "AN"):
-                    return "[Line " + str(lineNumber) + "] SyntaxError: Expected an argument separator keyword"
-                elif (lexemes[lineNumber][k] == "AN"):
-                    continue
-                else:
-                    print(lexemes[lineNumber][k])
-                    return "[Line " + str(lineNumber) + "] SyntaxError: Expected a numbr or numbar literal after arithmetic operator"
-        else:
-            if(lexemes[lineNumber][k] == "BTW"):
-                return singleCommentSyntax(lineNumber)
-            else:
-                # print(lexemes[lineNumber][k])                 # CHECKER
-                return "[Line " + str(lineNumber) + "] SyntaxError: cannot have statements after arithmetic operation"
-
-def smallrOfSyntax(lineNumber):
-    smallrOfIndex = lexemes[lineNumber].index("SMALLR OF")
-
-    counter = 0
-    for keyword in range(smallrOfIndex, len(lexemes[lineNumber])):                 # Checks the n operation keywords
-        if (lexemes[lineNumber][keyword] in ["SUM OF", "DIFF OF", "PRODUKT OF", "QUOSHUNT OF", "MOD OF", "BIGGR OF", "SMALLR OF"]):
-            counter += 1
-        else:
-            break
-
-    isNumber = False
-    numberCnt = 0
-    for k in range(smallrOfIndex + counter, len(lexemes[lineNumber])):
-        if (numberCnt < counter + 1):
-            isNumber = not isNumber
-            if isNumber:
-                if (types[lineNumber][k] in ["NUMBR literal", "NUMBAR literal"]):
-                    numberCnt += 1
-                else:
-                    return "[Line " + str(lineNumber) + "] SyntaxError: Expected a numbr or numbar literal"
-            else:
-                if (lexemes[lineNumber][k] != "AN"):
-                    return "[Line " + str(lineNumber) + "] SyntaxError: Expected an argument separator keyword"
-                elif (lexemes[lineNumber][k] == "AN"):
-                    continue
-                else:
-                    print(lexemes[lineNumber][k])
-                    return "[Line " + str(lineNumber) + "] SyntaxError: Expected a numbr or numbar literal after arithmetic operator"
-        else:
-            if(lexemes[lineNumber][k] == "BTW"):
-                return singleCommentSyntax(lineNumber)
-            else:
-                # print(lexemes[lineNumber][k])                 # CHECKER
-                return "[Line " + str(lineNumber) + "] SyntaxError: cannot have statements after arithmetic operation"
+# BIGGR OF (removed by Rio)
+# SMALLR OF (removed by Rio)
 
 def smooshSyntax(lineNumber):
     print("")
@@ -479,7 +413,7 @@ def bothOfSyntax(lineNumber):
 
     global startBoolOperator
     global sameBoolOperator
-
+    
     try: 
         if (startBoolOperator == ""):
             startBoolOperator = "BOTH OF"
@@ -1570,6 +1504,161 @@ def anyOfSyntax(lineNumber):
     except IndexError:
         return "[Line " + str(lineNumber) + "] SyntaxError: invalid syntax"
 
+def bothSaemSyntax(lineNumber):
+    bothSaemIndex = lexemes[lineNumber].index("BOTH SAEM")
+
+    # Based on the documentation, "Comparisons are done using integer math if the operands are NUMBRs, and floating point math if the operands are NUMBARs"
+
+    if (types[lineNumber][bothSaemIndex + 1] not in ["identifier", "NUMBR literal", "NUMBAR literal", "min operator", "max operator"]):
+        return "[Line " + str(lineNumber) + "] SyntaxError: Expected an identifier, literal, or operator"
+    else:
+        if (types[lineNumber][bothSaemIndex + 1] in ["identifier", "NUMBR literal", "NUMBAR literal"]):
+            if types[lineNumber][bothSaemIndex + 2] == "argument separator keyword":
+                if types[lineNumber][bothSaemIndex + 3] in ["identifier", "NUMBR literal", "NUMBAR literal", "min operator", "max operator"]:
+                    if types[lineNumber][bothSaemIndex + 3] in ["identifier", "NUMBR literal", "NUMBAR literal"]:
+                        try:
+                            if lexemes[lineNumber][bothSaemIndex + 4] == "BTW":
+                                syntaxError = singleCommentSyntax(lineNumber)
+
+                                if syntaxError != "OK":
+                                    return syntaxError
+                                
+                                return "OK"
+                            else:
+                                return "[Line " + str(lineNumber) + "] SyntaxError: Cannot have statements after operation"
+                        except IndexError:
+                            return "OK"
+                    else:
+                        if types[lineNumber][bothSaemIndex + 4] in ["identifier", "NUMBR literal", "NUMBAR literal"]:
+                            if types[lineNumber][bothSaemIndex + 5] == "argument separator keyword":
+                                if types[lineNumber][bothSaemIndex + 6] in ["identifier", "NUMBR literal", "NUMBAR literal"]:
+                                    try:
+                                        if lexemes[lineNumber][bothSaemIndex + 7] == "BTW":
+                                            syntaxError = singleCommentSyntax(lineNumber)
+
+                                            if syntaxError != "OK":
+                                                return syntaxError
+                                            
+                                            return "OK"
+                                        else:
+                                            return "[Line " + str(lineNumber) + "] SyntaxError: Cannot have statements after operation"
+                                    except IndexError:
+                                        return "OK"
+                                else:
+                                    return "[Line " + str(lineNumber) + "] SyntaxError: Expected an identifier or literal"
+                            else:
+                                return "[Line " + str(lineNumber) + "] SyntaxError: Expected an argument separator keyword"
+                        else:
+                            return "[Line " + str(lineNumber) + "] SyntaxError: Expected an identifier or literal"
+                else:
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Expected a literal or comparison operator"
+            else:
+                return "[Line " + str(lineNumber) + "] SyntaxError: Expected an argument separator keyword"
+        else: #lexemes[lineNumber][bothSaemIndex + 1] in ["BIGGR OF", "SMALLR OF"]
+            if types[lineNumber][bothSaemIndex + 2] in ["identifier", "NUMBR literal", "NUMBAR literal"]:
+                if types[lineNumber][bothSaemIndex + 3] == "argument separator keyword":
+                    if types[lineNumber][bothSaemIndex + 4] in ["identifier", "NUMBR literal", "NUMBAR literal"]:
+                        if types[lineNumber][bothSaemIndex + 5] == "argument separator keyword":
+                            if types[lineNumber][bothSaemIndex + 6] in ["identifier", "NUMBR literal", "NUMBAR literal"]:
+                                try:
+                                    if lexemes[lineNumber][bothSaemIndex + 7] == "BTW":
+                                        syntaxError = singleCommentSyntax
+
+                                        if syntaxError != "OK":
+                                            return syntaxError
+                                        
+                                        return "OK"
+                                    else:
+                                        return "[Line " + str(lineNumber) + "] SyntaxError: Cannot have statements after operation"
+                                except IndexError:
+                                    return "OK"
+                        else:
+                            return "[Line " + str(lineNumber) + "] SyntaxError: Expected an argument separator keyword"
+                    else:
+                        return "[Line " + str(lineNumber) + "] SyntaxError: Expected an identifier or literal"
+                else:
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Expected an argument separator keyword"
+            else:
+                return "[Line " + str(lineNumber) + "] SyntaxError: Expected an identifier or literal"
+
+def diffrintSyntax(lineNumber):
+    diffrintIndex = lexemes[lineNumber].index("DIFFRINT")
+
+
+    # Based on the documentation, "Comparisons are done using integer math if the operands are NUMBRs, and floating point math if the operands are NUMBARs"
+
+    if (types[lineNumber][diffrintIndex + 1] not in ["identifier", "NUMBR literal", "NUMBAR literal", "min operator", "max operator"]):
+        return "[Line " + str(lineNumber) + "] SyntaxError: Expected an identifier, literal, or operator"
+    else:
+        if (types[lineNumber][diffrintIndex + 1] in ["identifier", "NUMBR literal", "NUMBAR literal"]):
+            if types[lineNumber][diffrintIndex + 2] == "argument separator keyword":
+                if types[lineNumber][diffrintIndex + 3] in ["identifier", "NUMBR literal", "NUMBAR literal", "min operator", "max operator"]:
+                    if types[lineNumber][diffrintIndex + 3] in ["identifier", "NUMBR literal", "NUMBAR literal"]:
+                        try:
+                            if lexemes[lineNumber][diffrintIndex + 4] == "BTW":
+                                syntaxError = singleCommentSyntax(lineNumber)
+
+                                if syntaxError != "OK":
+                                    return syntaxError
+                                
+                                return "OK"
+                            else:
+                                return "[Line " + str(lineNumber) + "] SyntaxError: Cannot have statements after operation"
+                        except IndexError:
+                            return "OK"
+                    else:
+                        if types[lineNumber][diffrintIndex + 4] in ["identifier", "NUMBR literal", "NUMBAR literal"]:
+                            if types[lineNumber][diffrintIndex + 5] == "argument separator keyword":
+                                if types[lineNumber][diffrintIndex + 6] in ["identifier", "NUMBR literal", "NUMBAR literal"]:
+                                    try:
+                                        if lexemes[lineNumber][diffrintIndex + 7] == "BTW":
+                                            syntaxError = singleCommentSyntax(lineNumber)
+
+                                            if syntaxError != "OK":
+                                                return syntaxError
+                                            
+                                            return "OK"
+                                        else:
+                                            return "[Line " + str(lineNumber) + "] SyntaxError: Cannot have statements after operation"
+                                    except IndexError:
+                                        return "OK"
+                                else:
+                                    return "[Line " + str(lineNumber) + "] SyntaxError: Expected an identifier or literal"
+                            else:
+                                return "[Line " + str(lineNumber) + "] SyntaxError: Expected an argument separator keyword"
+                        else:
+                            return "[Line " + str(lineNumber) + "] SyntaxError: Expected an identifier or literal"
+                else:
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Expected a literal or comparison operator"
+            else:
+                return "[Line " + str(lineNumber) + "] SyntaxError: Expected an argument separator keyword"
+        else: #lexemes[lineNumber][bothSaemIndex + 1] in ["BIGGR OF", "SMALLR OF"]
+            if types[lineNumber][diffrintIndex + 2] in ["identifier", "NUMBR literal", "NUMBAR literal"]:
+                if types[lineNumber][diffrintIndex + 3] == "argument separator keyword":
+                    if types[lineNumber][diffrintIndex + 4] in ["identifier", "NUMBR literal", "NUMBAR literal"]:
+                        if types[lineNumber][diffrintIndex + 5] == "argument separator keyword":
+                            if types[lineNumber][diffrintIndex + 6] in ["identifier", "NUMBR literal", "NUMBAR literal"]:
+                                try:
+                                    if lexemes[lineNumber][diffrintIndex + 7] == "BTW":
+                                        syntaxError = singleCommentSyntax
+
+                                        if syntaxError != "OK":
+                                            return syntaxError
+                                        
+                                        return "OK"
+                                    else:
+                                        return "[Line " + str(lineNumber) + "] SyntaxError: Cannot have statements after operation"
+                                except IndexError:
+                                    return "OK"
+                        else:
+                            return "[Line " + str(lineNumber) + "] SyntaxError: Expected an argument separator keyword"
+                    else:
+                        return "[Line " + str(lineNumber) + "] SyntaxError: Expected an identifier or literal"
+                else:
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Expected an argument separator keyword"
+            else:
+                return "[Line " + str(lineNumber) + "] SyntaxError: Expected an identifier or literal"
+
 def itzSyntax(lineNumber):
     itzLexeme = lexemes[lineNumber].index("ITZ")
 
@@ -1624,16 +1713,16 @@ def itzSyntax(lineNumber):
 
         if(syntaxError != "OK"):
             return syntaxError
-    elif(lexemes[lineNumber][itzLexeme + 1] == "BIGGR OF"):
-        syntaxError = biggrOfSyntax(lineNumber)
+    # elif(lexemes[lineNumber][itzLexeme + 1] == "BIGGR OF"):
+    #     syntaxError = biggrOfSyntax(lineNumber)
 
-        if(syntaxError != "OK"):
-            return syntaxError
-    elif(lexemes[lineNumber][itzLexeme + 1] == "SMALLR OF"):
-        syntaxError = smallrOfSyntax(lineNumber)
+    #     if(syntaxError != "OK"):
+    #         return syntaxError
+    # elif(lexemes[lineNumber][itzLexeme + 1] == "SMALLR OF"):
+    #     syntaxError = smallrOfSyntax(lineNumber)
 
-        if(syntaxError != "OK"):
-            return syntaxError
+    #     if(syntaxError != "OK"):
+    #         return syntaxError
     elif(lexemes[lineNumber][itzLexeme + 1] == "SMOOSH"):
         syntaxError = smooshSyntax(lineNumber)
 
@@ -1669,6 +1758,16 @@ def itzSyntax(lineNumber):
 
         if(syntaxError != "OK"):
             return syntaxError
+    elif(lexemes[lineNumber][itzLexeme + 1] == "BOTH SAEM"):
+        syntaxError = allOfSyntax(lineNumber)
+
+        if(syntaxError != "OK"):
+            return syntaxError
+    elif(lexemes[lineNumber][itzLexeme + 1] == "DIFFRINT"):
+        syntaxError = anyOfSyntax(lineNumber)
+
+        if(syntaxError != "OK"):
+            return syntaxError
     
     return "OK"
 
@@ -1688,6 +1787,96 @@ def iHasASyntax(lineNumber):
                     return syntaxError
 
     return "OK"
+
+def maekSyntax(lineNumber):
+    maekIndex = lexemes[lineNumber].index("MAEK")
+
+    if(types[lineNumber][maekIndex+1] != "identifier"):
+        return "[Line " + str(lineNumber) + "] SyntaxError: required identifier after MAEK keyword"
+    if(lexemes[lineNumber][maekIndex+2] == "A"):
+        if(types[lineNumber][maekIndex + 3] not in literals):
+            return "[Line " + str(lineNumber) + "] SyntaxError: Expected literal at: End of line"
+    elif(types[lineNumber][maekIndex + 2] not in literals):
+            return "[Line " + str(lineNumber) + "] SyntaxError: Expected literal at: End of line"
+    if(lexemes[lineNumber][len(lexemes[lineNumber])-1] == "BTW"):
+        syntaxError = singleCommentSyntax(lineNumber)
+        if(syntaxError != "OK"):
+            return syntaxError
+
+    return "OK"
+
+def rSyntax(lineNumber):
+    rLexeme = lexemes[lineNumber].index("R")
+    if(len(lexemes[lineNumber]) <= 2):
+        return "[Line " + str(lineNumber) + "] SyntaxError: required identifier, literal, or expression "
+
+    if(len(lexemes[lineNumber]) >= 3):
+        if(types[lineNumber][rLexeme-1] != "identifier"):
+            if(types[lineNumber][rLexeme+1] not in literals):
+                if(lexemes[lineNumber][rLexeme + 1] not in ["SUM OF", "DIFF OF", "PRODUKT OF", "QUOSHUNT OF", "MOD OF", "SMALLR OF", "BIGGR OF"]):
+                    return "[Line " + str(lineNumber) + "] SyntaxError: required identifier, literal, or expression"
+    
+    if(lexemes[lineNumber][rLexeme + 2] == "BTW"):
+        syntaxError = singleCommentSyntax(lineNumber)
+
+        if(syntaxError != "OK"):
+            return syntaxError
+
+    return "OK"
+
+def yaRlySyntax(lineNumber):
+    yaRlyDelimiter = lexemes[lineNumber].index("YA RLY")
+    
+    if(lexemes[yaRlyDelimiter+1] == "BTW"):
+        syntaxError = singleCommentSyntax(lineNumber)
+
+        if(syntaxError != "OK"):
+            return syntaxError
+
+    return "OK"
+
+def oicSyntax(lineNumber):
+    oicDelimiter = lexemes[lineNumber].index("OIC")
+    
+    if(oicDelimiter != len(lexemes[lineNumber])-1):
+        return "[Line " + str(lineNumber) + "] SyntaxError: OIC cannot be together with other statements"
+
+    return "OK"
+
+    if(lineNumber == None):
+        return "[Line " + str(lineNumber) + "] SyntaxError: missing OIC"
+
+    return nextLineNumber(lineNumber)
+
+def orlySyntax(lineNumber):
+    global orlyFound
+    start = 1
+
+    if(lexemes[lineNumber][0] == "O RLY?"):
+        orlyLexeme = lexemes[lineNumber][0]
+        if(lexemes[lineNumber-1][0] in ["SUM OF", "DIFF OF", "PRODUKT OF", "QUOSHUNT OF", "MOD OF", "BIGGR OF", "SMALLR OF"] ):
+            if(len(lexemes[lineNumber]) > 1 and lexemes[lineNumber][len(lexemes[lineNumber])-1] == "OIC"):
+                return "[Line " + str(lineNumber) + "] SyntaxError: O RLY? and OIC must have their own lines"
+        else:
+            return "[Line " + str(lineNumber) + "] SyntaxError: Need expression in [Line " + str(lineNumber-1) + "] before O RLY?"
+    
+        lineNumber = nextLineNumber(lineNumber)
+        while(orlyFound == True):
+
+            if(lexemes[lineNumber][0] != "YA RLY"):
+                print(lexemes[lineNumber][0])
+                return "[Line " + str(lineNumber+1) + "] Expected YA RLY Keyword"
+            
+            syntaxError = yaRlySyntax(lineNumber)
+            if(syntaxError != "OK"):
+                return syntaxError
+                
+            orlyFound = False
+            break
+
+      
+    return "OK"
+
 
 def haiSyntax(lineNumber):
     if(len(lexemes[lineNumber]) != 1):
@@ -1718,7 +1907,7 @@ sameBoolOperator = 0
 
 while(True):
     #toPrint = lexemes[lineNumber][lexemeIndex]
-    #print("NOW CHECKING: " + lexemes[lineNumber][lexemeIndex] + " in line " + str(lineNumber))
+    print("NOW CHECKING: " + lexemes[lineNumber][lexemeIndex] + " in line " + str(lineNumber))
     if(codeStarted == False):
         if(lexemes[lineNumber][lexemeIndex] != "HAI"):
             if(lexemes[lineNumber][lexemeIndex] == "BTW"):
@@ -1813,15 +2002,6 @@ while(True):
             continue
         
         # ! START OF RIO DUCUSIN'S PART
-        # elif(lexemes[lineNumber][lexemeIndex] in ["SUM OF", "DIFF OF", "PRODUKT OF", "QUOSHUNT OF", "MOD OF", "BIGGR OF", "SMALLR OF"]):
-        #     syntaxError = mathOperationSyntax(lineNumber)
-
-        #     if(syntaxError != "OK"):
-        #         print(syntaxError)
-        #         break
-
-        #     lineNumber = nextLineNumber(lineNumber)
-        #     continue
         elif(lexemes[lineNumber][lexemeIndex] == "SUM OF"):
             syntaxError = sumOfSyntax(lineNumber)
 
@@ -1860,24 +2040,6 @@ while(True):
             continue
         elif(lexemes[lineNumber][lexemeIndex] == "MOD OF"):
             syntaxError = modOfSyntax(lineNumber)
-
-            if(syntaxError != "OK"):
-                print(syntaxError)
-                break
-
-            lineNumber = nextLineNumber(lineNumber)
-            continue
-        elif(lexemes[lineNumber][lexemeIndex] == "BIGGR OF"):
-            syntaxError = biggrOfSyntax(lineNumber)
-
-            if(syntaxError != "OK"):
-                print(syntaxError)
-                break
-
-            lineNumber = nextLineNumber(lineNumber)
-            continue
-        elif(lexemes[lineNumber][lexemeIndex] == "SMALLR OF"):
-            syntaxError = smallrOfSyntax(lineNumber)
 
             if(syntaxError != "OK"):
                 print(syntaxError)
@@ -1939,10 +2101,57 @@ while(True):
 
             lineNumber = nextLineNumber(lineNumber)
             continue
+        elif(lexemes[lineNumber][lexemeIndex] == "BOTH SAEM"):
+            syntaxError = bothSaemSyntax(lineNumber)
 
+            if(syntaxError != "OK"):
+                print(syntaxError)
+                break
+
+            lineNumber = nextLineNumber(lineNumber)
+            continue
+        elif(lexemes[lineNumber][lexemeIndex] == "DIFFRINT"):
+            syntaxError = diffrintSyntax(lineNumber)
+
+            if(syntaxError != "OK"):
+                print(syntaxError)
+                break
+
+            lineNumber = nextLineNumber(lineNumber)
+            continue
         # ! END OF RIO DUCUSIN'S PART
-        # elif(lexemes[lineNumber][lexemeIndex] == "BOTH SAEM"):
-        #     syntaxError = bothSaemSyntax(lineNumber)
+
+
+        # START OF ZYRIL TAMARGO'S PART
+        elif("MAEK" in lexemes[lineNumber]):
+            syntaxError = maekSyntax(lineNumber)
+            if(syntaxError != "OK"):
+                print(syntaxError)
+                break
+            lineNumber = nextLineNumber(lineNumber)
+            continue
+
+        elif("R" in lexemes[lineNumber]):
+            syntaxError = rSyntax(lineNumber)
+            if(syntaxError != "OK"):
+                print(syntaxError)
+                break
+            lineNumber = nextLineNumber(lineNumber)
+            continue
+
+        elif(lexemes[lineNumber][0] == "O RLY?"):
+            orlyFound = True
+            syntaxError = orlySyntax(lineNumber)
+
+            if(isinstance(syntaxError, int)):
+                lineNumber = syntaxError
+                continue
+            else:
+                print(syntaxError)
+                break
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "YA RLY"):
+        #     syntaxError = sumOfSyntax(lineNumber)
 
         #     if(syntaxError != "OK"):
         #         print(syntaxError)
@@ -1951,6 +2160,136 @@ while(True):
         #     lineNumber = nextLineNumber(lineNumber)
         #     continue
 
+        # elif(lexemes[lineNumber][lexemeIndex] == "MEBBE"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "NO WAI"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "WTF?"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "OMG"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "OMGWTF"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "OIC"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "IM IN YR"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+        # elif(lexemes[lineNumber][lexemeIndex] == "IM OUTTA YR"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "UPPIN"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+        # elif(lexemes[lineNumber][lexemeIndex] == "NERFIN"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "GTFO"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+        # elif(lexemes[lineNumber][lexemeIndex] == "TIL"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+
+        # elif(lexemes[lineNumber][lexemeIndex] == "WILE"):
+        #     syntaxError = sumOfSyntax(lineNumber)
+
+        #     if(syntaxError != "OK"):
+        #         print(syntaxError)
+        #         break
+
+        #     lineNumber = nextLineNumber(lineNumber)
+        #     continue
+        # END OF ZYRIL TAMARGO'S PART
 
         elif(lexemes[lineNumber][lexemeIndex] == "KTHXBYE"):
             codeEnded = True
@@ -1967,7 +2306,7 @@ while(True):
             else:
                 break
 
-     
+        
                 
                 
 
