@@ -1254,6 +1254,11 @@ def concatenationExpressionSemantics(lineNumber, variable):
                     tempVal += str(newSymbolTable[lexemes[lineNumber][anIndices[counter] - 1]][0])
                 else:
                     return "[Line " + str(lineNumber) + "] SemanticsError: Uninitialized identifier"
+            elif (types[lineNumber][anIndices[counter] - 1] == "string delimiter"):     # YARN literal
+                if (types[lineNumber][anIndices[counter] - 3] == "string delimiter"):   # another delimiter
+                    tempVal += lexemes[lineNumber][anIndices[counter] - 2]
+                else:
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Invalid syntax of YARN literal"     # ! TAKE NOTE
             else:
                 tempVal += str(lexemes[lineNumber][anIndices[counter] - 1])
             
@@ -1262,6 +1267,11 @@ def concatenationExpressionSemantics(lineNumber, variable):
                     tempVal += str(newSymbolTable[lexemes[lineNumber][anIndices[counter] + 1]][0])
                 else:
                     return "[Line " + str(lineNumber) + "] SemanticsError: Uninitialized identifier"
+            elif (types[lineNumber][anIndices[counter] + 1] == "string delimiter"):     # YARN literal
+                if (types[lineNumber][anIndices[counter] + 3] == "string delimiter"):   # another delimiter
+                    tempVal += lexemes[lineNumber][anIndices[counter] + 2]
+                else:
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Invalid syntax of YARN literal"     # ! TAKE NOTE
             else:
                 tempVal += str(lexemes[lineNumber][anIndices[counter] + 1])
 
@@ -1272,6 +1282,11 @@ def concatenationExpressionSemantics(lineNumber, variable):
                 tempVal += str(newSymbolTable[lexemes[lineNumber][anIndices[counter] - 1]][0])
             else:
                 return "[Line " + str(lineNumber) + "] SemanticsError: Uninitialized identifier"
+        elif (types[lineNumber][anIndices[counter] - 1] == "string delimiter"):     # YARN literal
+                if (types[lineNumber][anIndices[counter] - 3] == "string delimiter"):   # another delimiter
+                    tempVal += lexemes[lineNumber][anIndices[counter] - 2]
+                else:
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Invalid syntax of YARN literal"     # ! TAKE NOTE
         else:
             tempVal += str(lexemes[lineNumber][anIndices[counter] - 1])
 
