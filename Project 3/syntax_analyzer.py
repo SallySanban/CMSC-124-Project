@@ -1719,7 +1719,7 @@ def rSyntax(lineNumber):
                     return "[Line " + str(lineNumber) + "] SyntaxError: required identifier, literal, or expression"
             elif(types[lineNumber][rLexeme-1] == "MAEK"):
                 syntaxError = maekSyntax(lineNumber)
-    if(lexemes[lineNumber][rLexeme + 2] == "BTW"):
+    if("BTW" in lexemes[lineNumber]):
         syntaxError = singleCommentSyntax(lineNumber)
 
         if(syntaxError != "OK"):
@@ -1786,6 +1786,14 @@ def visibleSyntax(lineNumber):
             return "[Line " + str(lineNumber) + "] SyntaxError: Expected String Delimiter at: End of Line"
     else:return "[Line " + str(lineNumber) + "] SyntaxError: Expected expression"
     return "OK"
+
+def gimmehSyntax(lineNumber):
+    gimmehIndex = lexemes[lineNumber].index("GIMMEH")
+    if(len(lexemes[lineNumber]) > 1):
+        if(types[lineNumber][gimmehIndex+1] != "identifier"):
+            return "[Line " + str(lineNumber) + "] SyntaxError: Expected identifier"
+    return "OK"
+
 def haiSyntax(lineNumber):
     if(len(lexemes[lineNumber]) != 1):
         if(lexemes[lineNumber][1] == "BTW"):
@@ -2073,7 +2081,14 @@ while(True):
                 break
             lineNumber = nextLineNumber(lineNumber)
             continue
-
+        
+        elif("GIMMEH" in lexemes[lineNumber]):
+            syntaxError = gimmehSyntax(lineNumber)
+            if(syntaxError != "OK"):
+                print(syntaxError)
+                break
+            lineNumber = nextLineNumber(lineNumber)
+            continue
         # elif(lexemes[lineNumber][0] == "O RLY?"):
         #     orlyFound = True
         #     syntaxError = orlySyntax(lineNumber)
