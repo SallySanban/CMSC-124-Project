@@ -1789,9 +1789,20 @@ def visibleSyntax(lineNumber):
 
 def gimmehSyntax(lineNumber):
     gimmehIndex = lexemes[lineNumber].index("GIMMEH")
-    if(len(lexemes[lineNumber]) > 1):
+    if(len(lexemes[lineNumber]) == 2):
         if(types[lineNumber][gimmehIndex+1] != "identifier"):
-            return "[Line " + str(lineNumber) + "] SyntaxError: Expected identifier"
+            return "[Line " + str(lineNumber) + "] SyntaxError: variable must be of type identifier"
+    else:return "[Line " + str(lineNumber) + "] SyntaxError: Expected identifier"
+    return "OK"
+
+def isNowASyntax(lineNumber):
+    isNowAIndex = lexemes[lineNumber].index("IS NOW A")
+    if(len(lexemes[lineNumber]) == 3):
+        if(types[lineNumber][isNowAIndex-1] != "identifier"):
+            return "[Line " + str(lineNumber) + "] SyntaxError: variable must be of type identifier"
+        if(types[lineNumber][isNowAIndex+1] not in literals):
+            return "[Line " + str(lineNumber) + "] SyntaxError: expected type at \"" + lexemes[lineNumber][isNowAIndex+1] + "\""
+    else: return "[Line " + str(lineNumber) + "] SyntaxError: missing arguments"
     return "OK"
 
 def haiSyntax(lineNumber):
@@ -2084,6 +2095,14 @@ while(True):
         
         elif("GIMMEH" in lexemes[lineNumber]):
             syntaxError = gimmehSyntax(lineNumber)
+            if(syntaxError != "OK"):
+                print(syntaxError)
+                break
+            lineNumber = nextLineNumber(lineNumber)
+            continue
+
+        elif("IS NOW A" in lexemes[lineNumber]):
+            syntaxError = isNowASyntax(lineNumber)
             if(syntaxError != "OK"):
                 print(syntaxError)
                 break
