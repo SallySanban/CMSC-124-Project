@@ -1717,7 +1717,8 @@ def rSyntax(lineNumber):
             if(types[lineNumber][rLexeme+1] not in literals):
                 if(lexemes[lineNumber][rLexeme + 1] not in ["SUM OF", "DIFF OF", "PRODUKT OF", "QUOSHUNT OF", "MOD OF", "SMALLR OF", "BIGGR OF"]):
                     return "[Line " + str(lineNumber) + "] SyntaxError: required identifier, literal, or expression"
-    
+            elif(types[lineNumber][rLexeme-1] == "MAEK"):
+                syntaxError = maekSyntax(lineNumber)
     if(lexemes[lineNumber][rLexeme + 2] == "BTW"):
         syntaxError = singleCommentSyntax(lineNumber)
 
@@ -1775,11 +1776,16 @@ def orlySyntax(lineNumber):
                 
             orlyFound = False
             break
-
-      
+ 
     return "OK"
 
-
+def visibleSyntax(lineNumber):
+    visibleIndex = lexemes[lineNumber].index("VISIBLE")
+    if(len(lexemes[lineNumber]) > 1):
+        if(types[lineNumber][visibleIndex+1] == "string delimiter" and lexemes[lineNumber][visibleIndex-1] != "\""):
+            return "[Line " + str(lineNumber) + "] SyntaxError: Expected String Delimiter at: End of Line"
+    else:return "[Line " + str(lineNumber) + "] SyntaxError: Expected expression"
+    return "OK"
 def haiSyntax(lineNumber):
     if(len(lexemes[lineNumber]) != 1):
         if(lexemes[lineNumber][1] == "BTW"):
@@ -2060,16 +2066,24 @@ while(True):
             lineNumber = nextLineNumber(lineNumber)
             continue
 
-        elif(lexemes[lineNumber][0] == "O RLY?"):
-            orlyFound = True
-            syntaxError = orlySyntax(lineNumber)
-
-            if(isinstance(syntaxError, int)):
-                lineNumber = syntaxError
-                continue
-            else:
+        elif("VISIBLE" in lexemes[lineNumber]):
+            syntaxError = visibleSyntax(lineNumber)
+            if(syntaxError != "OK"):
                 print(syntaxError)
                 break
+            lineNumber = nextLineNumber(lineNumber)
+            continue
+
+        # elif(lexemes[lineNumber][0] == "O RLY?"):
+        #     orlyFound = True
+        #     syntaxError = orlySyntax(lineNumber)
+
+        #     if(isinstance(syntaxError, int)):
+        #         lineNumber = syntaxError
+        #         continue
+        #     else:
+        #         print(syntaxError)
+        #         break
 
         # elif(lexemes[lineNumber][lexemeIndex] == "YA RLY"):
         #     syntaxError = sumOfSyntax(lineNumber)
