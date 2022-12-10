@@ -127,7 +127,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
     if lexemeExpression[lastIndexOperator] == "SUM OF":
       if typeExpression[lastIndexOperator + 1] == "NUMBR literal":    # ! NUMBR Literal (1st operand)
         if typeExpression[lastIndexOperator + 3] == "NUMBR literal":
-          tempVal = int(lexemeExpression[lastIndexOperator + 1]) + int(lexemeExpression[lastIndexOperator + 3])
+          tempVal = int(int(lexemeExpression[lastIndexOperator + 1]) + int(lexemeExpression[lastIndexOperator + 3]))
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -140,7 +140,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
           typeExpression.insert(lastIndexOperator, "NUMBR literal")
         elif typeExpression[lastIndexOperator + 3] == "NUMBAR literal":
-          tempVal = float(lexemeExpression[lastIndexOperator + 1]) + float(lexemeExpression[lastIndexOperator + 3])
+          tempVal = float(float(lexemeExpression[lastIndexOperator + 1]) + float(lexemeExpression[lastIndexOperator + 3]))
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -159,7 +159,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
             try:
               tempVal = float(lexemeExpression[lastIndexOperator + 1]) + float(lexemeExpression[lastIndexOperator + 3])
             except ValueError:
-              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR of NUMBAR literal"
+              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -170,12 +170,15 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "TROOF literal":
           if lexemeExpression[lastIndexOperator + 3] == "WIN":
-            tempVal = int(lexemeExpression[lastIndexOperator + 1]) + 1
+            tempVal = int(int(lexemeExpression[lastIndexOperator + 1]) + 1)
           else:
-            tempVal = int(lexemeExpression[lastIndexOperator + 1]) + 0
+            tempVal = int(int(lexemeExpression[lastIndexOperator + 1]) + 0)
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -188,10 +191,10 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
           typeExpression.insert(lastIndexOperator, "NUMBR literal")
         else:
-          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR of NUMBAR literal"
+          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR or NUMBAR literal"
       elif typeExpression[lastIndexOperator + 1] == "NUMBAR literal":   # ! NUMBAR Literal (1st operand)
         if typeExpression[lastIndexOperator + 3] == "NUMBR literal":
-          tempVal = float(lexemeExpression[lastIndexOperator + 1]) + float(lexemeExpression[lastIndexOperator + 3])
+          tempVal = float(float(lexemeExpression[lastIndexOperator + 1]) + float(lexemeExpression[lastIndexOperator + 3]))
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -204,7 +207,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
           typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "NUMBAR literal":
-          tempVal = float(lexemeExpression[lastIndexOperator + 1]) + float(lexemeExpression[lastIndexOperator + 3])
+          tempVal = float(float(lexemeExpression[lastIndexOperator + 1]) + float(lexemeExpression[lastIndexOperator + 3]))
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -223,7 +226,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
             try:
               tempVal = float(lexemeExpression[lastIndexOperator + 1]) + float(lexemeExpression[lastIndexOperator + 3])
             except ValueError:
-              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR of NUMBAR literal"
+              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -234,12 +237,15 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "TROOF literal":
           if lexemeExpression[lastIndexOperator + 3] == "WIN":
-            tempVal = float(lexemeExpression[lastIndexOperator + 1]) + 1
+            tempVal = float(float(lexemeExpression[lastIndexOperator + 1]) + 1)
           else:
-            tempVal = float(lexemeExpression[lastIndexOperator + 1]) + 0
+            tempVal = float(float(lexemeExpression[lastIndexOperator + 1]) + 0)
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -252,14 +258,14 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
           typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         else:
-          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR of NUMBAR literal"
+          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR or NUMBAR literal"
       elif typeExpression[lastIndexOperator + 1] == "TROOF literal":         # ! TROOF LITERAL (1st operand)
         temp = 0
         if typeExpression[lastIndexOperator + 1] == "WIN":
           temp = 1
 
         if typeExpression[lastIndexOperator + 3] == "NUMBR literal":
-          tempVal = temp + int(lexemeExpression[lastIndexOperator + 3])
+          tempVal = int(temp + int(lexemeExpression[lastIndexOperator + 3]))
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -272,7 +278,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
           typeExpression.insert(lastIndexOperator, "NUMBR literal")
         elif typeExpression[lastIndexOperator + 3] == "NUMBAR literal":
-          tempVal = temp + float(lexemeExpression[lastIndexOperator + 3])
+          tempVal = float(temp + float(lexemeExpression[lastIndexOperator + 3]))
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -291,7 +297,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
             try:
               tempVal = temp + float(lexemeExpression[lastIndexOperator + 3])
             except ValueError:
-              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR of NUMBAR literal"
+              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -302,12 +308,15 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "TROOF literal":
           if lexemeExpression[lastIndexOperator + 3] == "WIN":
-            tempVal = temp + 1
+            tempVal = int(temp + 1)
           else:
-            tempVal = temp + 0
+            tempVal = int(temp + 0)
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -320,7 +329,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
           typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         else:
-          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR of NUMBAR literal"
+          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR or NUMBAR literal"
       elif typeExpression[lastIndexOperator + 1] == "YARN literal":         # ! YARN LITERAL (1st operand)
         try:
           temp = int(lexemeExpression[lastIndexOperator + 1])
@@ -328,7 +337,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
           try:
             temp = float(lexemeExpression[lastIndexOperator + 1])
           except ValueError:
-            return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR of NUMBAR literal"
+            return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
 
         if typeExpression[lastIndexOperator + 3] == "NUMBR literal":
           tempVal = temp + int(lexemeExpression[lastIndexOperator + 3])
@@ -343,9 +352,12 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "NUMBAR literal":
-          tempVal = temp + float(lexemeExpression[lastIndexOperator + 3])
+          tempVal = float(temp + float(lexemeExpression[lastIndexOperator + 3]))
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -364,7 +376,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
             try:
               tempVal = temp + float(lexemeExpression[lastIndexOperator + 3])
             except ValueError:
-              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR of NUMBAR literal"
+              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -375,7 +387,10 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "TROOF literal":
           if lexemeExpression[lastIndexOperator + 3] == "WIN":
             tempVal = temp + 1
@@ -391,15 +406,18 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         else:
-          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR of NUMBAR literal"
+          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR or NUMBAR literal"
       else:     # ! NOOB literal (1st operand)
-        return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR of NUMBAR literal"
+        return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR or NUMBAR literal"
     elif lexemeExpression[lastIndexOperator] == "DIFF OF":
       if typeExpression[lastIndexOperator + 1] == "NUMBR literal":    # ! NUMBR Literal (1st operand)
         if typeExpression[lastIndexOperator + 3] == "NUMBR literal":
-          tempVal = int(lexemeExpression[lastIndexOperator + 1]) - int(lexemeExpression[lastIndexOperator + 3])
+          tempVal = int(int(lexemeExpression[lastIndexOperator + 1]) - int(lexemeExpression[lastIndexOperator + 3]))
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -412,7 +430,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
           typeExpression.insert(lastIndexOperator, "NUMBR literal")
         elif typeExpression[lastIndexOperator + 3] == "NUMBAR literal":
-          tempVal = float(lexemeExpression[lastIndexOperator + 1]) - float(lexemeExpression[lastIndexOperator + 3])
+          tempVal = float(float(lexemeExpression[lastIndexOperator + 1]) - float(lexemeExpression[lastIndexOperator + 3]))
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -431,7 +449,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
             try:
               tempVal = float(lexemeExpression[lastIndexOperator + 1]) - float(lexemeExpression[lastIndexOperator + 3])
             except ValueError:
-              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR of NUMBAR literal"
+              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -442,12 +460,15 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "TROOF literal":
           if lexemeExpression[lastIndexOperator + 3] == "WIN":
-            tempVal = int(lexemeExpression[lastIndexOperator + 1]) - 1
+            tempVal = int(int(lexemeExpression[lastIndexOperator + 1]) - 1)
           else:
-            tempVal = int(lexemeExpression[lastIndexOperator + 1]) - 0
+            tempVal = int(int(lexemeExpression[lastIndexOperator + 1]) - 0)
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -460,10 +481,10 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
           typeExpression.insert(lastIndexOperator, "NUMBR literal")
         else:
-          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR of NUMBAR literal"
+          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR or NUMBAR literal"
       elif typeExpression[lastIndexOperator + 1] == "NUMBAR literal":   # ! NUMBAR Literal (1st operand)
         if typeExpression[lastIndexOperator + 3] == "NUMBR literal":
-          tempVal = float(lexemeExpression[lastIndexOperator + 1]) - float(lexemeExpression[lastIndexOperator + 3])
+          tempVal = float(float(lexemeExpression[lastIndexOperator + 1]) - float(lexemeExpression[lastIndexOperator + 3]))
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -476,7 +497,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
           typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "NUMBAR literal":
-          tempVal = float(lexemeExpression[lastIndexOperator + 1]) - float(lexemeExpression[lastIndexOperator + 3])
+          tempVal = float(float(lexemeExpression[lastIndexOperator + 1]) - float(lexemeExpression[lastIndexOperator + 3]))
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -495,7 +516,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
             try:
               tempVal = float(lexemeExpression[lastIndexOperator + 1]) - float(lexemeExpression[lastIndexOperator + 3])
             except ValueError:
-              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR of NUMBAR literal"
+              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
 
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -506,12 +527,15 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "TROOF literal":
           if lexemeExpression[lastIndexOperator + 3] == "WIN":
-            tempVal = float(lexemeExpression[lastIndexOperator + 1]) - 1
+            tempVal = float(float(lexemeExpression[lastIndexOperator + 1]) - 1)
           else:
-            tempVal = float(lexemeExpression[lastIndexOperator + 1]) - 0
+            tempVal = float(float(lexemeExpression[lastIndexOperator + 1]) - 0)
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -524,14 +548,14 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
           typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         else:
-          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR of NUMBAR literal"
+          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR or NUMBAR literal"
       elif typeExpression[lastIndexOperator + 1] == "TROOF literal":         # ! TROOF LITERAL (1st operand)
         temp = 0
         if typeExpression[lastIndexOperator + 1] == "WIN":
           temp = 1
 
         if typeExpression[lastIndexOperator + 3] == "NUMBR literal":
-          tempVal = temp - int(lexemeExpression[lastIndexOperator + 3])
+          tempVal = int(temp - int(lexemeExpression[lastIndexOperator + 3]))
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -544,7 +568,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
           typeExpression.insert(lastIndexOperator, "NUMBR literal")
         elif typeExpression[lastIndexOperator + 3] == "NUMBAR literal":
-          tempVal = temp - float(lexemeExpression[lastIndexOperator + 3])
+          tempVal = float(temp - float(lexemeExpression[lastIndexOperator + 3]))
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -563,7 +587,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
             try:
               tempVal = temp - float(lexemeExpression[lastIndexOperator + 3])
             except ValueError:
-              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR of NUMBAR literal"
+              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
           
           # * Popping the elements from the lexeme and type list
 
@@ -575,12 +599,15 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "TROOF literal":
           if lexemeExpression[lastIndexOperator + 3] == "WIN":
-            tempVal = temp - 1
+            tempVal = int(temp - 1)
           else:
-            tempVal = temp - 0
+            tempVal = int(temp - 0)
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -593,7 +620,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
           typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         else:
-          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR of NUMBAR literal"
+          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR or NUMBAR literal"
       elif typeExpression[lastIndexOperator + 1] == "YARN literal":         # ! YARN LITERAL (1st operand)
         try:
           temp = int(lexemeExpression[lastIndexOperator + 1])
@@ -601,7 +628,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
           try:
             temp = float(lexemeExpression[lastIndexOperator + 1])
           except ValueError:
-            return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR of NUMBAR literal"
+            return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
 
         if typeExpression[lastIndexOperator + 3] == "NUMBR literal":
           tempVal = temp - int(lexemeExpression[lastIndexOperator + 3])
@@ -615,9 +642,12 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "NUMBAR literal":
-          tempVal = temp - float(lexemeExpression[lastIndexOperator + 3])
+          tempVal = float(temp - float(lexemeExpression[lastIndexOperator + 3]))
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -636,7 +666,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
             try:
               tempVal = temp - float(lexemeExpression[lastIndexOperator + 3])
             except ValueError:
-              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR of NUMBAR literal"
+              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -647,12 +677,15 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "TROOF literal":
           if lexemeExpression[lastIndexOperator + 3] == "WIN":
-            tempVal = temp - 1
+            tempVal = int(temp - 1)
           else:
-            tempVal = temp - 0
+            tempVal = int(temp - 0)
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -665,13 +698,13 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
           typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         else:
-          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR of NUMBAR literal"
+          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR or NUMBAR literal"
       else:     # ! NOOB literal (1st operand)
-        return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR of NUMBAR literal"
+        return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR or NUMBAR literal"
     elif lexemeExpression[lastIndexOperator] == "PRODUKT OF":
       if typeExpression[lastIndexOperator + 1] == "NUMBR literal":    # ! NUMBR Literal (1st operand)
         if typeExpression[lastIndexOperator + 3] == "NUMBR literal":
-          tempVal = int(lexemeExpression[lastIndexOperator + 1]) * int(lexemeExpression[lastIndexOperator + 3])
+          tempVal = int(int(lexemeExpression[lastIndexOperator + 1]) * int(lexemeExpression[lastIndexOperator + 3]))
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -684,7 +717,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
           typeExpression.insert(lastIndexOperator, "NUMBR literal")
         elif typeExpression[lastIndexOperator + 3] == "NUMBAR literal":
-          tempVal = float(lexemeExpression[lastIndexOperator + 1]) * float(lexemeExpression[lastIndexOperator + 3])
+          tempVal = float(float(lexemeExpression[lastIndexOperator + 1]) * float(lexemeExpression[lastIndexOperator + 3]))
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -703,7 +736,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
             try:
               tempVal = float(lexemeExpression[lastIndexOperator + 1]) * float(lexemeExpression[lastIndexOperator + 3])
             except ValueError:
-              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR of NUMBAR literal"
+              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -714,12 +747,15 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "TROOF literal":
           if lexemeExpression[lastIndexOperator + 3] == "WIN":
-            tempVal = int(lexemeExpression[lastIndexOperator + 1]) * 1
+            tempVal = int(int(lexemeExpression[lastIndexOperator + 1]) * 1)
           else:
-            tempVal = int(lexemeExpression[lastIndexOperator + 1]) * 0
+            tempVal = int(int(lexemeExpression[lastIndexOperator + 1]) * 0)
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -732,10 +768,10 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
           typeExpression.insert(lastIndexOperator, "NUMBR literal")
         else:
-          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR of NUMBAR literal"
+          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR or NUMBAR literal"
       elif typeExpression[lastIndexOperator + 1] == "NUMBAR literal":   # ! NUMBAR Literal (1st operand)
         if typeExpression[lastIndexOperator + 3] == "NUMBR literal":
-          tempVal = float(lexemeExpression[lastIndexOperator + 1]) * float(lexemeExpression[lastIndexOperator + 3])
+          tempVal = float(float(lexemeExpression[lastIndexOperator + 1]) * float(lexemeExpression[lastIndexOperator + 3]))
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -748,7 +784,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
           typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "NUMBAR literal":
-          tempVal = float(lexemeExpression[lastIndexOperator + 1]) * float(lexemeExpression[lastIndexOperator + 3])
+          tempVal = float(float(lexemeExpression[lastIndexOperator + 1]) * float(lexemeExpression[lastIndexOperator + 3]))
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -767,7 +803,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
             try:
               tempVal = float(lexemeExpression[lastIndexOperator + 1]) * float(lexemeExpression[lastIndexOperator + 3])
             except ValueError:
-              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR of NUMBAR literal"
+              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -778,12 +814,15 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "TROOF literal":
           if lexemeExpression[lastIndexOperator + 3] == "WIN":
-            tempVal = float(lexemeExpression[lastIndexOperator + 1]) * 1
+            tempVal = float(float(lexemeExpression[lastIndexOperator + 1]) * 1)
           else:
-            tempVal = float(lexemeExpression[lastIndexOperator + 1]) * 0
+            tempVal = float(float(lexemeExpression[lastIndexOperator + 1]) * 0)
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -796,14 +835,14 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
           typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         else:
-          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR of NUMBAR literal"
+          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR or NUMBAR literal"
       elif typeExpression[lastIndexOperator + 1] == "TROOF literal":         # ! TROOF LITERAL (1st operand)
         temp = 0
         if typeExpression[lastIndexOperator + 1] == "WIN":
           temp = 1
 
         if typeExpression[lastIndexOperator + 3] == "NUMBR literal":
-          tempVal = temp * int(lexemeExpression[lastIndexOperator + 3])
+          tempVal = int(temp * int(lexemeExpression[lastIndexOperator + 3]))
         
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -816,7 +855,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
           typeExpression.insert(lastIndexOperator, "NUMBR literal")
         elif typeExpression[lastIndexOperator + 3] == "NUMBAR literal":
-          tempVal = temp * float(lexemeExpression[lastIndexOperator + 3])
+          tempVal = float(temp * float(lexemeExpression[lastIndexOperator + 3]))
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -835,7 +874,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
             try:
               tempVal = temp * float(lexemeExpression[lastIndexOperator + 3])
             except ValueError:
-              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR of NUMBAR literal"
+              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -846,12 +885,15 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "TROOF literal":
           if lexemeExpression[lastIndexOperator + 3] == "WIN":
-            tempVal = temp * 1
+            tempVal = int(temp * 1)
           else:
-            tempVal = temp * 0
+            tempVal = int(temp * 0)
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -864,7 +906,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
           typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         else:
-          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR of NUMBAR literal"
+          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR or NUMBAR literal"
       elif typeExpression[lastIndexOperator + 1] == "YARN literal":         # ! YARN LITERAL (1st operand)
         try:
           temp = int(lexemeExpression[lastIndexOperator + 1])
@@ -872,7 +914,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
           try:
             temp = float(lexemeExpression[lastIndexOperator + 1])
           except ValueError:
-            return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR of NUMBAR literal"
+            return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
 
         if typeExpression[lastIndexOperator + 3] == "NUMBR literal":
           tempVal = temp * int(lexemeExpression[lastIndexOperator + 3])
@@ -886,9 +928,12 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "NUMBAR literal":
-          tempVal = temp * float(lexemeExpression[lastIndexOperator + 3])
+          tempVal = float(temp * float(lexemeExpression[lastIndexOperator + 3]))
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -907,7 +952,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
             try:
               tempVal = temp * float(lexemeExpression[lastIndexOperator + 3])
             except ValueError:
-              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR of NUMBAR literal"
+              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -918,7 +963,10 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "TROOF literal":
           if lexemeExpression[lastIndexOperator + 3] == "WIN":
             tempVal = temp * 1
@@ -934,11 +982,14 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         else:
-          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR of NUMBAR literal"
+          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR or NUMBAR literal"
       else:     # ! NOOB literal (2st operand)
-        return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR of NUMBAR literal"
+        return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR or NUMBAR literal"
     elif lexemeExpression[lastIndexOperator] == "QUOSHUNT OF":
       if typeExpression[lastIndexOperator + 1] == "NUMBR literal":    # ! NUMBR Literal (1st operand)
         if typeExpression[lastIndexOperator + 3] == "NUMBR literal":
@@ -955,11 +1006,14 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "NUMBAR literal":
           if lexemeExpression[lastIndexOperator + 3] == "0.0":
             return "[Line " + str(lineNumber) + "] SemanticError: Division by zero" 
-          tempVal = float(lexemeExpression[lastIndexOperator + 1]) / float(lexemeExpression[lastIndexOperator + 3])
+          tempVal = float(float(lexemeExpression[lastIndexOperator + 1]) / float(lexemeExpression[lastIndexOperator + 3]))
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -978,9 +1032,9 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
             tempVal = int(lexemeExpression[lastIndexOperator + 1]) / int(lexemeExpression[lastIndexOperator + 3])
           except ValueError:
             try:
-              tempVal = float(lexemeExpression[lastIndexOperator + 1]) / float(lexemeExpression[lastIndexOperator + 3])
+              tempVal = float(float(lexemeExpression[lastIndexOperator + 1]) / float(lexemeExpression[lastIndexOperator + 3]))
             except ValueError:
-              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR of NUMBAR literal"
+              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -991,10 +1045,13 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "TROOF literal":
           if lexemeExpression[lastIndexOperator + 3] == "WIN":
-            tempVal = int(lexemeExpression[lastIndexOperator + 1]) / 1
+            tempVal = int(int(lexemeExpression[lastIndexOperator + 1]) / 1)
           else:
             return "[Line " + str(lineNumber) + "] SemanticError: Division by zero"
           
@@ -1009,12 +1066,12 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
           typeExpression.insert(lastIndexOperator, "NUMBR literal")
         else:
-          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR of NUMBAR literal"
+          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR or NUMBAR literal"
       elif typeExpression[lastIndexOperator + 1] == "NUMBAR literal":   # ! NUMBAR Literal (1st operand)
         if typeExpression[lastIndexOperator + 3] == "NUMBR literal":
           if lexemeExpression[lastIndexOperator + 3] == "0":
             return "[Line " + str(lineNumber) + "] SemanticError: Division by zero" 
-          tempVal = float(lexemeExpression[lastIndexOperator + 1]) / float(lexemeExpression[lastIndexOperator + 3])
+          tempVal = float(float(lexemeExpression[lastIndexOperator + 1]) / float(lexemeExpression[lastIndexOperator + 3]))
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -1029,7 +1086,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
         elif typeExpression[lastIndexOperator + 3] == "NUMBAR literal":
           if lexemeExpression[lastIndexOperator + 3] == "0" or lexemeExpression[lastIndexOperator + 3] == "0.0":
             return "[Line " + str(lineNumber) + "] SemanticError: Division by zero" 
-          tempVal = float(lexemeExpression[lastIndexOperator + 1]) * float(lexemeExpression[lastIndexOperator + 3])
+          tempVal = float(float(lexemeExpression[lastIndexOperator + 1]) / float(lexemeExpression[lastIndexOperator + 3]))
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -1045,12 +1102,12 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
           if lexemeExpression[lastIndexOperator + 3] == "0" or lexemeExpression[lastIndexOperator + 3] == "0.0":
             return "[Line " + str(lineNumber) + "] SemanticError: Division by zero" 
           try:
-            tempVal = float(lexemeExpression[lastIndexOperator + 1]) * float(lexemeExpression[lastIndexOperator + 3])
+            tempVal = float(lexemeExpression[lastIndexOperator + 1]) / float(lexemeExpression[lastIndexOperator + 3])
           except ValueError:
             try:
-              tempVal = float(lexemeExpression[lastIndexOperator + 1]) * float(lexemeExpression[lastIndexOperator + 3])
+              tempVal = float(lexemeExpression[lastIndexOperator + 1]) / float(lexemeExpression[lastIndexOperator + 3])
             except ValueError:
-              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR of NUMBAR literal"
+              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -1061,10 +1118,13 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "TROOF literal":
           if lexemeExpression[lastIndexOperator + 3] == "WIN":
-            tempVal = float(lexemeExpression[lastIndexOperator + 1]) / 1
+            tempVal = float(float(lexemeExpression[lastIndexOperator + 1]) / 1)
           else:
             return "[Line " + str(lineNumber) + "] SemanticError: Division by zero" 
         
@@ -1079,7 +1139,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
           typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         else:
-          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR of NUMBAR literal"
+          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR or NUMBAR literal"
       elif typeExpression[lastIndexOperator + 1] == "TROOF literal":         # ! TROOF LITERAL (1st operand)
         temp = 0
         if typeExpression[lastIndexOperator + 1] == "WIN":
@@ -1099,11 +1159,14 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "NUMBAR literal":
           if lexemeExpression[lastIndexOperator + 3] == "0" or lexemeExpression[lastIndexOperator + 3] == "0.0":
             return "[Line " + str(lineNumber) + "] SemanticError: Division by zero" 
-          tempVal = temp * float(lexemeExpression[lastIndexOperator + 3])
+          tempVal = float(temp * float(lexemeExpression[lastIndexOperator + 3]))
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -1119,12 +1182,12 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
           if lexemeExpression[lastIndexOperator + 3] == "0" or lexemeExpression[lastIndexOperator + 3] == "0.0":
             return "[Line " + str(lineNumber) + "] SemanticError: Division by zero" 
           try:
-            tempVal = temp * int(lexemeExpression[lastIndexOperator + 3])
+            tempVal = temp / int(lexemeExpression[lastIndexOperator + 3])
           except ValueError:
             try:
-              tempVal = temp * float(lexemeExpression[lastIndexOperator + 3])
+              tempVal = temp / float(lexemeExpression[lastIndexOperator + 3])
             except ValueError:
-              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR of NUMBAR literal"
+              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -1135,7 +1198,10 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "TROOF literal":
           if lexemeExpression[lastIndexOperator + 3] == "WIN":
             tempVal = temp / 1
@@ -1151,9 +1217,12 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         else:
-          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR of NUMBAR literal"
+          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR or NUMBAR literal"
       elif typeExpression[lastIndexOperator + 1] == "YARN literal":         # ! YARN LITERAL (1st operand)
         try:
           temp = int(lexemeExpression[lastIndexOperator + 1])
@@ -1161,7 +1230,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
           try:
             temp = float(lexemeExpression[lastIndexOperator + 1])
           except ValueError:
-            return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR of NUMBAR literal"
+            return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
 
         if typeExpression[lastIndexOperator + 3] == "NUMBR literal":
           tempVal = temp / int(lexemeExpression[lastIndexOperator + 3])
@@ -1175,9 +1244,12 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "NUMBAR literal":
-          tempVal = temp / float(lexemeExpression[lastIndexOperator + 3])
+          tempVal = float(temp / float(lexemeExpression[lastIndexOperator + 3]))
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -1196,9 +1268,9 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
             tempVal = temp / int(lexemeExpression[lastIndexOperator + 3])
           except ValueError:
             try:
-              tempVal = temp / float(lexemeExpression[lastIndexOperator + 3])
+              tempVal = float(temp / float(lexemeExpression[lastIndexOperator + 3]))
             except ValueError:
-              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR of NUMBAR literal"
+              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -1209,9 +1281,9 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          if type(tempVal) == int:
+          if(type(tempVal) == int):
             typeExpression.insert(lastIndexOperator, "NUMBR literal")
-          else:
+          if(type(tempVal) == float):
             typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "TROOF literal":
           if lexemeExpression[lastIndexOperator + 3] == "WIN":
@@ -1228,17 +1300,20 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         else:
-          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR of NUMBAR literal"
+          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR or NUMBAR literal"
       else:     # ! NOOB literal (2st operand)
-        return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR of NUMBAR literal"
+        return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR or NUMBAR literal"
     elif lexemeExpression[lastIndexOperator] == "MOD OF":
       if typeExpression[lastIndexOperator + 1] == "NUMBR literal":    # ! NUMBR Literal (1st operand)
         if typeExpression[lastIndexOperator + 3] == "NUMBR literal":
           if lexemeExpression[lastIndexOperator + 3] == "0" or lexemeExpression[lastIndexOperator + 3] == "0.0":
             return "[Line " + str(lineNumber) + "] SemanticError: Division by zero" 
-          tempVal = int(lexemeExpression[lastIndexOperator + 1]) % int(lexemeExpression[lastIndexOperator + 3])
+          tempVal = int(int(lexemeExpression[lastIndexOperator + 1]) % int(lexemeExpression[lastIndexOperator + 3]))
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -1253,7 +1328,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
         elif typeExpression[lastIndexOperator + 3] == "NUMBAR literal":
           if lexemeExpression[lastIndexOperator + 3] == "0" or lexemeExpression[lastIndexOperator + 3] == "0.0":
             return "[Line " + str(lineNumber) + "] SemanticError: Division by zero" 
-          tempVal = float(lexemeExpression[lastIndexOperator + 1]) % float(lexemeExpression[lastIndexOperator + 3])
+          tempVal = float(float(lexemeExpression[lastIndexOperator + 1]) % float(lexemeExpression[lastIndexOperator + 3]))
 
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -1274,7 +1349,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
             try:
               tempVal = float(lexemeExpression[lastIndexOperator + 1]) % float(lexemeExpression[lastIndexOperator + 3])
             except ValueError:
-              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR of NUMBAR literal"
+              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -1285,10 +1360,13 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "TROOF literal":
           if lexemeExpression[lastIndexOperator + 3] == "WIN":
-            tempVal = int(lexemeExpression[lastIndexOperator + 1]) % 1
+            tempVal = int(int(lexemeExpression[lastIndexOperator + 1]) % 1)
           else:
             return "[Line " + str(lineNumber) + "] SemanticError: Division by zero" 
           
@@ -1303,12 +1381,12 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
           typeExpression.insert(lastIndexOperator, "NUMBR literal")
         else:
-          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR of NUMBAR literal"
+          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR or NUMBAR literal"
       elif typeExpression[lastIndexOperator + 1] == "NUMBAR literal":   # ! NUMBAR Literal (1st operand)
         if typeExpression[lastIndexOperator + 3] == "NUMBR literal":
           if lexemeExpression[lastIndexOperator + 3] == "0" or lexemeExpression[lastIndexOperator + 3] == "0.0":
             return "[Line " + str(lineNumber) + "] SemanticError: Division by zero" 
-          tempVal = float(lexemeExpression[lastIndexOperator + 1]) % float(lexemeExpression[lastIndexOperator + 3])
+          tempVal = float(float(lexemeExpression[lastIndexOperator + 1]) % float(lexemeExpression[lastIndexOperator + 3]))
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -1323,7 +1401,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
         elif typeExpression[lastIndexOperator + 3] == "NUMBAR literal":
           if lexemeExpression[lastIndexOperator + 3] == "0" or lexemeExpression[lastIndexOperator + 3] == "0.0":
             return "[Line " + str(lineNumber) + "] SemanticError: Division by zero" 
-          tempVal = float(lexemeExpression[lastIndexOperator + 1]) % float(lexemeExpression[lastIndexOperator + 3])
+          tempVal = float(float(lexemeExpression[lastIndexOperator + 1]) % float(lexemeExpression[lastIndexOperator + 3]))
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -1344,7 +1422,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
             try:
               tempVal = float(lexemeExpression[lastIndexOperator + 1]) % float(lexemeExpression[lastIndexOperator + 3])
             except ValueError:
-              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR of NUMBAR literal"
+              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -1355,10 +1433,13 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "TROOF literal":
           if lexemeExpression[lastIndexOperator + 3] == "WIN":
-            tempVal = float(lexemeExpression[lastIndexOperator + 1]) % 1
+            tempVal = float(float(lexemeExpression[lastIndexOperator + 1]) % 1)
           else:
             return "[Line " + str(lineNumber) + "] SemanticError: Division by zero" 
           
@@ -1373,7 +1454,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
           typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         else:
-          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR of NUMBAR literal"
+          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR or NUMBAR literal"
       elif typeExpression[lastIndexOperator + 1] == "TROOF literal":         # ! TROOF LITERAL (1st operand)
         temp = 0
         if typeExpression[lastIndexOperator + 1] == "WIN":
@@ -1382,7 +1463,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
         if typeExpression[lastIndexOperator + 3] == "NUMBR literal":
           if lexemeExpression[lastIndexOperator + 3] == "0" or lexemeExpression[lastIndexOperator + 3] == "0.0":
             return "[Line " + str(lineNumber) + "] SemanticError: Division by zero" 
-          tempVal = temp % int(lexemeExpression[lastIndexOperator + 3])
+          tempVal = int(temp % int(lexemeExpression[lastIndexOperator + 3]))
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -1397,7 +1478,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
         elif typeExpression[lastIndexOperator + 3] == "NUMBAR literal":
           if lexemeExpression[lastIndexOperator + 3] == "0" or lexemeExpression[lastIndexOperator + 3] == "0.0":
             return "[Line " + str(lineNumber) + "] SemanticError: Division by zero" 
-          tempVal = temp * float(lexemeExpression[lastIndexOperator + 3])
+          tempVal = float(temp % float(lexemeExpression[lastIndexOperator + 3]))
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -1413,12 +1494,12 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
           if lexemeExpression[lastIndexOperator + 3] == "0" or lexemeExpression[lastIndexOperator + 3] == "0.0":
             return "[Line " + str(lineNumber) + "] SemanticError: Division by zero" 
           try:
-            tempVal = temp * int(lexemeExpression[lastIndexOperator + 3])
+            tempVal = int(temp % int(lexemeExpression[lastIndexOperator + 3]))
           except ValueError:
             try:
-              tempVal = temp * float(lexemeExpression[lastIndexOperator + 3])
+              tempVal = float(temp % float(lexemeExpression[lastIndexOperator + 3]))
             except ValueError:
-              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR of NUMBAR literal"
+              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
           
           # * Popping the elements from the lexeme and type list
 
@@ -1430,85 +1511,10 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
-        elif typeExpression[lastIndexOperator + 3] == "TROOF literal":
-          if lexemeExpression[lastIndexOperator + 3] == "WIN":
-            tempVal = temp * 1
-          else:
-            return "[Line " + str(lineNumber) + "] SemanticError: Division by zero" 
-          
-          # * Popping the elements from the lexeme and type list
-          counter = 0
-          while counter != 4:
-            lexemeExpression.pop(lastIndexOperator)
-            typeExpression.pop(lastIndexOperator)
-            counter += 1
-
-          # * Appending the new elements from the lexeme and type list
-          lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
-        else:
-          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR of NUMBAR literal"
-      elif typeExpression[lastIndexOperator + 1] == "YARN literal":         # ! YARN LITERAL (1st operand)
-        try:
-          temp = int(lexemeExpression[lastIndexOperator + 1])
-        except ValueError:
-          try:
-            temp = float(lexemeExpression[lastIndexOperator + 1])
-          except ValueError:
-            return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR of NUMBAR literal"
-
-        if typeExpression[lastIndexOperator + 3] == "NUMBR literal":
-          if lexemeExpression[lastIndexOperator + 3] == "0" or lexemeExpression[lastIndexOperator + 3] == "0.0":
-            return "[Line " + str(lineNumber) + "] SemanticError: Division by zero" 
-          tempVal = temp % int(lexemeExpression[lastIndexOperator + 3])
-          
-          # * Popping the elements from the lexeme and type list
-          counter = 0
-          while counter != 4:
-            lexemeExpression.pop(lastIndexOperator)
-            typeExpression.pop(lastIndexOperator)
-            counter += 1
-
-          # * Appending the new elements from the lexeme and type list
-          lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBR literal")
-        elif typeExpression[lastIndexOperator + 3] == "NUMBAR literal":
-          if lexemeExpression[lastIndexOperator + 3] == "0" or lexemeExpression[lastIndexOperator + 3] == "0.0":
-            return "[Line " + str(lineNumber) + "] SemanticError: Division by zero" 
-          tempVal = temp % float(lexemeExpression[lastIndexOperator + 3])
-          
-          # * Popping the elements from the lexeme and type list
-          counter = 0
-          while counter != 4:
-            lexemeExpression.pop(lastIndexOperator)
-            typeExpression.pop(lastIndexOperator)
-            counter += 1
-
-          # * Appending the new elements from the lexeme and type list
-          lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
-        elif typeExpression[lastIndexOperator + 3] == "YARN literal":
-          if lexemeExpression[lastIndexOperator + 3] == "0" or lexemeExpression[lastIndexOperator + 3] == "0.0":
-            return "[Line " + str(lineNumber) + "] SemanticError: Division by zero" 
-          try:
-            tempVal = temp % int(lexemeExpression[lastIndexOperator + 3])
-          except ValueError:
-            try:
-              tempVal = temp % float(lexemeExpression[lastIndexOperator + 3])
-            except ValueError:
-              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR of NUMBAR literal"
-          
-          # * Popping the elements from the lexeme and type list
-          counter = 0
-          while counter != 4:
-            lexemeExpression.pop(lastIndexOperator)
-            typeExpression.pop(lastIndexOperator)
-            counter += 1
-
-          # * Appending the new elements from the lexeme and type list
-          lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "TROOF literal":
           if lexemeExpression[lastIndexOperator + 3] == "WIN":
             tempVal = temp % 1
@@ -1524,11 +1530,104 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         else:
-          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR of NUMBAR literal"
+          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR or NUMBAR literal"
+      elif typeExpression[lastIndexOperator + 1] == "YARN literal":         # ! YARN LITERAL (1st operand)
+        try:
+          temp = int(lexemeExpression[lastIndexOperator + 1])
+        except ValueError:
+          try:
+            temp = float(lexemeExpression[lastIndexOperator + 1])
+          except ValueError:
+            return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
+
+        if typeExpression[lastIndexOperator + 3] == "NUMBR literal":
+          if lexemeExpression[lastIndexOperator + 3] == "0" or lexemeExpression[lastIndexOperator + 3] == "0.0":
+            return "[Line " + str(lineNumber) + "] SemanticError: Division by zero" 
+          tempVal = temp % int(lexemeExpression[lastIndexOperator + 3])
+          
+          # * Popping the elements from the lexeme and type list
+          counter = 0
+          while counter != 4:
+            lexemeExpression.pop(lastIndexOperator)
+            typeExpression.pop(lastIndexOperator)
+            counter += 1
+
+          # * Appending the new elements from the lexeme and type list
+          lexemeExpression.insert(lastIndexOperator, str(tempVal))
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+        elif typeExpression[lastIndexOperator + 3] == "NUMBAR literal":
+          if lexemeExpression[lastIndexOperator + 3] == "0" or lexemeExpression[lastIndexOperator + 3] == "0.0":
+            return "[Line " + str(lineNumber) + "] SemanticError: Division by zero" 
+          tempVal = temp % float(lexemeExpression[lastIndexOperator + 3])
+          
+          # * Popping the elements from the lexeme and type list
+          counter = 0
+          while counter != 4:
+            lexemeExpression.pop(lastIndexOperator)
+            typeExpression.pop(lastIndexOperator)
+            counter += 1
+
+          # * Appending the new elements from the lexeme and type list
+          lexemeExpression.insert(lastIndexOperator, str(tempVal))
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+        elif typeExpression[lastIndexOperator + 3] == "YARN literal":
+          if lexemeExpression[lastIndexOperator + 3] == "0" or lexemeExpression[lastIndexOperator + 3] == "0.0":
+            return "[Line " + str(lineNumber) + "] SemanticError: Division by zero" 
+          try:
+            tempVal = temp % int(lexemeExpression[lastIndexOperator + 3])
+          except ValueError:
+            try:
+              tempVal = temp % float(lexemeExpression[lastIndexOperator + 3])
+            except ValueError:
+              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
+          
+          # * Popping the elements from the lexeme and type list
+          counter = 0
+          while counter != 4:
+            lexemeExpression.pop(lastIndexOperator)
+            typeExpression.pop(lastIndexOperator)
+            counter += 1
+
+          # * Appending the new elements from the lexeme and type list
+          lexemeExpression.insert(lastIndexOperator, str(tempVal))
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+        elif typeExpression[lastIndexOperator + 3] == "TROOF literal":
+          if lexemeExpression[lastIndexOperator + 3] == "WIN":
+            tempVal = temp % 1
+          else:
+            return "[Line " + str(lineNumber) + "] SemanticError: Division by zero" 
+          
+          # * Popping the elements from the lexeme and type list
+          counter = 0
+          while counter != 4:
+            lexemeExpression.pop(lastIndexOperator)
+            typeExpression.pop(lastIndexOperator)
+            counter += 1
+
+          # * Appending the new elements from the lexeme and type list
+          lexemeExpression.insert(lastIndexOperator, str(tempVal))
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+        else:
+          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR or NUMBAR literal"
       else:     # ! NOOB literal (1st operand)
-        return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR of NUMBAR literal"
+        return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR or NUMBAR literal"
     elif lexemeExpression[lastIndexOperator] == "BIGGR OF":
       if typeExpression[lastIndexOperator + 1] == "NUMBR literal":    # ! NUMBR Literal (1st operand)
         if typeExpression[lastIndexOperator + 3] == "NUMBR literal":
@@ -1543,7 +1642,10 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "NUMBAR literal":
           tempVal = max(float(lexemeExpression[lastIndexOperator + 1]), float(lexemeExpression[lastIndexOperator + 3]))
           
@@ -1556,7 +1658,10 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "YARN literal":
           try:
             tempVal = max(int(lexemeExpression[lastIndexOperator + 1]), int(lexemeExpression[lastIndexOperator + 3]))
@@ -1564,7 +1669,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
             try:
               tempVal = max(float(lexemeExpression[lastIndexOperator + 1]), float(lexemeExpression[lastIndexOperator + 3]))
             except ValueError:
-              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR of NUMBAR literal"
+              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -1575,7 +1680,10 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "TROOF literal":
           if lexemeExpression[lastIndexOperator + 3] == "WIN":
             tempVal = max(lexemeExpression[lastIndexOperator + 1], 1)
@@ -1591,9 +1699,12 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         else:
-          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR of NUMBAR literal"
+          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR or NUMBAR literal"
       elif typeExpression[lastIndexOperator + 1] == "NUMBAR literal":   # ! NUMBAR Literal (1st operand)
         if typeExpression[lastIndexOperator + 3] == "NUMBR literal":
           tempVal = max(float(lexemeExpression[lastIndexOperator + 1]), float(lexemeExpression[lastIndexOperator + 3]))
@@ -1607,7 +1718,10 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "NUMBAR literal":
           tempVal = max(float(lexemeExpression[lastIndexOperator + 1]), float(lexemeExpression[lastIndexOperator + 3]))
           
@@ -1620,7 +1734,10 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "YARN literal":
           try:
             tempVal = max(float(lexemeExpression[lastIndexOperator + 1]), float(lexemeExpression[lastIndexOperator + 3]))
@@ -1628,7 +1745,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
             try:
               tempVal = max(float(lexemeExpression[lastIndexOperator + 1]), float(lexemeExpression[lastIndexOperator + 3]))
             except ValueError:
-              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR of NUMBAR literal"
+              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
 
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -1639,7 +1756,10 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "TROOF literal":
           if lexemeExpression[lastIndexOperator + 3] == "WIN":
             tempVal = max(float(lexemeExpression[lastIndexOperator + 1]), 1)
@@ -1655,9 +1775,12 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         else:
-          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR of NUMBAR literal"
+          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR or NUMBAR literal"
       elif typeExpression[lastIndexOperator + 1] == "TROOF literal":         # ! TROOF LITERAL (1st operand)
         temp = 0
         if typeExpression[lastIndexOperator + 1] == "WIN":
@@ -1675,7 +1798,10 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "NUMBAR literal":
           tempVal = max(temp, float(lexemeExpression[lastIndexOperator + 3]))
           
@@ -1688,7 +1814,10 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "YARN literal":
           try:
             tempVal = max(temp, int(lexemeExpression[lastIndexOperator + 3]))
@@ -1696,7 +1825,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
             try:
               tempVal = max(temp, float(lexemeExpression[lastIndexOperator + 3]))
             except ValueError:
-              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR of NUMBAR literal"
+              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -1707,7 +1836,10 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "TROOF literal":
           if lexemeExpression[lastIndexOperator + 3] == "WIN":
             tempVal = max(temp, 1)
@@ -1723,9 +1855,12 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         else:
-          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR of NUMBAR literal"
+          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR or NUMBAR literal"
       elif typeExpression[lastIndexOperator + 1] == "YARN literal":         # ! YARN LITERAL (1st operand)
         try:
           temp = int(lexemeExpression[lastIndexOperator + 1])
@@ -1733,7 +1868,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
           try:
             temp = float(lexemeExpression[lastIndexOperator + 1])
           except ValueError:
-            return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR of NUMBAR literal"
+            return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
 
         if typeExpression[lastIndexOperator + 3] == "NUMBR literal":
           tempVal = max(temp, int(lexemeExpression[lastIndexOperator + 3]))
@@ -1747,7 +1882,10 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "NUMBAR literal":
           tempVal = max(temp, float(lexemeExpression[lastIndexOperator + 3]))
           
@@ -1760,7 +1898,10 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "YARN literal":
           try:
             tempVal = max(temp, int(lexemeExpression[lastIndexOperator + 3]))
@@ -1768,7 +1909,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
             try:
               tempVal = max(temp, float(lexemeExpression[lastIndexOperator + 3]))
             except ValueError:
-              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR of NUMBAR literal"
+              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -1779,7 +1920,10 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "TROOF literal":
           if lexemeExpression[lastIndexOperator + 3] == "WIN":
             tempVal = max(temp, 1)
@@ -1795,11 +1939,14 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         else:
-          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR of NUMBAR literal"
+          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR or NUMBAR literal"
       else:     # ! NOOB literal (1st operand)
-        return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR of NUMBAR literal"
+        return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR or NUMBAR literal"
     elif lexemeExpression[lastIndexOperator] == "SMALLR OF":
       if typeExpression[lastIndexOperator + 1] == "NUMBR literal":    # ! NUMBR Literal (1st operand)
         if typeExpression[lastIndexOperator + 3] == "NUMBR literal":
@@ -1814,7 +1961,10 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "NUMBAR literal":
           tempVal = min(float(lexemeExpression[lastIndexOperator + 1]), float(lexemeExpression[lastIndexOperator + 3]))
           
@@ -1827,7 +1977,10 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "YARN literal":
           try:
             tempVal = min(int(lexemeExpression[lastIndexOperator + 1]), int(lexemeExpression[lastIndexOperator + 3]))
@@ -1835,7 +1988,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
             try:
               tempVal = min(float(lexemeExpression[lastIndexOperator + 1]), float(lexemeExpression[lastIndexOperator + 3]))
             except ValueError:
-              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR of NUMBAR literal"
+              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -1846,7 +1999,10 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "TROOF literal":
           if lexemeExpression[lastIndexOperator + 3] == "WIN":
             tempVal = min(lexemeExpression[lastIndexOperator + 1], 1)
@@ -1862,9 +2018,12 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         else:
-          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR of NUMBAR literal"
+          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR or NUMBAR literal"
       elif typeExpression[lastIndexOperator + 1] == "NUMBAR literal":   # ! NUMBAR Literal (1st operand)
         if typeExpression[lastIndexOperator + 3] == "NUMBR literal":
           tempVal = min(float(lexemeExpression[lastIndexOperator + 1]), float(lexemeExpression[lastIndexOperator + 3]))
@@ -1878,7 +2037,10 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "NUMBAR literal":
           tempVal = max(float(lexemeExpression[lastIndexOperator + 1]), float(lexemeExpression[lastIndexOperator + 3]))
           
@@ -1891,7 +2053,10 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "YARN literal":
           try:
             tempVal = max(float(lexemeExpression[lastIndexOperator + 1]), float(lexemeExpression[lastIndexOperator + 3]))
@@ -1899,7 +2064,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
             try:
               tempVal = max(float(lexemeExpression[lastIndexOperator + 1]), float(lexemeExpression[lastIndexOperator + 3]))
             except ValueError:
-              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR of NUMBAR literal"
+              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -1910,7 +2075,10 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "TROOF literal":
           if lexemeExpression[lastIndexOperator + 3] == "WIN":
             tempVal = max(float(lexemeExpression[lastIndexOperator + 1]), 1)
@@ -1926,9 +2094,12 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         else:
-          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR of NUMBAR literal"
+          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR or NUMBAR literal"
       elif typeExpression[lastIndexOperator + 1] == "TROOF literal":         # ! TROOF LITERAL (1st operand)
         temp = 0
         if typeExpression[lastIndexOperator + 1] == "WIN":
@@ -1946,7 +2117,10 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "NUMBAR literal":
           tempVal = min(temp, float(lexemeExpression[lastIndexOperator + 3]))
           
@@ -1959,7 +2133,10 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "YARN literal":
           try:
             tempVal = min(temp, int(lexemeExpression[lastIndexOperator + 3]))
@@ -1967,7 +2144,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
             try:
               tempVal = min(temp, float(lexemeExpression[lastIndexOperator + 3]))
             except ValueError:
-              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR of NUMBAR literal"
+              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -1978,7 +2155,10 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "TROOF literal":
           if lexemeExpression[lastIndexOperator + 3] == "WIN":
             tempVal = min(temp, 1)
@@ -1994,9 +2174,12 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         else:
-          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR of NUMBAR literal"
+          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR or NUMBAR literal"
       elif typeExpression[lastIndexOperator + 1] == "YARN literal":         # ! YARN LITERAL (1st operand)
         try:
           temp = int(lexemeExpression[lastIndexOperator + 1])
@@ -2004,7 +2187,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
           try:
             temp = float(lexemeExpression[lastIndexOperator + 1])
           except ValueError:
-            return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR of NUMBAR literal"
+            return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
 
         if typeExpression[lastIndexOperator + 3] == "NUMBR literal":
           tempVal = min(temp, int(lexemeExpression[lastIndexOperator + 3]))
@@ -2019,7 +2202,10 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "NUMBAR literal":
           tempVal = min(temp, float(lexemeExpression[lastIndexOperator + 3]))
           
@@ -2032,7 +2218,10 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "YARN literal":
           try:
             tempVal = min(temp, int(lexemeExpression[lastIndexOperator + 3]))
@@ -2040,7 +2229,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
             try:
               tempVal = max(temp, float(lexemeExpression[lastIndexOperator + 3]))
             except ValueError:
-              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR of NUMBAR literal"
+              return "[Line " + str(lineNumber) + "] SemanticError: YARN literal cannot be converted to NUMBR or NUMBAR literal"
           
           # * Popping the elements from the lexeme and type list
           counter = 0
@@ -2051,7 +2240,10 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "TROOF literal":
           if lexemeExpression[lastIndexOperator + 3] == "WIN":
             tempVal = min(temp, 1)
@@ -2067,11 +2259,14 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if(type(tempVal) == int):
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          if(type(tempVal) == float):
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         else:
-          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR of NUMBAR literal"
+          return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR or NUMBAR literal"
       else:     # ! NOOB literal (1st operand)
-        return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR of NUMBAR literal"
+        return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal cannot be converted to NUMBR or NUMBAR literal"
 
   if typeExpression[0] == "NUMBR literal":
     tempVal = [int(lexemeExpression[0]), typeExpression[0]]
