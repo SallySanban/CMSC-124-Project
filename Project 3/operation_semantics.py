@@ -34,6 +34,17 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
   #put other cases where the arithmetic expression might be
   elif("print keyword" in types[lineNumber]):
     expressionIndex = lexemes[lineNumber].index("VISIBLE")
+    
+    operationIndices = []
+    if types[lineNumber][expressionIndex + 1] not in expressionKeywords["arithmetic"]:
+      # Find the first operation to appear in string
+      for index in range(len(lexemes[lineNumber])):
+        if lexemes[lineNumber][index] in expressionKeywords["arithmetic"]:
+          operationIndices.append(index)
+      
+      expressionIndex = operationIndices[0] - 1
+      
+      
   else:
     expressionIndex = -1 
 
@@ -69,7 +80,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
   if len(anIndices) != len(operationIndices):
     return(f"[Line {lineNumber}] SyntaxError: Invalid expression")
   
-  
+
   while True:
     print(lexemeExpression)
     # * Breaks the loop if lexemeExpression is equal to 1
@@ -1178,6 +1189,8 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
           typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "YARN literal":
           try:
+            if int(lexemeExpression[lastIndexOperator + 3]) == 0:
+              return "[Line " + str(lineNumber) + "] SemanticError: Division by zero"
             tempVal = temp / int(lexemeExpression[lastIndexOperator + 3])
           except ValueError:
             try:
@@ -1194,7 +1207,10 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
 
           # * Appending the new elements from the lexeme and type list
           lexemeExpression.insert(lastIndexOperator, str(tempVal))
-          typeExpression.insert(lastIndexOperator, "NUMBAR literal")
+          if type(tempVal) == int:
+            typeExpression.insert(lastIndexOperator, "NUMBR literal")
+          else:
+            typeExpression.insert(lastIndexOperator, "NUMBAR literal")
         elif typeExpression[lastIndexOperator + 3] == "TROOF literal":
           if lexemeExpression[lastIndexOperator + 3] == "WIN":
             tempVal = temp / 1
@@ -2069,6 +2085,15 @@ def booleanExpSemantics(lineNumber, symbolTable, lexemes, types):
   #put other cases where the arithmetic expression might be
   elif("print keyword" in types[lineNumber]):
     expressionIndex = lexemes[lineNumber].index("VISIBLE")
+    
+    operationIndices = []
+    if types[lineNumber][expressionIndex + 1] not in expressionKeywords["arithmetic"]:
+      # Find the first operation to appear in string
+      for index in range(len(lexemes[lineNumber])):
+        if lexemes[lineNumber][index] in expressionKeywords["arithmetic"]:
+          operationIndices.append(index)
+      
+      expressionIndex = operationIndices[0] - 1
   else:
     expressionIndex = -1 
   
@@ -2361,6 +2386,15 @@ def comparisonExpSemantics(lineNumber, symbolTable, lexemes, types):
     #put other cases where the arithmetic expression might be
     elif("print keyword" in types[lineNumber]):
         expressionIndex = lexemes[lineNumber].index("VISIBLE")
+        
+        operationIndices = []
+        if types[lineNumber][expressionIndex + 1] not in expressionKeywords["arithmetic"]:
+          # Find the first operation to appear in string
+          for index in range(len(lexemes[lineNumber])):
+            if lexemes[lineNumber][index] in expressionKeywords["arithmetic"]:
+              operationIndices.append(index)
+          
+          expressionIndex = operationIndices[0] - 1
     else:
         expressionIndex = -1    
     
@@ -2899,3 +2933,132 @@ def concatenationExpSemantics(lineNumber, symbolTable, lexemes, types):
 
         counter += 1
 
+def visibleExpSemantics(lineNumber, symbolTable, lexemes, types):
+  # * Gets the index of VISIBLE
+  visibleIndex = lexemes[lineNumber].index("VISIBLE")
+  
+  if visibleIndex != 0:
+    return "[Line " + str(lineNumber) + "] SyntaxError: VISIBLE should be the first element in the line"
+  
+  lexemeExpression = 0
+  typeExpression = 0
+  
+  # * Check if valid syntax of YARN literal
+  yarnIndices = []
+  for index in range(len(types[lineNumber])):
+    if types[lineNumber][index] == "YARN literal":
+      yarnIndices.append(index)
+      
+  for index in yarnIndices:
+    if types[lineNumber][index - 1] != "string delimiter" or types[lineNumber][index + 1] != "string delimiter":
+      return "[Line " + str(lineNumber) + "] SyntaxError: Invalid format of YARN literal"
+  
+  # * Check if there are comments
+  endIndex = -1
+  try:
+    btwIndex = lexemes[lineNumber].index("BTW")
+    
+    endIndex = btwIndex - 1
+  except ValueError:
+    endIndex = len(lexemes[lineNumber]) - 1
+  
+  # * Creates the whole expression excluding the comments and VISIBLE keyword
+  lexemeExpression = lexemes[lineNumber][(1):(endIndex + 1)]
+  typeExpression = types[lineNumber][(1):(endIndex + 1)]
+
+  # * Removes the string delimiters from the list
+  while True:
+    try:
+      lexemeExpression.remove("\"")
+      typeExpression.remove("string delimiter")
+    except ValueError:
+      break
+    
+  # * Converts the identifiers to their respective values
+  identifierIndices = []
+  for index in range(len(typeExpression)):
+    if typeExpression[index] == "identifier":
+      identifierIndices.append(index)
+      
+  for index in identifierIndices:
+    if symbolTable.get(lexemeExpression[index]):      
+      identifier = symbolTable[lexemeExpression[index]]
+      lexemeExpression[index] = identifier[0]
+      typeExpression[index] = identifier[1]
+      
+      if lexemeExpression[index] == "NOOB":
+        return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal can not be typecasted to YARN literal"
+    else:
+      return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+  
+  # * Gets the indices of operations in the expression
+  operationIndices = []
+  
+  while True:
+    # * Refreshes the operationIndices
+    operationIndices.clear()
+    for index in range(len(lexemeExpression)):
+      if lexemeExpression[index] in expressionKeywords["arithmetic"]:
+        operationIndices.append(index)
+      if lexemeExpression[index] in expressionKeywords["boolean"]:
+        operationIndices.append(index)
+      if lexemeExpression[index] in expressionKeywords["comparison"]:
+        operationIndices.append(index)
+      if lexemeExpression[index] in expressionKeywords["concatenation"]:
+        operationIndices.append(index)
+    
+    if len(operationIndices) == 0:
+      break
+        
+    # * Get index of first operation to solve starting from the last
+    lastIndexOperator = operationIndices[len(operationIndices) - 1]
+    
+    if lexemeExpression[lastIndexOperator] in expressionKeywords["arithmetic"]:
+      tempVal = arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types)
+      
+      if type(tempVal) != list:
+        return tempVal
+      
+      # * Popping the elements from the lexeme and type list
+      if lexemeExpression[lastIndexOperator] not in ["ALL OF", "ANY OF", "SMOOSH", "NOT"]:
+        counter = 0
+        while counter != 3:
+          lexemeExpression.pop(lastIndexOperator)
+          typeExpression.pop(lastIndexOperator)
+          counter += 1
+      elif lexemeExpression[lastIndexOperator] == "NOT":
+        counter = 0
+        while counter != 1:
+          lexemeExpression.pop(lastIndexOperator)
+          typeExpression.pop(lastIndexOperator)
+          counter += 1
+      
+      lexemeExpression[lastIndexOperator] = tempVal[0]
+      typeExpression[lastIndexOperator] = tempVal[1]
+      break
+  
+  # * Converts the list to a whole string
+  for index in range(len(lexemeExpression)):
+    if typeExpression[index] == "NOOB":
+      return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal can not be typecasted to YARN literal"
+    else:
+      lexemeExpression[index] = str(lexemeExpression[index])
+    
+  # print(operationIndices)
+  tempVal = ' '.join(element for element in lexemeExpression)
+  
+  tempVal = [tempVal, "YARN literal"]
+  
+  print(lexemeExpression)
+  print(typeExpression)
+  # print(operationIndices)
+  # print(lexemes[lineNumber])
+  # print(types[lineNumber])
+  
+  return tempVal
+   
+    
+
+    
+  
+  
