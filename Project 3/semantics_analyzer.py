@@ -162,9 +162,9 @@ def updateSymbolTable(lineNumber, value, variable):
             newSymbolTable[variable] = [str(lexemes[lineNumber][value]), "YARN literal"]
         elif(types[lineNumber][value] == "TROOF literal"):    #value is troof
             if(lexemes[lineNumber][value] == "WIN"):
-                newSymbolTable[variable] = [True, "TROOF literal"]
+                newSymbolTable[variable] = ["WIN", "TROOF literal"]
             elif(lexemes[lineNumber][value] == "FAIL"):
-                newSymbolTable[variable] = [False, "TROOF literal"]
+                newSymbolTable[variable] = ["FAIL", "TROOF literal"]
         else:   #value is type
             return "[Line " + str(lineNumber) + "] SemanticError: cannot store TYPE in identifier"
     
