@@ -66,6 +66,10 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
           break
       break
 
+  if len(anIndices) != len(operationIndices):
+    return(f"[Line {lineNumber}] SyntaxError: Invalid expression")
+  
+  
   while True:
     print(lexemeExpression)
     # * Breaks the loop if lexemeExpression is equal to 1
