@@ -181,6 +181,10 @@ def findLexemes(lines, lexemes, types):
                             lexemes[i+1].append("\"")
                             lexemes[i+1].append(string.strip()[1:len(string.strip())-1])
                             lexemes[i+1].append("\"")
+                        elif('\"' != splitWords[j][len(splitWords[j])-1]):
+                            lexemes[i+1].append("\"")
+                            lexemes[i+1].append(string.strip()[1:len(string.strip())-1])
+                            
                         else:
                             lexemes[i+1].append("\"")
                             lexemes[i+1].append(string.strip()[1:len(string.strip())-1])
