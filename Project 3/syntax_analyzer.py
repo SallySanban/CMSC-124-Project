@@ -307,8 +307,8 @@ def modOfSyntax(lineNumber):
 # SMALLR OF (removed by Rio)
 
 def smooshSyntax(lineNumber):
-    print("")
-    #INSERT CODE HERE
+    return "OK"
+     #INSERT CODE HERE
 
 def notSyntax(lineNumber):
     # NOT <x>
@@ -1764,7 +1764,7 @@ def itzSyntax(lineNumber):
         if(syntaxError != "OK"):
             return syntaxError
     elif(lexemes[lineNumber][itzLexeme + 1] == "DIFFRINT"):
-        syntaxError = anyOfSyntax(lineNumber)
+        syntaxError = diffrintSyntax(lineNumber)
 
         if(syntaxError != "OK"):
             return syntaxError
@@ -1880,8 +1880,14 @@ def orlySyntax(lineNumber):
 def visibleSyntax(lineNumber):
     visibleIndex = lexemes[lineNumber].index("VISIBLE")
     if(len(lexemes[lineNumber]) > 1):
-        if(types[lineNumber][visibleIndex+1] == "string delimiter" and lexemes[lineNumber][visibleIndex-1] != "\""):
-            return "[Line " + str(lineNumber) + "] SyntaxError: Expected String Delimiter at: End of Line"
+        if(types[lineNumber][visibleIndex+1] == "string delimiter"):
+            if(lexemes[lineNumber][visibleIndex-1] != "\""):
+                return "[Line " + str(lineNumber) + "] SyntaxError: Expected String Delimiter at: End of Line"
+        elif(lexemes[lineNumber][visibleIndex+1] == "SMOOSH"):
+            syntaxError = smooshSyntax(lineNumber)
+            if(syntaxError != "OK"):
+                return syntaxError
+        else: return "[Line " + str(lineNumber) + "] SyntaxError: Must be expression"
     else:return "[Line " + str(lineNumber) + "] SyntaxError: Expected expression"
     return "OK"
 
