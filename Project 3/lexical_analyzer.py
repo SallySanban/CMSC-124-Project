@@ -1626,11 +1626,11 @@ def findLexemes(lines, lexemes, types):
 #             print("")
 #         print("")
 
-def getLexemes():
-    return lexemes
+# def getLexemes():
+#     return lexemes
 
-def getType():
-    return types
+# def getType():
+#     return types
 
 # MAIN CODE
 # lexemes = {}

@@ -6,6 +6,15 @@ HAI
     GIMMEH x
     GIMMEH y
 
+    VISIBLE x "+" y " = " SUM OF x AN y
+    VISIBLE x "-" y " = " DIFF OF x AN y
+    VISIBLE x "*" y " = " PRODUKT OF x AN y
+    VISIBLE x "/" y " = " QUOSHUNT OF x AN y
+    VISIBLE x "%" y " = " MOD OF x AN y
+
+    VISIBLE "max(" x "," y ") = " BIGGR OF x AN y
+    VISIBLE "min(" x "," y ") = " SMALLR OF x AN y
+    
     BTW x^2 + y^2
     VISIBLE SUM OF PRODUKT OF x AN x AN PRODUKT OF y AN y
     BTW (x+y)^2

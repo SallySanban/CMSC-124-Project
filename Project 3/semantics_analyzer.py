@@ -8,7 +8,7 @@ import tkinter.filedialog
 import tkinter.scrolledtext as scrolledtext
 
 
-import arithmetic_semantics as arith_sem
+import operation_semantics
 
 types = {}
 lexemes = {}
@@ -166,7 +166,22 @@ def updateSymbolTable(lineNumber, value, variable):
     return "OK"
 
 def arithmeticExpressionSemantics(lineNumber, variable):
-    temp = arith_sem.arithmeticExpSemantics(lineNumber, newSymbolTable, lexemes, types)
+    temp = operation_semantics.arithmeticExpSemantics(lineNumber, newSymbolTable, lexemes, types)
+    
+    # * Semantic Error
+    if type(temp) != list:
+        return temp
+
+    # * STORES THE FINAL VALUE OF TEMP HERE
+    if(variable != "IT"):
+        variable = lexemes[lineNumber][1]
+    
+    updateSymbolTable(lineNumber, [temp[0], temp[1]], variable)
+
+    return "OK"
+
+def booleanExpressionSemantics(lineNumber, variable):
+    temp = operation_semantics.booleanExpSemantics(lineNumber, newSymbolTable, lexemes, types)
     
     # * Semantic Error
     if type(temp) != list:
@@ -900,8 +915,8 @@ def visibleSemantics(lineNumber):
     elif(lexemes[lineNumber][visibleLexeme + 1] in expressionKeywords["arithmetic"] or lexemes[lineNumber][visibleLexeme + 1] in expressionKeywords["boolean"] or lexemes[lineNumber][visibleLexeme + 1] in expressionKeywords["comparison"] or lexemes[lineNumber][visibleLexeme + 1] in expressionKeywords["concatenation"]):
         if (lexemes[lineNumber][visibleLexeme + 1] in expressionKeywords["arithmetic"]):
             semanticError = arithmeticExpressionSemantics(lineNumber, "IT")
-        # if (lexemes[lineNumber][visibleLexeme + 1] in expressionKeywords["boolean"]):
-        #     semanticError = expressionSemantics(lineNumber, "IT")
+        if (lexemes[lineNumber][visibleLexeme + 1] in expressionKeywords["boolean"]):
+            semanticError = booleanExpressionSemantics(lineNumber, "IT")
         if (lexemes[lineNumber][visibleLexeme + 1] in expressionKeywords["comparison"]):
             semanticError = comparisonExpressionSemantics(lineNumber, "IT")
         if (lexemes[lineNumber][visibleLexeme + 1] in expressionKeywords["concatenation"]):
