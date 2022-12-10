@@ -1632,7 +1632,7 @@ def findLexemes(lines, lexemes, types):
 # def getType():
 #     return types
 
-#MAIN CODE
+# MAIN CODE
 # lexemes = {}
 # types = {}
 
