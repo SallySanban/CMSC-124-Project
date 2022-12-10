@@ -90,6 +90,9 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
         typeExpression[lastIndexOperator + 1] = identifier[1]
       else:
         return(f"[Line {lineNumber}] SemanticsError: Uninitialized variable")
+    elif typeExpression[lastIndexOperator + 1] not in ["NUMBR literal", "NUMBAR literal", "TROOF literal", "string delimiter", "YARN literal", "NOOB"]:
+      return(f"[Line {lineNumber}] SyntaxError: Invalid expression")
+
     
     if typeExpression[lastIndexOperator + 3] == "identifier":   # ! identifier (2nd operand)
       if symbolTable.get(lexemeExpression[lastIndexOperator + 3]):
@@ -98,6 +101,8 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
         typeExpression[lastIndexOperator + 3] = identifier[1]
       else:
         return(f"[Line {lineNumber}] SemanticsError: Uninitialized variable")
+    elif typeExpression[lastIndexOperator + 3] not in ["NUMBR literal", "NUMBAR literal", "TROOF literal", "string delimiter", "YARN literal", "NOOB"]:
+      return(f"[Line {lineNumber}] SyntaxError: Invalid expression")
 
     if lexemeExpression[lastIndexOperator] == "SUM OF":
       if typeExpression[lastIndexOperator + 1] == "NUMBR literal":    # ! NUMBR Literal (1st operand)
@@ -2142,6 +2147,7 @@ def booleanExpSemantics(lineNumber, symbolTable, lexemes, types):
         else:
           return(f"[Line {lineNumber}] SemanticsError: Uninitialized variable")
       elif lexemeExpression[lastIndexOperator + 1] not in ["WIN", "FAIL", "NOOB"]:
+        # print(f"[Line {lineNumber}] SyntaxError: Invalid statement")
         return(f"[Line {lineNumber}] SyntaxError: Invalid statement")
       
 

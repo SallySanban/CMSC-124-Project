@@ -66,6 +66,7 @@ def makeSymbolTable(symbolTable):
     global listOfSymbolTable, symbolTableTree
 
     refactoredSymbolTable = []
+    # print(symbolTable)
     for i in symbolTable.keys():
         refactoredSymbolTable.append((i, symbolTable[i][0], symbolTable[i][1]))
 
@@ -922,6 +923,7 @@ def visibleSemantics(lineNumber):
         if (lexemes[lineNumber][visibleLexeme + 1] in expressionKeywords["concatenation"]):
             semanticError = concatenationExpressionSemantics(lineNumber, "IT")
 
+        # print(semanticError)
         if(semanticError != "OK"):
             return semanticError
             
