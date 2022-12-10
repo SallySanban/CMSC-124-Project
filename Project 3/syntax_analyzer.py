@@ -306,9 +306,8 @@ def modOfSyntax(lineNumber, lexemes, types):
 # BIGGR OF (removed by Rio)
 # SMALLR OF (removed by Rio)
 
-def smooshSyntax(lineNumber, lexemes, types):
-    print("")
-    #INSERT CODE HERE
+def smooshSyntax(lineNumber):
+    return "OK"
 
 def notSyntax(lineNumber, lexemes, types):
     # NOT <x>
@@ -1764,7 +1763,7 @@ def itzSyntax(lineNumber, lexemes, types):
         if(syntaxError != "OK"):
             return syntaxError
     elif(lexemes[lineNumber][itzLexeme + 1] == "DIFFRINT"):
-        syntaxError = anyOfSyntax(lineNumber, lexemes, types)
+        syntaxError = diffrintSyntax(lineNumber)
 
         if(syntaxError != "OK"):
             return syntaxError
@@ -1815,9 +1814,10 @@ def rSyntax(lineNumber, lexemes, types):
             if(types[lineNumber][rLexeme+1] not in literals):
                 if(lexemes[lineNumber][rLexeme + 1] not in ["SUM OF", "DIFF OF", "PRODUKT OF", "QUOSHUNT OF", "MOD OF", "SMALLR OF", "BIGGR OF"]):
                     return "[Line " + str(lineNumber) + "] SyntaxError: required identifier, literal, or expression"
-    
-    if(lexemes[lineNumber][rLexeme + 2] == "BTW"):
-        syntaxError = singleCommentSyntax(lineNumber, lexemes, types)
+            elif(types[lineNumber][rLexeme-1] == "MAEK"):
+                syntaxError = maekSyntax(lineNumber)
+    if("BTW" in lexemes[lineNumber]):
+        syntaxError = singleCommentSyntax(lineNumber)
 
         if(syntaxError != "OK"):
             return syntaxError
@@ -1873,10 +1873,40 @@ def orlySyntax(lineNumber, lexemes, types):
                 
             orlyFound = False
             break
-
-      
+ 
     return "OK"
 
+def visibleSyntax(lineNumber):
+    visibleIndex = lexemes[lineNumber].index("VISIBLE")
+    if(len(lexemes[lineNumber]) > 1):
+        if(types[lineNumber][visibleIndex+1] == "string delimiter"):
+            if(lexemes[lineNumber][visibleIndex-1] != "\""):
+                return "[Line " + str(lineNumber) + "] SyntaxError: Expected String Delimiter at: End of Line"
+        elif(lexemes[lineNumber][visibleIndex+1] == "SMOOSH"):
+            syntaxError = smooshSyntax(lineNumber)
+            if(syntaxError != "OK"):
+                return syntaxError
+        else: return "[Line " + str(lineNumber) + "] SyntaxError: Must be expression"
+    else:return "[Line " + str(lineNumber) + "] SyntaxError: Expected expression"
+    return "OK"
+
+def gimmehSyntax(lineNumber):
+    gimmehIndex = lexemes[lineNumber].index("GIMMEH")
+    if(len(lexemes[lineNumber]) == 2):
+        if(types[lineNumber][gimmehIndex+1] != "identifier"):
+            return "[Line " + str(lineNumber) + "] SyntaxError: variable must be of type identifier"
+    else:return "[Line " + str(lineNumber) + "] SyntaxError: Expected identifier"
+    return "OK"
+
+def isNowASyntax(lineNumber):
+    isNowAIndex = lexemes[lineNumber].index("IS NOW A")
+    if(len(lexemes[lineNumber]) == 3):
+        if(types[lineNumber][isNowAIndex-1] != "identifier"):
+            return "[Line " + str(lineNumber) + "] SyntaxError: variable must be of type identifier"
+        if(types[lineNumber][isNowAIndex+1] not in literals):
+            return "[Line " + str(lineNumber) + "] SyntaxError: expected type at \"" + lexemes[lineNumber][isNowAIndex+1] + "\""
+    else: return "[Line " + str(lineNumber) + "] SyntaxError: missing arguments"
+    return "OK"
 
 def haiSyntax(lineNumber, lexemes, types):
     if(len(lexemes[lineNumber]) != 1):
@@ -2114,16 +2144,39 @@ def syntax(lexemes, types):
                     return syntaxError
                 lineNumber = nextLineNumber(lineNumber, lexemes, types)
                 continue
+        elif("VISIBLE" in lexemes[lineNumber]):
+            syntaxError = visibleSyntax(lineNumber)
+            if(syntaxError != "OK"):
+                print(syntaxError)
+                break
+            lineNumber = nextLineNumber(lineNumber)
+            continue
+        
+        elif("GIMMEH" in lexemes[lineNumber]):
+            syntaxError = gimmehSyntax(lineNumber)
+            if(syntaxError != "OK"):
+                print(syntaxError)
+                break
+            lineNumber = nextLineNumber(lineNumber)
+            continue
 
-            elif(lexemes[lineNumber][0] == "O RLY?"):
-                orlyFound = True
-                syntaxError = orlySyntax(lineNumber, lexemes, types)
+        elif("IS NOW A" in lexemes[lineNumber]):
+            syntaxError = isNowASyntax(lineNumber)
+            if(syntaxError != "OK"):
+                print(syntaxError)
+                break
+            lineNumber = nextLineNumber(lineNumber)
+            continue
+        # elif(lexemes[lineNumber][0] == "O RLY?"):
+        #     orlyFound = True
+        #     syntaxError = orlySyntax(lineNumber)
 
-                if(isinstance(syntaxError, int)):
-                    lineNumber = syntaxError
-                    continue
-                else:
-                    return syntaxError
+        #     if(isinstance(syntaxError, int)):
+        #         lineNumber = syntaxError
+        #         continue
+        #     else:
+        #         print(syntaxError)
+        #         break
 
             # elif(lexemes[lineNumber][lexemeIndex] == "YA RLY"):
             #     syntaxError = sumOfSyntax(lineNumber, lexemes, types)
