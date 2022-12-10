@@ -1,2 +1,5 @@
 
 *.pyc
+Project 3/__pycache__/lexical_analyzer.cpython-310.pyc
+Project 3/__pycache__/operation_semantics.cpython-310.pyc
+Project 3/__pycache__/syntax_analyzer.cpython-310.pyc
