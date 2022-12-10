@@ -34,15 +34,17 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
   #put other cases where the arithmetic expression might be
   elif("print keyword" in types[lineNumber]):
     expressionIndex = lexemes[lineNumber].index("VISIBLE")
-    
-    operationIndices = []
+
     if types[lineNumber][expressionIndex + 1] not in expressionKeywords["arithmetic"]:
       # Find the first operation to appear in string
+      operationIndices = []
       for index in range(len(lexemes[lineNumber])):
         if lexemes[lineNumber][index] in expressionKeywords["arithmetic"]:
           operationIndices.append(index)
       
       expressionIndex = operationIndices[0] - 1
+    else:
+      expressionIndex = 0
       
       
   else:
@@ -2094,6 +2096,8 @@ def booleanExpSemantics(lineNumber, symbolTable, lexemes, types):
           operationIndices.append(index)
       
       expressionIndex = operationIndices[0] - 1
+    else:
+      expressionIndex = expressionIndex + 1
   else:
     expressionIndex = -1 
   
@@ -2395,6 +2399,8 @@ def comparisonExpSemantics(lineNumber, symbolTable, lexemes, types):
               operationIndices.append(index)
           
           expressionIndex = operationIndices[0] - 1
+        else:
+          expressionIndex = expressionIndex + 1
     else:
         expressionIndex = -1    
     
@@ -3035,7 +3041,6 @@ def visibleExpSemantics(lineNumber, symbolTable, lexemes, types):
       
       lexemeExpression[lastIndexOperator] = tempVal[0]
       typeExpression[lastIndexOperator] = tempVal[1]
-      break
   
   # * Converts the list to a whole string
   for index in range(len(lexemeExpression)):
@@ -3045,7 +3050,7 @@ def visibleExpSemantics(lineNumber, symbolTable, lexemes, types):
       lexemeExpression[index] = str(lexemeExpression[index])
     
   # print(operationIndices)
-  tempVal = ' '.join(element for element in lexemeExpression)
+  tempVal = ''.join(element for element in lexemeExpression)
   
   tempVal = [tempVal, "YARN literal"]
   
