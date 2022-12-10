@@ -116,12 +116,13 @@ def run():
         lines = lexical_analyzer.readFile(listOfLines)
         lexical_analyzer.findLexemes(lines, lexemes, types)
 
-        #syntaxError = syntax_analyzer.syntax(lexemes, types)
+        # syntaxError = syntax_analyzer.syntax(lexemes, types)
 
         # if("SyntaxError" in syntaxError):
         #     messagebox.showinfo('Syntax Error', syntaxError)
         # else:
         semanticError = semantics()
+        print(semanticError)
 
         if("SemanticError" in semanticError):
             messagebox.showinfo('Semantic Error', semanticError)

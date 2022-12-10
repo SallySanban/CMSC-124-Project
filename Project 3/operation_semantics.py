@@ -2022,6 +2022,23 @@ def booleanExpSemantics(lineNumber, symbolTable, lexemes, types):
     expressionIndex = lexemes[lineNumber].index("VISIBLE")
   else:
     expressionIndex = -1 
+  
+  if lexemes[lineNumber].count("ANY OF") > 1:
+    return "[Line " + str(lineNumber) + "] SyntaxError: ANY OF cannot be nested"
+  elif lexemes[lineNumber].count("ANY OF") == 1:
+    if lexemes[lineNumber].count("MKAY") > 1:
+      return "[Line " + str(lineNumber) + "] SyntaxError: Have too many ANY OF delimiter MKAY "
+    if lexemes[lineNumber].count("MKAY") == 0:
+      return "[Line " + str(lineNumber) + "] SyntaxError: ANY OF delimiter MKAY not found"
+    
+  if lexemes[lineNumber].count("ALL OF") > 1:
+    return "[Line " + str(lineNumber) + "] SyntaxError: ANY OF cannot be nested"
+  elif lexemes[lineNumber].count("ALL OF") == 1:
+    if lexemes[lineNumber].count("MKAY") > 1:
+      return "[Line " + str(lineNumber) + "] SyntaxError: Have too many ANY OF delimiter MKAY "
+    if lexemes[lineNumber].count("MKAY") == 0:
+      return "[Line " + str(lineNumber) + "] SyntaxError: ANY OF delimiter MKAY not found"
+      
 
   # * Gets the indices of arithmetic operations
   operationIndices = []
@@ -2061,6 +2078,11 @@ def booleanExpSemantics(lineNumber, symbolTable, lexemes, types):
       else:
         lexemeExpression = lexemes[lineNumber][(expressionIndex + 1):(anIndices[len(anIndices) - 1] + 3)]
         typeExpression = types[lineNumber][(expressionIndex + 1):(anIndices[len(anIndices) - 1] + 3)]
+    elif lexemes[lineNumber][expressionIndex + 1] in ["ANY OF", "ALL OF"]:
+      mkayIndex = lexemes[lineNumber].index("MKAY")
+      
+      lexemeExpression = lexemes[lineNumber][(expressionIndex + 1):(mkayIndex)]
+      typeExpression = types[lineNumber][(expressionIndex + 1):(mkayIndex)]
         
       
       # * Removes the string delimiters from the list
@@ -2077,6 +2099,7 @@ def booleanExpSemantics(lineNumber, symbolTable, lexemes, types):
   # print(typeExpression)
   # print(operationIndices)
   # print(anIndices)
+  print(lexemeExpression)
   
   while True:
     # * Breaks the loop if lexemeExpression is equal to 1
@@ -2227,9 +2250,31 @@ def booleanExpSemantics(lineNumber, symbolTable, lexemes, types):
       lexemeExpression.insert(lastIndexOperator, str(tempVal))
       typeExpression.insert(lastIndexOperator, "TROOF literal")
     elif lexemeExpression[lastIndexOperator] == "ALL OF":   # * ALL OF (infinite arity)
-      print(lexemeExpression)
-    elif lexemeExpression[lastIndexOperator] == "ANY OF":   # * ALL OF (infinite arity)
-      print(lexemeExpression)
+      literalCount = typeExpression.count("TROOF literal")
+      if lexemeExpression.count("WIN") > 0 and lexemeExpression.count("FAIL") > 0:
+        lexemeExpression = ["FAIL"]
+        typeExpression = ["TROOF literal"]
+      elif lexemeExpression.count("WIN") == literalCount:
+        lexemeExpression = ["WIN"]
+        typeExpression = ["TROOF literal"]
+      elif lexemeExpression.count("FAIL") == literalCount:
+        lexemeExpression = ["FAIL"]
+        typeExpression = ["TROOF literal"]
+      
+      break
+    elif lexemeExpression[lastIndexOperator] == "ANY OF":   # * ANY OF (infinite arity)
+      literalCount = typeExpression.count("TROOF literal")
+      if lexemeExpression.count("WIN") > 0 and lexemeExpression.count("FAIL") > 0:
+        lexemeExpression = ["WIN"]
+        typeExpression = ["TROOF literal"]
+      elif lexemeExpression.count("WIN") == literalCount:
+        lexemeExpression = ["WIN"]
+        typeExpression = ["TROOF literal"]
+      elif lexemeExpression.count("FAIL") == literalCount:
+        lexemeExpression = ["FAIL"]
+        typeExpression = ["TROOF literal"]
+        
+      break
   
   
   if lexemeExpression[0] == "WIN":
