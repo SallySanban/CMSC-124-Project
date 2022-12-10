@@ -129,7 +129,6 @@ def multiCommentSyntax(lineNumber, lexemes, types):
 def sumOfSyntax(lineNumber, lexemes, types):
     sumOfIndex = lexemes[lineNumber].index("SUM OF")
 
-    # print(lexemes[lineNumber])
     counter = 0
     for keyword in range(sumOfIndex, len(lexemes[lineNumber])):                 # Checks the n operation keywords
         if (lexemes[lineNumber][keyword] in ["SUM OF", "DIFF OF", "PRODUKT OF", "QUOSHUNT OF", "MOD OF", "BIGGR OF", "SMALLR OF"]):
@@ -153,13 +152,11 @@ def sumOfSyntax(lineNumber, lexemes, types):
                 elif (lexemes[lineNumber][k] == "AN"):
                     continue
                 else:
-                    print(lexemes[lineNumber][k])
                     return "[Line " + str(lineNumber) + "] SyntaxError: Expected a numbr or numbar literal after arithmetic operator"
         else:
             if(lexemes[lineNumber][k] == "BTW"):
                 return singleCommentSyntax(lineNumber, lexemes, types)
             else:
-                # print(lexemes[lineNumber][k])                 # CHECKER
                 return "[Line " + str(lineNumber) + "] SyntaxError: cannot have statements after arithmetic operation"
     return "OK"
 
@@ -189,13 +186,11 @@ def diffOfSyntax(lineNumber, lexemes, types):
                 elif (lexemes[lineNumber][k] == "AN"):
                     continue
                 else:
-                    print(lexemes[lineNumber][k])
                     return "[Line " + str(lineNumber) + "] SyntaxError: Expected a numbr or numbar literal after arithmetic operator"
         else:
             if(lexemes[lineNumber][k] == "BTW"):
                 return singleCommentSyntax(lineNumber, lexemes, types)
             else:
-                # print(lexemes[lineNumber][k])                 # CHECKER
                 return "[Line " + str(lineNumber) + "] SyntaxError: cannot have statements after arithmetic operation"
 
 def produktOfSyntax(lineNumber, lexemes, types):
@@ -224,13 +219,11 @@ def produktOfSyntax(lineNumber, lexemes, types):
                 elif (lexemes[lineNumber][k] == "AN"):
                     continue
                 else:
-                    print(lexemes[lineNumber][k])
                     return "[Line " + str(lineNumber) + "] SyntaxError: Expected a numbr or numbar literal after arithmetic operator"
         else:
             if(lexemes[lineNumber][k] == "BTW"):
                 return singleCommentSyntax(lineNumber, lexemes, types)
             else:
-                # print(lexemes[lineNumber][k])                 # CHECKER
                 return "[Line " + str(lineNumber) + "] SyntaxError: cannot have statements after arithmetic operation"
 
 def quoshuntOfSyntax(lineNumber, lexemes, types):
@@ -259,13 +252,11 @@ def quoshuntOfSyntax(lineNumber, lexemes, types):
                 elif (lexemes[lineNumber][k] == "AN"):
                     continue
                 else:
-                    print(lexemes[lineNumber][k])
                     return "[Line " + str(lineNumber) + "] SyntaxError: Expected a numbr or numbar literal after arithmetic operator"
         else:
             if(lexemes[lineNumber][k] == "BTW"):
                 return singleCommentSyntax(lineNumber, lexemes, types)
             else:
-                # print(lexemes[lineNumber][k])                 # CHECKER
                 return "[Line " + str(lineNumber) + "] SyntaxError: cannot have statements after arithmetic operation"
 
 def modOfSyntax(lineNumber, lexemes, types):
@@ -294,13 +285,11 @@ def modOfSyntax(lineNumber, lexemes, types):
                 elif (lexemes[lineNumber][k] == "AN"):
                     continue
                 else:
-                    print(lexemes[lineNumber][k])
                     return "[Line " + str(lineNumber) + "] SyntaxError: Expected a numbr or numbar literal after arithmetic operator"
         else:
             if(lexemes[lineNumber][k] == "BTW"):
                 return singleCommentSyntax(lineNumber, lexemes, types)
             else:
-                # print(lexemes[lineNumber][k])                 # CHECKER
                 return "[Line " + str(lineNumber) + "] SyntaxError: cannot have statements after arithmetic operation"
 
 # BIGGR OF (removed by Rio)
@@ -1864,7 +1853,6 @@ def orlySyntax(lineNumber, lexemes, types):
         while(orlyFound == True):
 
             if(lexemes[lineNumber][0] != "YA RLY"):
-                print(lexemes[lineNumber][0])
                 return "[Line " + str(lineNumber+1) + "] Expected YA RLY Keyword"
             
             syntaxError = yaRlySyntax(lineNumber, lexemes, types)
@@ -1937,8 +1925,6 @@ def syntax(lexemes, types):
     sameBoolOperator = 0
 
     while(True):
-        #toPrint = lexemes[lineNumber][lexemeIndex]
-        #print("NOW CHECKING: " + lexemes[lineNumber][lexemeIndex] + " in line " + str(lineNumber))
         if(codeStarted == False):
             if(lexemes[lineNumber][lexemeIndex] != "HAI"):
                 if(lexemes[lineNumber][lexemeIndex] == "BTW"):

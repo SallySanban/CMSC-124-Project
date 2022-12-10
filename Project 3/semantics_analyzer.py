@@ -64,8 +64,6 @@ def makeTokens():
 
 def makeSymbolTable(symbolTable):
     global listOfSymbolTable, symbolTableTree
-    
-    print(symbolTable)
 
     refactoredSymbolTable = []
     for i in symbolTable.keys():
@@ -251,10 +249,6 @@ def switchCaseSemantics(lineNumber, variable):
         lineNumber = nextLineNumber(lineNumber)
     
     lineNumber = omgLineNumber[0] - 1       # Returns back the line number to where WTF? is
-    
-    # print(omgLineNumber)            # Checker
-    # print(omgWtfLineNumber)
-    # print(lineNumber)
 
     # * Checks if the IT value is equal to the cases in OMG
     checkedLine = -1
@@ -350,71 +344,6 @@ def iHasASemantics(lineNumber):
     return "OK"
 
 def visibleSemantics(lineNumber):
-    # console.config(state=NORMAL)
-    # visibleLexeme = lexemes[lineNumber].index("VISIBLE")
-    
-    # temp = operation_semantics.visibleExpSemantics(lineNumber, newSymbolTable, lexemes, types)
-    
-    # # * Semantic Error
-    # if type(temp) != list:
-    #     return temp
-       
-    # # * STORES THE FINAL VALUE OF TEMP HERE
-    # if(variable != "IT"):
-    #     variable = lexemes[lineNumber][1]
-    
-    # tempVal = [tempVal, "YARN literal"]
-
-    # updateSymbolTable(lineNumber, [temp[0], temp[1]], variable)
-
-    # return "OK"
-
-    # # TODO: doesnt catch when more than one arity
-    # if(types[lineNumber][visibleLexeme + 1] == "identifier"):
-    #     for i in newSymbolTable.keys():
-    #         if(i == lexemes[lineNumber][visibleLexeme + 1]):
-    #             if(newSymbolTable[i][1] == "TROOF literal"):
-    #                 if(newSymbolTable[i][0] == True):
-    #                     #print("WIN")
-    #                     console.insert(END, "WIN\n")
-    #                     console.config(state=DISABLED)
-    #                 else:
-    #                     #print("FAIL")
-    #                     console.insert(END, "FAIL\n")
-    #                     console.config(state=DISABLED)
-    #             else:
-    #                 console.insert(END, str(newSymbolTable[i][0]) + "\n")
-    #                 console.config(state=DISABLED)
-    #             return "OK"
-    # elif(types[lineNumber][visibleLexeme + 1] in literals):
-    #     console.insert(END, str(lexemes[lineNumber][visibleLexeme + 1]) + "\n")
-    #     console.config(state=DISABLED)
-    #     return "OK"
-    # elif(types[lineNumber][visibleLexeme + 1] == "string delimiter" and types[lineNumber][visibleLexeme + 2] == "YARN literal" and types[lineNumber][visibleLexeme + 3] == "string delimiter"):
-    #     console.insert(END, str(lexemes[lineNumber][visibleLexeme + 2]) + "\n")
-    #     console.config(state=DISABLED)
-    #     return "OK"
-    # elif(lexemes[lineNumber][visibleLexeme + 1] in expressionKeywords["arithmetic"] or lexemes[lineNumber][visibleLexeme + 1] in expressionKeywords["boolean"] or lexemes[lineNumber][visibleLexeme + 1] in expressionKeywords["comparison"] or lexemes[lineNumber][visibleLexeme + 1] in expressionKeywords["concatenation"]):
-    #     if (lexemes[lineNumber][visibleLexeme + 1] in expressionKeywords["arithmetic"]):
-    #         semanticError = arithmeticExpressionSemantics(lineNumber, "IT")
-    #     if (lexemes[lineNumber][visibleLexeme + 1] in expressionKeywords["boolean"]):
-    #         semanticError = booleanExpressionSemantics(lineNumber, "IT")
-    #     if (lexemes[lineNumber][visibleLexeme + 1] in expressionKeywords["comparison"]):
-    #         semanticError = comparisonExpressionSemantics(lineNumber, "IT")
-    #     if (lexemes[lineNumber][visibleLexeme + 1] in expressionKeywords["concatenation"]):
-    #         semanticError = concatenationExpressionSemantics(lineNumber, "IT")
-
-    #     # print(semanticError)
-    #     if(semanticError != "OK"):
-    #         return semanticError
-            
-    #     #print(newSymbolTable['IT'][0])
-    #     console.insert(END, str(newSymbolTable['IT'][0]) + "\n")
-    #     console.config(state=DISABLED)
-    #     return "OK"
-
-    # return "[Line " + str(lineNumber) + "] SemanticError: identifier not found"
-    
     console.config(state=NORMAL)
     
     temp = operation_semantics.visibleExpSemantics(lineNumber, newSymbolTable, lexemes, types)
@@ -474,10 +403,8 @@ def semantics():
         elif(lexemes[lineNumber][lexemeIndex] == "WTF?"):
             semanticsError = switchCaseSemantics(lineNumber, "IT")      # Returns a line number
 
-            # print(type(lineNumber))
             if (type(semanticsError) != int):
-                print(semanticsError)
-                break
+                return semanticsError
 
             lineNumber = nextLineNumber(semanticsError)
             continue
@@ -486,10 +413,7 @@ def semantics():
                 newSymbolTable["IT"] = [newSymbolTable[lexemes[lineNumber][lexemeIndex]][0], newSymbolTable[lexemes[lineNumber][lexemeIndex]][1]]
                 continue
             else:
-                print("[Line " + str(lineNumber) + "] SemanticsError: Uninitialized identifier")
-
-                lineNumber = nextLineNumber(lineNumber)
-                continue
+                return "[Line " + str(lineNumber) + "] SemanticsError: Uninitialized identifier"
 
         # * GO NEXT LINE
         else:
