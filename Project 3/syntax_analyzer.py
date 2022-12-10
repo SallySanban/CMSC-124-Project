@@ -1687,31 +1687,31 @@ def itzSyntax(lineNumber, lexemes, types):
 
     #     if(syntaxError != "OK"):
     #         return syntaxError
-    elif(lexemes[lineNumber][itzLexeme + 1] == "SUM OF"):
-        syntaxError = sumOfSyntax(lineNumber, lexemes, types)
+    # elif(lexemes[lineNumber][itzLexeme + 1] == "SUM OF"):
+    #     syntaxError = sumOfSyntax(lineNumber, lexemes, types)
 
-        if(syntaxError != "OK"):
-            return syntaxError
-    elif(lexemes[lineNumber][itzLexeme + 1] == "DIFF OF"):
-        syntaxError = diffOfSyntax(lineNumber, lexemes, types)
+    #     if(syntaxError != "OK"):
+    #         return syntaxError
+    # elif(lexemes[lineNumber][itzLexeme + 1] == "DIFF OF"):
+    #     syntaxError = diffOfSyntax(lineNumber, lexemes, types)
 
-        if(syntaxError != "OK"):
-            return syntaxError
-    elif(lexemes[lineNumber][itzLexeme + 1] == "PRODUKT OF"):
-        syntaxError = produktOfSyntax(lineNumber, lexemes, types)
+    #     if(syntaxError != "OK"):
+    #         return syntaxError
+    # elif(lexemes[lineNumber][itzLexeme + 1] == "PRODUKT OF"):
+    #     syntaxError = produktOfSyntax(lineNumber, lexemes, types)
 
-        if(syntaxError != "OK"):
-            return syntaxError
-    elif(lexemes[lineNumber][itzLexeme + 1] == "QUOSHUNT OF"):
-        syntaxError = quoshuntOfSyntax(lineNumber, lexemes, types)
+    #     if(syntaxError != "OK"):
+    #         return syntaxError
+    # elif(lexemes[lineNumber][itzLexeme + 1] == "QUOSHUNT OF"):
+    #     syntaxError = quoshuntOfSyntax(lineNumber, lexemes, types)
 
-        if(syntaxError != "OK"):
-            return syntaxError
-    elif(lexemes[lineNumber][itzLexeme + 1] == "MOD OF"):
-        syntaxError = quoshuntOfSyntax(lineNumber, lexemes, types)
+    #     if(syntaxError != "OK"):
+    #         return syntaxError
+    # elif(lexemes[lineNumber][itzLexeme + 1] == "MOD OF"):
+    #     syntaxError = quoshuntOfSyntax(lineNumber, lexemes, types)
 
-        if(syntaxError != "OK"):
-            return syntaxError
+    #     if(syntaxError != "OK"):
+    #         return syntaxError
     # elif(lexemes[lineNumber][itzLexeme + 1] == "BIGGR OF"):
     #     syntaxError = biggrOfSyntax(lineNumber, lexemes, types)
 
@@ -1722,53 +1722,53 @@ def itzSyntax(lineNumber, lexemes, types):
 
     #     if(syntaxError != "OK"):
     #         return syntaxError
-    elif(lexemes[lineNumber][itzLexeme + 1] == "SMOOSH"):
-        syntaxError = smooshSyntax(lineNumber, lexemes, types)
+    # elif(lexemes[lineNumber][itzLexeme + 1] == "SMOOSH"):
+    #     syntaxError = smooshSyntax(lineNumber, lexemes, types)
 
-        if(syntaxError != "OK"):
-            return syntaxError
-    elif(lexemes[lineNumber][itzLexeme + 1] == "NOT"):
-        syntaxError = notSyntax(lineNumber, lexemes, types)
+    #     if(syntaxError != "OK"):
+    #         return syntaxError
+    # elif(lexemes[lineNumber][itzLexeme + 1] == "NOT"):
+    #     syntaxError = notSyntax(lineNumber, lexemes, types)
 
-        if(syntaxError != "OK"):
-            return syntaxError
-    elif(lexemes[lineNumber][itzLexeme + 1] == "BOTH OF"):
-        syntaxError = bothOfSyntax(lineNumber, lexemes, types)
+    #     if(syntaxError != "OK"):
+    #         return syntaxError
+    # elif(lexemes[lineNumber][itzLexeme + 1] == "BOTH OF"):
+    #     syntaxError = bothOfSyntax(lineNumber, lexemes, types)
 
-        if(syntaxError != "OK"):
-            return syntaxError
-    elif(lexemes[lineNumber][itzLexeme + 1] == "EITHER OF"):
-        syntaxError = eitherOfSyntax(lineNumber, lexemes, types)
+    #     if(syntaxError != "OK"):
+    #         return syntaxError
+    # elif(lexemes[lineNumber][itzLexeme + 1] == "EITHER OF"):
+    #     syntaxError = eitherOfSyntax(lineNumber, lexemes, types)
 
-        if(syntaxError != "OK"):
-            return syntaxError
-    elif(lexemes[lineNumber][itzLexeme + 1] == "WON OF"):
-        syntaxError = wonOfSyntax(lineNumber, lexemes, types)
+    #     if(syntaxError != "OK"):
+    #         return syntaxError
+    # elif(lexemes[lineNumber][itzLexeme + 1] == "WON OF"):
+    #     syntaxError = wonOfSyntax(lineNumber, lexemes, types)
 
-        if(syntaxError != "OK"):
-            return syntaxError
-    elif(lexemes[lineNumber][itzLexeme + 1] == "ALL OF"):
-        syntaxError = allOfSyntax(lineNumber, lexemes, types)
+    #     if(syntaxError != "OK"):
+    #         return syntaxError
+    # elif(lexemes[lineNumber][itzLexeme + 1] == "ALL OF"):
+    #     syntaxError = allOfSyntax(lineNumber, lexemes, types)
 
-        if(syntaxError != "OK"):
-            return syntaxError
-    elif(lexemes[lineNumber][itzLexeme + 1] == "ANY OF"):
-        syntaxError = anyOfSyntax(lineNumber, lexemes, types)
+    #     if(syntaxError != "OK"):
+    #         return syntaxError
+    # elif(lexemes[lineNumber][itzLexeme + 1] == "ANY OF"):
+    #     syntaxError = anyOfSyntax(lineNumber, lexemes, types)
 
-        if(syntaxError != "OK"):
-            return syntaxError
-    elif(lexemes[lineNumber][itzLexeme + 1] == "BOTH SAEM"):
-        syntaxError = allOfSyntax(lineNumber, lexemes, types)
+    #     if(syntaxError != "OK"):
+    #         return syntaxError
+    # elif(lexemes[lineNumber][itzLexeme + 1] == "BOTH SAEM"):
+    #     syntaxError = allOfSyntax(lineNumber, lexemes, types)
 
-        if(syntaxError != "OK"):
-            return syntaxError
-    elif(lexemes[lineNumber][itzLexeme + 1] == "DIFFRINT"):
-        syntaxError = diffrintSyntax(lineNumber, lexemes, types)
+    #     if(syntaxError != "OK"):
+    #         return syntaxError
+    # elif(lexemes[lineNumber][itzLexeme + 1] == "DIFFRINT"):
+    #     syntaxError = diffrintSyntax(lineNumber, lexemes, types)
 
-        if(syntaxError != "OK"):
-            return syntaxError
+    #     if(syntaxError != "OK"):
+    #         return syntaxError
     
-    return "OK"
+    # return "OK"
 
 def iHasASyntax(lineNumber, lexemes, types):
     if(len(lexemes[lineNumber]) == 1):
@@ -2064,66 +2064,66 @@ def syntax(lexemes, types):
                 lineNumber = nextLineNumber(lineNumber, lexemes, types)
                 continue
             elif(lexemes[lineNumber][lexemeIndex] == "BOTH OF"):
-                syntaxError = bothOfSyntax(lineNumber, lexemes, types)
+                # syntaxError = bothOfSyntax(lineNumber, lexemes, types)
 
-                if(syntaxError != "OK"):
-                    return syntaxError
+                # if(syntaxError != "OK"):
+                #     return syntaxError
 
                 lineNumber = nextLineNumber(lineNumber, lexemes, types)
                 continue
             elif(lexemes[lineNumber][lexemeIndex] == "EITHER OF"):
-                syntaxError = eitherOfSyntax(lineNumber, lexemes, types)
+                # syntaxError = eitherOfSyntax(lineNumber, lexemes, types)
 
-                if(syntaxError != "OK"):
-                    return syntaxError
+                # if(syntaxError != "OK"):
+                #     return syntaxError
 
                 lineNumber = nextLineNumber(lineNumber, lexemes, types)
                 continue
             elif(lexemes[lineNumber][lexemeIndex] == "WON OF"):
-                syntaxError = wonOfSyntax(lineNumber, lexemes, types)
+                # syntaxError = wonOfSyntax(lineNumber, lexemes, types)
 
-                if(syntaxError != "OK"):
-                    return syntaxError
+                # if(syntaxError != "OK"):
+                #     return syntaxError
 
                 lineNumber = nextLineNumber(lineNumber, lexemes, types)
                 continue
             elif(lexemes[lineNumber][lexemeIndex] == "NOT"):
-                syntaxError = notSyntax(lineNumber, lexemes, types)
+                # syntaxError = notSyntax(lineNumber, lexemes, types)
 
-                if(syntaxError != "OK"):
-                    return syntaxError
+                # if(syntaxError != "OK"):
+                #     return syntaxError
 
                 lineNumber = nextLineNumber(lineNumber, lexemes, types)
                 continue
             elif(lexemes[lineNumber][lexemeIndex] == "ANY OF"):
-                syntaxError = anyOfSyntax(lineNumber, lexemes, types)
+                # syntaxError = anyOfSyntax(lineNumber, lexemes, types)
 
-                if(syntaxError != "OK"):
-                    return syntaxError
+                # if(syntaxError != "OK"):
+                #     return syntaxError
 
                 lineNumber = nextLineNumber(lineNumber, lexemes, types)
                 continue
             elif(lexemes[lineNumber][lexemeIndex] == "ALL OF"):
-                syntaxError = allOfSyntax(lineNumber, lexemes, types)
+                # syntaxError = allOfSyntax(lineNumber, lexemes, types)
 
-                if(syntaxError != "OK"):
-                    return syntaxError
+                # if(syntaxError != "OK"):
+                #     return syntaxError
 
                 lineNumber = nextLineNumber(lineNumber, lexemes, types)
                 continue
             elif(lexemes[lineNumber][lexemeIndex] == "BOTH SAEM"):
-                syntaxError = bothSaemSyntax(lineNumber, lexemes, types)
+                # syntaxError = bothSaemSyntax(lineNumber, lexemes, types)
 
-                if(syntaxError != "OK"):
-                    return syntaxError
+                # if(syntaxError != "OK"):
+                #     return syntaxError
 
                 lineNumber = nextLineNumber(lineNumber, lexemes, types)
                 continue
             elif(lexemes[lineNumber][lexemeIndex] == "DIFFRINT"):
-                syntaxError = diffrintSyntax(lineNumber, lexemes, types)
+                # syntaxError = diffrintSyntax(lineNumber, lexemes, types)
 
-                if(syntaxError != "OK"):
-                    return syntaxError
+                # if(syntaxError != "OK"):
+                #     return syntaxError
 
                 lineNumber = nextLineNumber(lineNumber, lexemes, types)
                 continue

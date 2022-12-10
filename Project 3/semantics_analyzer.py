@@ -64,6 +64,8 @@ def makeTokens():
 
 def makeSymbolTable(symbolTable):
     global listOfSymbolTable, symbolTableTree
+    
+    print(symbolTable)
 
     refactoredSymbolTable = []
     for i in symbolTable.keys():
