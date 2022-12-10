@@ -120,7 +120,7 @@ def run():
 
         syntaxError = syntax_analyzer.syntax(lexemes, types)
 
-        if(syntaxError != None):
+        if("SyntaxError" in syntaxError):
             messagebox.showinfo('Syntax Error', syntaxError)
         else:
             semanticError = semantics()
@@ -900,17 +900,14 @@ def visibleSemantics(lineNumber):
                         console.insert(END, "FAIL\n")
                         console.config(state=DISABLED)
                 else:
-                    #print(newSymbolTable[i][0])
                     console.insert(END, str(newSymbolTable[i][0]) + "\n")
                     console.config(state=DISABLED)
                 return "OK"
     elif(types[lineNumber][visibleLexeme + 1] in literals):
-        #print(lexemes[lineNumber][visibleLexeme + 1])
         console.insert(END, str(lexemes[lineNumber][visibleLexeme + 1]) + "\n")
         console.config(state=DISABLED)
         return "OK"
     elif(types[lineNumber][visibleLexeme + 1] == "string delimiter" and types[lineNumber][visibleLexeme + 2] == "YARN literal" and types[lineNumber][visibleLexeme + 3] == "string delimiter"):
-        #print(lexemes[lineNumber][visibleLexeme + 2])
         console.insert(END, str(lexemes[lineNumber][visibleLexeme + 2]) + "\n")
         console.config(state=DISABLED)
         return "OK"
@@ -924,6 +921,7 @@ def visibleSemantics(lineNumber):
         if (lexemes[lineNumber][visibleLexeme + 1] in expressionKeywords["concatenation"]):
             semanticError = concatenationExpressionSemantics(lineNumber, "IT")
 
+        # print(semanticError)
         if(semanticError != "OK"):
             return semanticError
             
