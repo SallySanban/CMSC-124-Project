@@ -66,7 +66,6 @@ def makeSymbolTable(symbolTable):
     global listOfSymbolTable, symbolTableTree
 
     refactoredSymbolTable = []
-    # print(symbolTable)
     for i in symbolTable.keys():
         refactoredSymbolTable.append((i, symbolTable[i][0], symbolTable[i][1]))
 
