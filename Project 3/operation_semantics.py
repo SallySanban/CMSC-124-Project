@@ -2373,9 +2373,9 @@ def booleanExpSemantics(lineNumber, symbolTable, lexemes, types):
   
   
   if lexemeExpression[0] == "WIN":
-    tempVal = [True, typeExpression[0]]
+    tempVal = ["WIN", typeExpression[0]]
   else:
-    tempVal = [False, typeExpression[0]]
+    tempVal = ["FAIL", typeExpression[0]]
     
   print(lexemeExpression)
   print(typeExpression)
@@ -2993,7 +2993,7 @@ def visibleExpSemantics(lineNumber, symbolTable, lexemes, types):
       typeExpression[index] = identifier[1]
       
       if lexemeExpression[index] == "NOOB":
-        return "[Line " + str(lineNumber) + "] SemanticError: NOOB literal can not be typecasted to YARN literal"
+        return ["NOOB", "NOOB"]
     else:
       return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
   
