@@ -423,7 +423,6 @@ def visibleSemantics(lineNumber):
     if type(temp) != list:
         return temp
     
-
     updateSymbolTable(lineNumber, [temp[0], temp[1]], "IT")
     console.insert(END, str(newSymbolTable['IT'][0]) + "\n")
     console.config(state=DISABLED)
