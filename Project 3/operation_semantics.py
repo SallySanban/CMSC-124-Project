@@ -2074,7 +2074,8 @@ def booleanExpSemantics(lineNumber, symbolTable, lexemes, types):
   
   if lexemes[lineNumber].count("ANY OF") > 1:
     return "[Line " + str(lineNumber) + "] SyntaxError: ANY OF cannot be nested"
-  elif lexemes[lineNumber].count("ANY OF") == 1:
+  
+  if lexemes[lineNumber].count("ANY OF") == 1:
     if lexemes[lineNumber].count("MKAY") > 1:
       return "[Line " + str(lineNumber) + "] SyntaxError: Have too many ANY OF delimiter MKAY "
     if lexemes[lineNumber].count("MKAY") == 0:
@@ -2082,14 +2083,21 @@ def booleanExpSemantics(lineNumber, symbolTable, lexemes, types):
     
   if lexemes[lineNumber].count("ALL OF") > 1:
     return "[Line " + str(lineNumber) + "] SyntaxError: ANY OF cannot be nested"
-  elif lexemes[lineNumber].count("ALL OF") == 1:
+  if lexemes[lineNumber].count("ALL OF") == 1:
     if lexemes[lineNumber].count("MKAY") > 1:
       return "[Line " + str(lineNumber) + "] SyntaxError: Have too many ANY OF delimiter MKAY "
     if lexemes[lineNumber].count("MKAY") == 0:
       return "[Line " + str(lineNumber) + "] SyntaxError: ANY OF delimiter MKAY not found"
+  
+  try:
+    if lexemes[lineNumber][lexemes[lineNumber].index("MKAY") + 1]:
+      print("",end="")
+  except IndexError:
+    return "[Line " + str(lineNumber) + "] SyntaxError: No statements allowed after ALL OF or ANY OF delimiter"
+
       
 
-  # * Gets the indices of arithmetic operations
+  # * Gets the indices of boolean operations
   operationIndices = []
   lexemeExpression = 0
   typeExpression = 0
@@ -2816,3 +2824,69 @@ def comparisonExpSemantics(lineNumber, symbolTable, lexemes, types):
                         return "[Line " + str(lineNumber) + "] SemanticError: Invalid operands for comparison operation"
                 else:
                     return "[Line " + str(lineNumber) + "] SemanticError: Invalid operands for comparison operation"
+
+def concatenationExpSemantics(lineNumber, symbolTable, lexemes, types):
+    # ! NO OPERATIONS AS OPERANDS YET
+   # * Gets the index of ITZ
+    if("variable initialization keyword" in types[lineNumber]):
+        expressionIndex = lexemes[lineNumber].index("ITZ")
+    #put other cases where the arithmetic expression might be
+    elif("print keyword" in types[lineNumber]):
+        expressionIndex = lexemes[lineNumber].index("VISIBLE")
+    else:
+        expressionIndex = -1    
+    
+    #print(lexemes[lineNumber][expressionIndex])
+    anIndices = []
+    for index in range(len(lexemes[lineNumber])):
+        if lexemes[lineNumber][index] == "AN":
+            anIndices.append(index)
+    
+    counter = 0
+    tempVal = ''
+    while True:
+        if (counter == len(anIndices) - 1):
+            if (types[lineNumber][anIndices[counter] - 1] == "identifier"):
+                if (symbolTable.get(lexemes[lineNumber][anIndices[counter] - 1])):
+                    tempVal += str(symbolTable[lexemes[lineNumber][anIndices[counter] - 1]][0])
+                else:
+                    return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+            elif (types[lineNumber][anIndices[counter] - 1] == "string delimiter"):     # YARN literal
+                if (types[lineNumber][anIndices[counter] - 3] == "string delimiter"):   # another delimiter
+                    tempVal += lexemes[lineNumber][anIndices[counter] - 2]
+                else:
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Invalid syntax of YARN literal"     # ! TAKE NOTE
+            else:
+                tempVal += str(lexemes[lineNumber][anIndices[counter] - 1])
+            
+            if (types[lineNumber][anIndices[counter] + 1] == "identifier"):
+                if (symbolTable.get(lexemes[lineNumber][anIndices[counter] + 1])):
+                    tempVal += str(symbolTable[lexemes[lineNumber][anIndices[counter] + 1]][0])
+                else:
+                    return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+            elif (types[lineNumber][anIndices[counter] + 1] == "string delimiter"):     # YARN literal
+                if (types[lineNumber][anIndices[counter] + 3] == "string delimiter"):   # another delimiter
+                    tempVal += lexemes[lineNumber][anIndices[counter] + 2]
+                else:
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Invalid syntax of YARN literal"     # ! TAKE NOTE
+            else:
+                tempVal += str(lexemes[lineNumber][anIndices[counter] + 1])
+
+            break
+        
+        if (types[lineNumber][anIndices[counter] - 1] == "identifier"):
+            if (symbolTable.get(lexemes[lineNumber][anIndices[counter] - 1])):
+                tempVal += str(symbolTable[lexemes[lineNumber][anIndices[counter] - 1]][0])
+            else:
+                return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+        elif (types[lineNumber][anIndices[counter] - 1] == "string delimiter"):     # YARN literal
+                if (types[lineNumber][anIndices[counter] - 3] == "string delimiter"):   # another delimiter
+                    tempVal += lexemes[lineNumber][anIndices[counter] - 2]
+                else:
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Invalid syntax of YARN literal"     # ! TAKE NOTE
+        else:
+            tempVal += str(lexemes[lineNumber][anIndices[counter] - 1])
+
+
+        counter += 1
+

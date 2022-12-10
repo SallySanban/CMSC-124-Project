@@ -213,79 +213,19 @@ def comparisonExpressionSemantics(lineNumber, variable):
     return "OK"
 
 def concatenationExpressionSemantics(lineNumber, variable):
-    # * AUTOMATICALLY TYPECAST INTO YARN EVERY DATA TYPE
-    # ! NO OPERATIONS AS OPERANDS YET
-
-    # * Gets the index of ITZ
-    if("variable initialization keyword" in types[lineNumber]):
-        expressionIndex = lexemes[lineNumber].index("ITZ")
-    #put other cases where the arithmetic expression might be
-    elif("print keyword" in types[lineNumber]):
-        expressionIndex = lexemes[lineNumber].index("VISIBLE")
-    else:
-        expressionIndex = -1    
+    temp = operation_semantics.booleanExpSemantics(lineNumber, newSymbolTable, lexemes, types)
     
-    #print(lexemes[lineNumber][expressionIndex])
-    anIndices = []
-    for index in range(len(lexemes[lineNumber])):
-        if lexemes[lineNumber][index] == "AN":
-            anIndices.append(index)
-    
-    counter = 0
-    tempVal = ''
-    while True:
-        if (counter == len(anIndices) - 1):
-            if (types[lineNumber][anIndices[counter] - 1] == "identifier"):
-                if (newSymbolTable.get(lexemes[lineNumber][anIndices[counter] - 1])):
-                    tempVal += str(newSymbolTable[lexemes[lineNumber][anIndices[counter] - 1]][0])
-                else:
-                    return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
-            elif (types[lineNumber][anIndices[counter] - 1] == "string delimiter"):     # YARN literal
-                if (types[lineNumber][anIndices[counter] - 3] == "string delimiter"):   # another delimiter
-                    tempVal += lexemes[lineNumber][anIndices[counter] - 2]
-                else:
-                    return "[Line " + str(lineNumber) + "] SyntaxError: Invalid syntax of YARN literal"     # ! TAKE NOTE
-            else:
-                tempVal += str(lexemes[lineNumber][anIndices[counter] - 1])
-            
-            if (types[lineNumber][anIndices[counter] + 1] == "identifier"):
-                if (newSymbolTable.get(lexemes[lineNumber][anIndices[counter] + 1])):
-                    tempVal += str(newSymbolTable[lexemes[lineNumber][anIndices[counter] + 1]][0])
-                else:
-                    return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
-            elif (types[lineNumber][anIndices[counter] + 1] == "string delimiter"):     # YARN literal
-                if (types[lineNumber][anIndices[counter] + 3] == "string delimiter"):   # another delimiter
-                    tempVal += lexemes[lineNumber][anIndices[counter] + 2]
-                else:
-                    return "[Line " + str(lineNumber) + "] SyntaxError: Invalid syntax of YARN literal"     # ! TAKE NOTE
-            else:
-                tempVal += str(lexemes[lineNumber][anIndices[counter] + 1])
-
-            break
-        
-        if (types[lineNumber][anIndices[counter] - 1] == "identifier"):
-            if (newSymbolTable.get(lexemes[lineNumber][anIndices[counter] - 1])):
-                tempVal += str(newSymbolTable[lexemes[lineNumber][anIndices[counter] - 1]][0])
-            else:
-                return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
-        elif (types[lineNumber][anIndices[counter] - 1] == "string delimiter"):     # YARN literal
-                if (types[lineNumber][anIndices[counter] - 3] == "string delimiter"):   # another delimiter
-                    tempVal += lexemes[lineNumber][anIndices[counter] - 2]
-                else:
-                    return "[Line " + str(lineNumber) + "] SyntaxError: Invalid syntax of YARN literal"     # ! TAKE NOTE
-        else:
-            tempVal += str(lexemes[lineNumber][anIndices[counter] - 1])
-
-
-        counter += 1
-    
+    # * Semantic Error
+    if type(temp) != list:
+        return temp
+       
     # * STORES THE FINAL VALUE OF TEMP HERE
     if(variable != "IT"):
         variable = lexemes[lineNumber][1]
     
     tempVal = [tempVal, "YARN literal"]
 
-    updateSymbolTable(lineNumber, [tempVal[0], tempVal[1]], variable)
+    updateSymbolTable(lineNumber, [temp[0], temp[1]], variable)
 
     return "OK"
         
