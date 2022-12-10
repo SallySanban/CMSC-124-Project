@@ -2074,7 +2074,8 @@ def booleanExpSemantics(lineNumber, symbolTable, lexemes, types):
   
   if lexemes[lineNumber].count("ANY OF") > 1:
     return "[Line " + str(lineNumber) + "] SyntaxError: ANY OF cannot be nested"
-  elif lexemes[lineNumber].count("ANY OF") == 1:
+  
+  if lexemes[lineNumber].count("ANY OF") == 1:
     if lexemes[lineNumber].count("MKAY") > 1:
       return "[Line " + str(lineNumber) + "] SyntaxError: Have too many ANY OF delimiter MKAY "
     if lexemes[lineNumber].count("MKAY") == 0:
@@ -2082,14 +2083,21 @@ def booleanExpSemantics(lineNumber, symbolTable, lexemes, types):
     
   if lexemes[lineNumber].count("ALL OF") > 1:
     return "[Line " + str(lineNumber) + "] SyntaxError: ANY OF cannot be nested"
-  elif lexemes[lineNumber].count("ALL OF") == 1:
+  if lexemes[lineNumber].count("ALL OF") == 1:
     if lexemes[lineNumber].count("MKAY") > 1:
       return "[Line " + str(lineNumber) + "] SyntaxError: Have too many ANY OF delimiter MKAY "
     if lexemes[lineNumber].count("MKAY") == 0:
       return "[Line " + str(lineNumber) + "] SyntaxError: ANY OF delimiter MKAY not found"
+  
+  try:
+    if lexemes[lineNumber][lexemes[lineNumber].index("MKAY") + 1]:
+      print("",end="")
+  except IndexError:
+    return "[Line " + str(lineNumber) + "] SyntaxError: No statements allowed after ALL OF or ANY OF delimiter"
+
       
 
-  # * Gets the indices of arithmetic operations
+  # * Gets the indices of boolean operations
   operationIndices = []
   lexemeExpression = 0
   typeExpression = 0
@@ -2336,3 +2344,549 @@ def booleanExpSemantics(lineNumber, symbolTable, lexemes, types):
   print(tempVal)
   
   return tempVal
+
+def comparisonExpSemantics(lineNumber, symbolTable, lexemes, types):
+   # * Gets the index of ITZ
+    if("variable initialization keyword" in types[lineNumber]):
+        expressionIndex = lexemes[lineNumber].index("ITZ")
+    #put other cases where the arithmetic expression might be
+    elif("print keyword" in types[lineNumber]):
+        expressionIndex = lexemes[lineNumber].index("VISIBLE")
+    else:
+        expressionIndex = -1    
+    
+    # print(lexemes[lineNumber][expressionIndex])
+    anIndices = []
+    for index in range(len(lexemes[lineNumber])):
+        if lexemes[lineNumber][index] == "AN":
+            anIndices.append(index)
+    
+    
+    if (len(anIndices) == 1):      # (x == y OR x != y)
+        if lexemes[lineNumber][expressionIndex + 1] == "BOTH SAEM": # x == y
+            if types[lineNumber][expressionIndex + 2] == "identifier":  # x = identifier
+                if symbolTable.get(lexemes[lineNumber][expressionIndex + 2]):
+                    if types[lineNumber][expressionIndex + 4] == "identifier":      # y
+                        if symbolTable.get(lexemes[lineNumber][expressionIndex + 4]):
+                            if (symbolTable[lexemes[lineNumber][expressionIndex + 2]][0] == symbolTable[lexemes[lineNumber][expressionIndex + 4]][0]):
+                                tempVal = ["WIN", "TROOF literal"]
+                            else:
+                                tempVal = ["FAIL", "TROOF literal"]
+                        else:
+                            return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+                    elif types[lineNumber][expressionIndex + 4] == "NUMBR literal":
+                        if (symbolTable[lexemes[lineNumber][expressionIndex + 2]][1] == "NUMBR literal"):
+                            if (symbolTable[lexemes[lineNumber][expressionIndex + 2]][0] == int(lexemes[lineNumber][expressionIndex + 4])):
+                                tempVal = ["WIN", "TROOF literal"]
+                            else:
+                                tempVal = ["FAIL", "TROOF literal"]
+                        else:
+                            return "[Line " + str(lineNumber) + "] SemanticError: Cannot implicitly typecast in comparison operation"
+                    elif types[lineNumber][expressionIndex + 4] == "NUMBAR literal":
+                        if (symbolTable[lexemes[lineNumber][expressionIndex + 2]][1] == "NUMBAR literal"):
+                            if (symbolTable[lexemes[lineNumber][expressionIndex + 4]][0] == float(lexemes[lineNumber][expressionIndex + 4])):
+                                tempVal = ["WIN", "TROOF literal"]
+                            else:
+                                tempVal = ["FAIL", "TROOF literal"]
+                        else:
+                            return "[Line " + str(lineNumber) + "] SemanticError: Cannot implicitly typecast in comparison operation"
+                    else:
+                        return "[Line " + str(lineNumber) + "] SemanticError: Invalid operands for comparison operation"
+                else:
+                    return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+            elif types[lineNumber][expressionIndex + 2] == "NUMBR literal": # x = NUMBR
+                if types[lineNumber][expressionIndex + 4] == "identifier":      # y
+                    if symbolTable.get(lexemes[lineNumber][expressionIndex + 4]):
+                        if (int(lexemes[lineNumber][expressionIndex + 2]) == symbolTable[lexemes[lineNumber][expressionIndex + 4]][0]):
+                            temp = ["WIN", "TROOF literal"]
+                        else:
+                            temp = ["FAIL", "TROOF literal"]
+                    else:
+                        return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+                elif types[lineNumber][expressionIndex + 4] == "NUMBR literal":
+                    if (int(lexemes[lineNumber][expressionIndex + 2]) == int(lexemes[lineNumber][expressionIndex + 4])):
+                        temp = ["WIN", "TROOF literal"]
+                    else:
+                        temp = ["FAIL", "TROOF literal"]
+                elif types[lineNumber][expressionIndex + 4] == "NUMBAR literal":
+                    if (int(lexemes[lineNumber][expressionIndex + 2]) == float(lexemes[lineNumber][expressionIndex + 4])):
+                        temp = ["WIN", "TROOF literal"]
+                    else:
+                        temp = ["FAIL", "TROOF literal"]
+                else:
+                    return "[Line " + str(lineNumber) + "] SemanticError: Invalid operands for comparison operation"
+            elif types[lineNumber][expressionIndex + 2] == "NUMBAR literal":    # x = NUMBAR
+                if types[lineNumber][expressionIndex + 4] == "identifier":      # y
+                    if symbolTable.get(lexemes[lineNumber][expressionIndex + 4]):
+                        if (float(lexemes[lineNumber][expressionIndex + 2]) == symbolTable[lexemes[lineNumber][expressionIndex + 4]][0]):
+                            tempVal = ["WIN", "TROOF literal"]
+                        else:
+                            tempVal = ["FAIL", "TROOF literal"]
+                    else:
+                        return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+                elif types[lineNumber][expressionIndex + 4] == "NUMBR literal":
+                    if (float(lexemes[lineNumber][expressionIndex + 2]) == int(lexemes[lineNumber][expressionIndex + 4])):
+                        tempVal = ["WIN", "TROOF literal"]
+                    else:
+                        tempVal = ["FAIL", "TROOF literal"]
+                elif types[lineNumber][expressionIndex + 4] == "NUMBAR literal":
+                    if (float(lexemes[lineNumber][expressionIndex + 2]) == float(lexemes[lineNumber][expressionIndex + 4])):
+                        tempVal = ["WIN", "TROOF literal"]
+                    else:
+                        tempVal = ["FAIL", "TROOF literal"]
+                else:
+                    return "[Line " + str(lineNumber) + "] SemanticError: Invalid operands for comparison operation"
+            else:
+                return "[Line " + str(lineNumber) + "] SemanticError: Invalid operands for comparison operation"
+        else:   # DIFFRINT      x != y
+            if types[lineNumber][expressionIndex + 2] == "identifier":  # x = identifier
+                if symbolTable.get(lexemes[lineNumber][expressionIndex + 2]):
+                    if types[lineNumber][expressionIndex + 4] == "identifier":      # y
+                        if symbolTable.get(lexemes[lineNumber][expressionIndex + 4]):
+                            if (symbolTable[lexemes[lineNumber][expressionIndex + 2]][0] != symbolTable[lexemes[lineNumber][expressionIndex + 4]][0]):
+                                tempVal = ["WIN", "TROOF literal"]
+                            else:
+                                tempVal = ["FAIL", "TROOF literal"]
+                        else:
+                            return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+                    elif types[lineNumber][expressionIndex + 4] == "NUMBR literal":
+                        if (symbolTable[lexemes[lineNumber][expressionIndex + 2]][1] == "NUMBR literal"):
+                            if (symbolTable[lexemes[lineNumber][expressionIndex + 2]][0] != int(lexemes[lineNumber][expressionIndex + 4])):
+                                tempVal = ["WIN", "TROOF literal"]
+                            else:
+                                tempVal = ["FAIL", "TROOF literal"]
+                        else:
+                            return "[Line " + str(lineNumber) + "] SemanticError: Cannot implicitly typecast in comparison operation"
+                    elif types[lineNumber][expressionIndex + 4] == "NUMBAR literal":
+                        if (symbolTable[lexemes[lineNumber][expressionIndex + 2]][1] == "NUMBAR literal"):
+                            if (symbolTable[lexemes[lineNumber][expressionIndex + 4]][0] != float(lexemes[lineNumber][expressionIndex + 4])):
+                                tempVal = ["WIN", "TROOF literal"]
+                            else:
+                                tempVal = ["FAIL", "TROOF literal"]
+                        else:
+                            return "[Line " + str(lineNumber) + "] SemanticError: Cannot implicitly typecast in comparison operation"
+                    else:
+                        return "[Line " + str(lineNumber) + "] SemanticError: Invalid operands for comparison operation"
+                else:
+                    return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+            elif types[lineNumber][expressionIndex + 2] == "NUMBR literal": # x = NUMBR
+                if types[lineNumber][expressionIndex + 4] == "identifier":      # y
+                    if symbolTable.get(lexemes[lineNumber][expressionIndex + 4]):
+                        if (int(lexemes[lineNumber][expressionIndex + 2]) != symbolTable[lexemes[lineNumber][expressionIndex + 4]][0]):
+                            tempVal = ["WIN", "TROOF literal"]
+                        else:
+                            tempVal = ["FAIL", "TROOF literal"]
+                    else:
+                        return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+                elif types[lineNumber][expressionIndex + 4] == "NUMBR literal":
+                    if (int(lexemes[lineNumber][expressionIndex + 2]) != int(lexemes[lineNumber][expressionIndex + 4])):
+                        tempVal = ["WIN", "TROOF literal"]
+                    else:
+                        tempVal = ["FAIL", "TROOF literal"]
+                elif types[lineNumber][expressionIndex + 4] == "NUMBAR literal":
+                    if (int(lexemes[lineNumber][expressionIndex + 2]) != float(lexemes[lineNumber][expressionIndex + 4])):
+                        tempVal = ["WIN", "TROOF literal"]
+                    else:
+                        tempVal = ["FAIL", "TROOF literal"]
+                else:
+                    return "[Line " + str(lineNumber) + "] SemanticError: Invalid operands for comparison operation"
+            elif types[lineNumber][expressionIndex + 2] == "NUMBAR literal":    # x = NUMBAR
+                if types[lineNumber][expressionIndex + 4] == "identifier":      # y
+                    if symbolTable.get(lexemes[lineNumber][expressionIndex + 4]):
+                        if (float(lexemes[lineNumber][expressionIndex + 2]) != symbolTable[lexemes[lineNumber][expressionIndex + 4]][0]):
+                            tempVal = ["WIN", "TROOF literal"]
+                        else:
+                            tempVal = ["FAIL", "TROOF literal"]
+                    else:
+                        return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+                elif types[lineNumber][expressionIndex + 4] == "NUMBR literal":
+                    if (float(lexemes[lineNumber][expressionIndex + 2]) != int(lexemes[lineNumber][expressionIndex + 4])):
+                        tempVal = ["WIN", "TROOF literal"]
+                    else:
+                        tempVal = ["FAIL", "TROOF literal"]
+                elif types[lineNumber][expressionIndex + 4] == "NUMBAR literal":
+                    if (float(lexemes[lineNumber][expressionIndex + 2]) != float(lexemes[lineNumber][expressionIndex + 4])):
+                        tempVal = ["WIN", "TROOF literal"]
+                    else:
+                        tempVal = ["FAIL", "TROOF literal"]
+                else:
+                    return "[Line " + str(lineNumber) + "] SemanticError: Invalid operands for comparison operation"
+            else:
+                return "[Line " + str(lineNumber) + "] SemanticError: Invalid operands for comparison operation"
+
+    else:       # (x <= y, x >= y, x < y, x > y)
+        bigCnt = lexemes[lineNumber].count("BIGGR OF")
+        try:
+            sizeIndex = lexemes[lineNumber].index("BIGGR OF")
+        except ValueError:
+            sizeIndex = lexemes[lineNumber].index("SMALLR OF")
+
+
+        if lexemes[lineNumber][expressionIndex + 1] == "BOTH SAEM": # x <= y, x >= y
+            if (bigCnt == 0):       # x <= y
+                if types[lineNumber][sizeIndex + 1] == "identifier":  # x = identifier
+                    if symbolTable.get(lexemes[lineNumber][sizeIndex + 1]):
+                        if types[lineNumber][sizeIndex + 3] == "identifier":      # y
+                            if symbolTable.get(lexemes[lineNumber][sizeIndex + 3]):
+                                if (symbolTable[lexemes[lineNumber][sizeIndex + 1]][0] <= symbolTable[lexemes[lineNumber][sizeIndex + 3]][0]):
+                                    tempVal = ["WIN", "TROOF literal"]
+                                else:
+                                    tempVal = ["FAIL", "TROOF literal"]
+                            else:
+                                return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+                        elif types[lineNumber][sizeIndex + 3] == "NUMBR literal":
+                            if (symbolTable[lexemes[lineNumber][sizeIndex + 1]][1] == "NUMBR literal"):
+                                if (symbolTable[lexemes[lineNumber][sizeIndex + 1]][0] <= int(lexemes[lineNumber][sizeIndex + 3])):
+                                    tempVal = ["WIN", "TROOF literal"]
+                                else:
+                                    tempVal = ["FAIL", "TROOF literal"]
+                            else:
+                                return "[Line " + str(lineNumber) + "] SemanticError: Cannot implicitly typecast in comparison operation"
+                        elif types[lineNumber][sizeIndex + 3] == "NUMBAR literal":
+                            if (symbolTable[lexemes[lineNumber][sizeIndex + 1]][1] == "NUMBAR literal"):
+                                if (symbolTable[lexemes[lineNumber][sizeIndex + 3]][0] <= float(lexemes[lineNumber][sizeIndex + 3])):
+                                    tempVal = ["WIN", "TROOF literal"]
+                                else:
+                                    tempVal = ["FAIL", "TROOF literal"]
+                            else:
+                                return "[Line " + str(lineNumber) + "] SemanticError: Cannot implicitly typecast in comparison operation"
+                        else:
+                            return "[Line " + str(lineNumber) + "] SemanticError: Invalid operands for comparison operation"
+                    else:
+                        return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+                elif types[lineNumber][sizeIndex + 1] == "NUMBR literal": # x = NUMBR
+                    if types[lineNumber][sizeIndex + 3] == "identifier":      # y
+                        if symbolTable.get(lexemes[lineNumber][sizeIndex + 3]):
+                            if (int(lexemes[lineNumber][sizeIndex + 1]) <= symbolTable[lexemes[lineNumber][sizeIndex + 3]][0]):
+                                temp = ["WIN", "TROOF literal"]
+                            else:
+                                temp = ["FAIL", "TROOF literal"]
+                        else:
+                            return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+                    elif types[lineNumber][sizeIndex + 3] == "NUMBR literal":
+                        if (int(lexemes[lineNumber][sizeIndex + 1]) <= int(lexemes[lineNumber][sizeIndex + 1])):
+                            temp = ["WIN", "TROOF literal"]
+                        else:
+                            temp = ["FAIL", "TROOF literal"]
+                    elif types[lineNumber][sizeIndex + 3] == "NUMBAR literal":
+                        if (int(lexemes[lineNumber][sizeIndex + 1]) <= float(lexemes[lineNumber][sizeIndex + 3])):
+                            temp = ["WIN", "TROOF literal"]
+                        else:
+                            temp = ["FAIL", "TROOF literal"]
+                    else:
+                        return "[Line " + str(lineNumber) + "] SemanticError: Invalid operands for comparison operation"
+                elif types[lineNumber][sizeIndex + 1] == "NUMBAR literal":    # x = NUMBAR
+                    if types[lineNumber][sizeIndex + 3] == "identifier":      # y
+                        if symbolTable.get(lexemes[lineNumber][sizeIndex + 3]):
+                            if (float(lexemes[lineNumber][sizeIndex + 1]) <= symbolTable[lexemes[lineNumber][sizeIndex + 3]][0]):
+                                tempVal = ["WIN", "TROOF literal"]
+                            else:
+                                tempVal = ["FAIL", "TROOF literal"]
+                        else:
+                            return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+                    elif types[lineNumber][sizeIndex + 3] == "NUMBR literal":
+                        if (float(lexemes[lineNumber][sizeIndex + 1]) <= int(lexemes[lineNumber][sizeIndex + 3])):
+                            tempVal = ["WIN", "TROOF literal"]
+                        else:
+                            tempVal = ["FAIL", "TROOF literal"]
+                    elif types[lineNumber][sizeIndex + 3] == "NUMBAR literal":
+                        if (float(lexemes[lineNumber][sizeIndex + 1]) <= float(lexemes[lineNumber][sizeIndex + 3])):
+                            tempVal = ["WIN", "TROOF literal"]
+                        else:
+                            tempVal = ["FAIL", "TROOF literal"]
+                    else:
+                        return "[Line " + str(lineNumber) + "] SemanticError: Invalid operands for comparison operation"
+                else:
+                    return "[Line " + str(lineNumber) + "] SemanticError: Invalid operands for comparison operation"
+            else:       # x >= y
+                if types[lineNumber][sizeIndex + 1] == "identifier":  # x = identifier
+                    if symbolTable.get(lexemes[lineNumber][sizeIndex + 1]):
+                        if types[lineNumber][sizeIndex + 3] == "identifier":      # y
+                            if symbolTable.get(lexemes[lineNumber][sizeIndex + 3]):
+                                if (symbolTable[lexemes[lineNumber][sizeIndex + 1]][0] >= symbolTable[lexemes[lineNumber][sizeIndex + 3]][0]):
+                                    tempVal = ["WIN", "TROOF literal"]
+                                else:
+                                    tempVal = ["FAIL", "TROOF literal"]
+                            else:
+                                return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+                        elif types[lineNumber][sizeIndex + 3] == "NUMBR literal":
+                            if (symbolTable[lexemes[lineNumber][sizeIndex + 1]][1] == "NUMBR literal"):
+                                if (symbolTable[lexemes[lineNumber][sizeIndex + 1]][0] >= int(lexemes[lineNumber][sizeIndex + 3])):
+                                    tempVal = ["WIN", "TROOF literal"]
+                                else:
+                                    tempVal = ["FAIL", "TROOF literal"]
+                            else:
+                                return "[Line " + str(lineNumber) + "] SemanticError: Cannot implicitly typecast in comparison operation"
+                        elif types[lineNumber][sizeIndex + 3] == "NUMBAR literal":
+                            if (symbolTable[lexemes[lineNumber][sizeIndex + 1]][1] == "NUMBAR literal"):
+                                if (symbolTable[lexemes[lineNumber][sizeIndex + 3]][0] >= float(lexemes[lineNumber][sizeIndex + 3])):
+                                    tempVal = ["WIN", "TROOF literal"]
+                                else:
+                                    tempVal = ["FAIL", "TROOF literal"]
+                            else:
+                                return "[Line " + str(lineNumber) + "] SemanticError: Cannot implicitly typecast in comparison operation"
+                        else:
+                            return "[Line " + str(lineNumber) + "] SemanticError: Invalid operands for comparison operation"
+                    else:
+                        return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+                elif types[lineNumber][sizeIndex + 1] == "NUMBR literal": # x = NUMBR
+                    if types[lineNumber][sizeIndex + 3] == "identifier":      # y
+                        if symbolTable.get(lexemes[lineNumber][sizeIndex + 3]):
+                            if (int(lexemes[lineNumber][sizeIndex + 1]) >= symbolTable[lexemes[lineNumber][sizeIndex + 3]][0]):
+                                temp = ["WIN", "TROOF literal"]
+                            else:
+                                temp = ["FAIL", "TROOF literal"]
+                        else:
+                            return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+                    elif types[lineNumber][sizeIndex + 3] == "NUMBR literal":
+                        if (int(lexemes[lineNumber][sizeIndex + 1]) >= int(lexemes[lineNumber][sizeIndex + 1])):
+                            temp = ["WIN", "TROOF literal"]
+                        else:
+                            temp = ["FAIL", "TROOF literal"]
+                    elif types[lineNumber][sizeIndex + 3] == "NUMBAR literal":
+                        if (int(lexemes[lineNumber][sizeIndex + 1]) >= float(lexemes[lineNumber][sizeIndex + 3])):
+                            temp = ["WIN", "TROOF literal"]
+                        else:
+                            temp = ["FAIL", "TROOF literal"]
+                    else:
+                        return "[Line " + str(lineNumber) + "] SemanticError: Invalid operands for comparison operation"
+                elif types[lineNumber][sizeIndex + 1] == "NUMBAR literal":    # x = NUMBAR
+                    if types[lineNumber][sizeIndex + 3] == "identifier":      # y
+                        if symbolTable.get(lexemes[lineNumber][sizeIndex + 3]):
+                            if (float(lexemes[lineNumber][sizeIndex + 1]) >= symbolTable[lexemes[lineNumber][sizeIndex + 3]][0]):
+                                tempVal = ["WIN", "TROOF literal"]
+                            else:
+                                tempVal = ["FAIL", "TROOF literal"]
+                        else:
+                            return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+                    elif types[lineNumber][sizeIndex + 3] == "NUMBR literal":
+                        if (float(lexemes[lineNumber][sizeIndex + 1]) >= int(lexemes[lineNumber][sizeIndex + 3])):
+                            tempVal = ["WIN", "TROOF literal"]
+                        else:
+                            tempVal = ["FAIL", "TROOF literal"]
+                    elif types[lineNumber][sizeIndex + 3] == "NUMBAR literal":
+                        if (float(lexemes[lineNumber][sizeIndex + 1]) >= float(lexemes[lineNumber][sizeIndex + 3])):
+                            tempVal = ["WIN", "TROOF literal"]
+                        else:
+                            tempVal = ["FAIL", "TROOF literal"]
+                    else:
+                        return "[Line " + str(lineNumber) + "] SemanticError: Invalid operands for comparison operation"
+                else:
+                    return "[Line " + str(lineNumber) + "] SemanticError: Invalid operands for comparison operation"
+        else: # DIFFRINT (x < y, x > y)
+            if (bigCnt == 0):       # x > y
+                if types[lineNumber][sizeIndex + 1] == "identifier":  # x = identifier
+                    if symbolTable.get(lexemes[lineNumber][sizeIndex + 1]):
+                        if types[lineNumber][sizeIndex + 3] == "identifier":      # y
+                            if symbolTable.get(lexemes[lineNumber][sizeIndex + 3]):
+                                if (symbolTable[lexemes[lineNumber][sizeIndex + 1]][0] > symbolTable[lexemes[lineNumber][sizeIndex + 3]][0]):
+                                    tempVal = ["WIN", "TROOF literal"]
+                                else:
+                                    tempVal = ["FAIL", "TROOF literal"]
+                            else:
+                                return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+                        elif types[lineNumber][sizeIndex + 3] == "NUMBR literal":
+                            if (symbolTable[lexemes[lineNumber][sizeIndex + 1]][1] == "NUMBR literal"):
+                                if (symbolTable[lexemes[lineNumber][sizeIndex + 1]][0] > int(lexemes[lineNumber][sizeIndex + 3])):
+                                    tempVal = ["WIN", "TROOF literal"]
+                                else:
+                                    tempVal = ["FAIL", "TROOF literal"]
+                            else:
+                                return "[Line " + str(lineNumber) + "] SemanticError: Cannot implicitly typecast in comparison operation"
+                        elif types[lineNumber][sizeIndex + 3] == "NUMBAR literal":
+                            if (symbolTable[lexemes[lineNumber][sizeIndex + 1]][1] == "NUMBAR literal"):
+                                if (symbolTable[lexemes[lineNumber][sizeIndex + 3]][0] > float(lexemes[lineNumber][sizeIndex + 3])):
+                                    tempVal = ["WIN", "TROOF literal"]
+                                else:
+                                    tempVal = ["FAIL", "TROOF literal"]
+                            else:
+                                return "[Line " + str(lineNumber) + "] SemanticError: Cannot implicitly typecast in comparison operation"
+                        else:
+                            return "[Line " + str(lineNumber) + "] SemanticError: Invalid operands for comparison operation"
+                    else:
+                        return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+                elif types[lineNumber][sizeIndex + 1] == "NUMBR literal": # x = NUMBR
+                    if types[lineNumber][sizeIndex + 3] == "identifier":      # y
+                        if symbolTable.get(lexemes[lineNumber][sizeIndex + 3]):
+                            if (int(lexemes[lineNumber][sizeIndex + 1]) > symbolTable[lexemes[lineNumber][sizeIndex + 3]][0]):
+                                temp = ["WIN", "TROOF literal"]
+                            else:
+                                temp = ["FAIL", "TROOF literal"]
+                        else:
+                            return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+                    elif types[lineNumber][sizeIndex + 3] == "NUMBR literal":
+                        if (int(lexemes[lineNumber][sizeIndex + 1]) > int(lexemes[lineNumber][sizeIndex + 1])):
+                            temp = ["WIN", "TROOF literal"]
+                        else:
+                            temp = ["FAIL", "TROOF literal"]
+                    elif types[lineNumber][sizeIndex + 3] == "NUMBAR literal":
+                        if (int(lexemes[lineNumber][sizeIndex + 1]) > float(lexemes[lineNumber][sizeIndex + 3])):
+                            temp = ["WIN", "TROOF literal"]
+                        else:
+                            temp = ["FAIL", "TROOF literal"]
+                    else:
+                        return "[Line " + str(lineNumber) + "] SemanticError: Invalid operands for comparison operation"
+                elif types[lineNumber][sizeIndex + 1] == "NUMBAR literal":    # x = NUMBAR
+                    if types[lineNumber][sizeIndex + 3] == "identifier":      # y
+                        if symbolTable.get(lexemes[lineNumber][sizeIndex + 3]):
+                            if (float(lexemes[lineNumber][sizeIndex + 1]) > symbolTable[lexemes[lineNumber][sizeIndex + 3]][0]):
+                                tempVal = ["WIN", "TROOF literal"]
+                            else:
+                                tempVal = ["FAIL", "TROOF literal"]
+                        else:
+                            return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+                    elif types[lineNumber][sizeIndex + 3] == "NUMBR literal":
+                        if (float(lexemes[lineNumber][sizeIndex + 1]) > int(lexemes[lineNumber][sizeIndex + 3])):
+                            tempVal = ["WIN", "TROOF literal"]
+                        else:
+                            tempVal = ["FAIL", "TROOF literal"]
+                    elif types[lineNumber][sizeIndex + 3] == "NUMBAR literal":
+                        if (float(lexemes[lineNumber][sizeIndex + 1]) > float(lexemes[lineNumber][sizeIndex + 3])):
+                            tempVal = ["WIN", "TROOF literal"]
+                        else:
+                            tempVal = ["FAIL", "TROOF literal"]
+                    else:
+                        return "[Line " + str(lineNumber) + "] SemanticError: Invalid operands for comparison operation"
+                else:
+                    return "[Line " + str(lineNumber) + "] SemanticError: Invalid operands for comparison operation"
+            else:       # x < y
+                if types[lineNumber][sizeIndex + 1] == "identifier":  # x = identifier
+                    if symbolTable.get(lexemes[lineNumber][sizeIndex + 1]):
+                        if types[lineNumber][sizeIndex + 3] == "identifier":      # y
+                            if symbolTable.get(lexemes[lineNumber][sizeIndex + 3]):
+                                if (symbolTable[lexemes[lineNumber][sizeIndex + 1]][0] < symbolTable[lexemes[lineNumber][sizeIndex + 3]][0]):
+                                    tempVal = ["WIN", "TROOF literal"]
+                                else:
+                                    tempVal = ["FAIL", "TROOF literal"]
+                            else:
+                                return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+                        elif types[lineNumber][sizeIndex + 3] == "NUMBR literal":
+                            if (symbolTable[lexemes[lineNumber][sizeIndex + 1]][1] == "NUMBR literal"):
+                                if (symbolTable[lexemes[lineNumber][sizeIndex + 1]][0] < int(lexemes[lineNumber][sizeIndex + 3])):
+                                    tempVal = ["WIN", "TROOF literal"]
+                                else:
+                                    tempVal = ["FAIL", "TROOF literal"]
+                            else:
+                                return "[Line " + str(lineNumber) + "] SemanticError: Cannot implicitly typecast in comparison operation"
+                        elif types[lineNumber][sizeIndex + 3] == "NUMBAR literal":
+                            if (symbolTable[lexemes[lineNumber][sizeIndex + 1]][1] == "NUMBAR literal"):
+                                if (symbolTable[lexemes[lineNumber][sizeIndex + 3]][0] < float(lexemes[lineNumber][sizeIndex + 3])):
+                                    tempVal = ["WIN", "TROOF literal"]
+                                else:
+                                    tempVal = ["FAIL", "TROOF literal"]
+                            else:
+                                return "[Line " + str(lineNumber) + "] SemanticError: Cannot implicitly typecast in comparison operation"
+                        else:
+                            return "[Line " + str(lineNumber) + "] SemanticError: Invalid operands for comparison operation"
+                    else:
+                        return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+                elif types[lineNumber][sizeIndex + 1] == "NUMBR literal": # x = NUMBR
+                    if types[lineNumber][sizeIndex + 3] == "identifier":      # y
+                        if symbolTable.get(lexemes[lineNumber][sizeIndex + 3]):
+                            if (int(lexemes[lineNumber][sizeIndex + 1]) < symbolTable[lexemes[lineNumber][sizeIndex + 3]][0]):
+                                temp = ["WIN", "TROOF literal"]
+                            else:
+                                temp = ["FAIL", "TROOF literal"]
+                        else:
+                            return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+                    elif types[lineNumber][sizeIndex + 3] == "NUMBR literal":
+                        if (int(lexemes[lineNumber][sizeIndex + 1]) < int(lexemes[lineNumber][sizeIndex + 1])):
+                            temp = ["WIN", "TROOF literal"]
+                        else:
+                            temp = ["FAIL", "TROOF literal"]
+                    elif types[lineNumber][sizeIndex + 3] == "NUMBAR literal":
+                        if (int(lexemes[lineNumber][sizeIndex + 1]) < float(lexemes[lineNumber][sizeIndex + 3])):
+                            temp = ["WIN", "TROOF literal"]
+                        else:
+                            temp = ["FAIL", "TROOF literal"]
+                    else:
+                        return "[Line " + str(lineNumber) + "] SemanticError: Invalid operands for comparison operation"
+                elif types[lineNumber][sizeIndex + 1] == "NUMBAR literal":    # x = NUMBAR
+                    if types[lineNumber][sizeIndex + 3] == "identifier":      # y
+                        if symbolTable.get(lexemes[lineNumber][sizeIndex + 3]):
+                            if (float(lexemes[lineNumber][sizeIndex + 1]) < symbolTable[lexemes[lineNumber][sizeIndex + 3]][0]):
+                                tempVal = ["WIN", "TROOF literal"]
+                            else:
+                                tempVal = ["FAIL", "TROOF literal"]
+                        else:
+                            return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+                    elif types[lineNumber][sizeIndex + 3] == "NUMBR literal":
+                        if (float(lexemes[lineNumber][sizeIndex + 1]) < int(lexemes[lineNumber][sizeIndex + 3])):
+                            tempVal = ["WIN", "TROOF literal"]
+                        else:
+                            tempVal = ["FAIL", "TROOF literal"]
+                    elif types[lineNumber][sizeIndex + 3] == "NUMBAR literal":
+                        if (float(lexemes[lineNumber][sizeIndex + 1]) < float(lexemes[lineNumber][sizeIndex + 3])):
+                            tempVal = ["WIN", "TROOF literal"]
+                        else:
+                            tempVal = ["FAIL", "TROOF literal"]
+                    else:
+                        return "[Line " + str(lineNumber) + "] SemanticError: Invalid operands for comparison operation"
+                else:
+                    return "[Line " + str(lineNumber) + "] SemanticError: Invalid operands for comparison operation"
+
+def concatenationExpSemantics(lineNumber, symbolTable, lexemes, types):
+    # ! NO OPERATIONS AS OPERANDS YET
+   # * Gets the index of ITZ
+    if("variable initialization keyword" in types[lineNumber]):
+        expressionIndex = lexemes[lineNumber].index("ITZ")
+    #put other cases where the arithmetic expression might be
+    elif("print keyword" in types[lineNumber]):
+        expressionIndex = lexemes[lineNumber].index("VISIBLE")
+    else:
+        expressionIndex = -1    
+    
+    #print(lexemes[lineNumber][expressionIndex])
+    anIndices = []
+    for index in range(len(lexemes[lineNumber])):
+        if lexemes[lineNumber][index] == "AN":
+            anIndices.append(index)
+    
+    counter = 0
+    tempVal = ''
+    while True:
+        if (counter == len(anIndices) - 1):
+            if (types[lineNumber][anIndices[counter] - 1] == "identifier"):
+                if (symbolTable.get(lexemes[lineNumber][anIndices[counter] - 1])):
+                    tempVal += str(symbolTable[lexemes[lineNumber][anIndices[counter] - 1]][0])
+                else:
+                    return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+            elif (types[lineNumber][anIndices[counter] - 1] == "string delimiter"):     # YARN literal
+                if (types[lineNumber][anIndices[counter] - 3] == "string delimiter"):   # another delimiter
+                    tempVal += lexemes[lineNumber][anIndices[counter] - 2]
+                else:
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Invalid syntax of YARN literal"     # ! TAKE NOTE
+            else:
+                tempVal += str(lexemes[lineNumber][anIndices[counter] - 1])
+            
+            if (types[lineNumber][anIndices[counter] + 1] == "identifier"):
+                if (symbolTable.get(lexemes[lineNumber][anIndices[counter] + 1])):
+                    tempVal += str(symbolTable[lexemes[lineNumber][anIndices[counter] + 1]][0])
+                else:
+                    return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+            elif (types[lineNumber][anIndices[counter] + 1] == "string delimiter"):     # YARN literal
+                if (types[lineNumber][anIndices[counter] + 3] == "string delimiter"):   # another delimiter
+                    tempVal += lexemes[lineNumber][anIndices[counter] + 2]
+                else:
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Invalid syntax of YARN literal"     # ! TAKE NOTE
+            else:
+                tempVal += str(lexemes[lineNumber][anIndices[counter] + 1])
+
+            break
+        
+        if (types[lineNumber][anIndices[counter] - 1] == "identifier"):
+            if (symbolTable.get(lexemes[lineNumber][anIndices[counter] - 1])):
+                tempVal += str(symbolTable[lexemes[lineNumber][anIndices[counter] - 1]][0])
+            else:
+                return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+        elif (types[lineNumber][anIndices[counter] - 1] == "string delimiter"):     # YARN literal
+                if (types[lineNumber][anIndices[counter] - 3] == "string delimiter"):   # another delimiter
+                    tempVal += lexemes[lineNumber][anIndices[counter] - 2]
+                else:
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Invalid syntax of YARN literal"     # ! TAKE NOTE
+        else:
+            tempVal += str(lexemes[lineNumber][anIndices[counter] - 1])
+
+
+        counter += 1
+
