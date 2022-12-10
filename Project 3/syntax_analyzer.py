@@ -2147,24 +2147,21 @@ def syntax(lexemes, types):
             elif("VISIBLE" in lexemes[lineNumber]):
                 syntaxError = visibleSyntax(lineNumber, lexemes, types)
                 if(syntaxError != "OK"):
-                    print(syntaxError)
-                    break
+                    return syntaxError
                 lineNumber = nextLineNumber(lineNumber, lexemes, types)
                 continue
             
             elif("GIMMEH" in lexemes[lineNumber]):
                 syntaxError = gimmehSyntax(lineNumber, lexemes, types)
                 if(syntaxError != "OK"):
-                    print(syntaxError)
-                    break
+                    return syntaxError
                 lineNumber = nextLineNumber(lineNumber, lexemes, types)
                 continue
 
             elif("IS NOW A" in lexemes[lineNumber]):
                 syntaxError = isNowASyntax(lineNumber, lexemes, types)
                 if(syntaxError != "OK"):
-                    print(syntaxError)
-                    break
+                    return syntaxError
                 lineNumber = nextLineNumber(lineNumber, lexemes, types)
                 continue
             # elif(lexemes[lineNumber][0] == "O RLY?"):
