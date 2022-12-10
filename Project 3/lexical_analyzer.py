@@ -166,8 +166,9 @@ def findLexemes(lines, lexemes, types):
                 continue
 
             #catches YARN LITERAL and STRING DELIMITER
-            if('\"' == splitWords[j][0]):
-                stringFound = True
+            if('\"' == splitWords[j][0] and len(splitWords[j]) > 1):
+                if(splitWords[j][1] != "\""):
+                    stringFound = True
 
             if(stringFound == True):
                 string = string + splitWords[j] + " "
@@ -181,10 +182,6 @@ def findLexemes(lines, lexemes, types):
                             lexemes[i+1].append("\"")
                             lexemes[i+1].append(string.strip()[1:len(string.strip())-1])
                             lexemes[i+1].append("\"")
-                        elif('\"' != splitWords[j][len(splitWords[j])-1]):
-                            lexemes[i+1].append("\"")
-                            lexemes[i+1].append(string.strip()[1:len(string.strip())-1])
-                            
                         else:
                             lexemes[i+1].append("\"")
                             lexemes[i+1].append(string.strip()[1:len(string.strip())-1])
@@ -446,19 +443,7 @@ def findLexemes(lines, lexemes, types):
                         iHasAKeyword = ""
                         continue
                 else: #case where it's only I HAS (invalid)
-                    if(i+1 not in lexemes):
-                        lexemes[i+1] = []
-                        lexemes[i+1].append("I HAS")
-                    else:
-                        lexemes[i+1].append("I HAS")
-
-                    if(i+1 not in types):
-                        types[i+1] = []
-                        types[i+1].append("invalid keyword")
-                    else:
-                        types[i+1].append("invalid keyword")
-
-                    iHasAKeyword = ""
+                    return "SyntaxError: I HAS is an invalid keyword"
             
             #catches ITZ
             itzKeyword = re.search("^(ITZ)$", splitWords[j])
@@ -1109,19 +1094,7 @@ def findLexemes(lines, lexemes, types):
                         isNowAKeyword = ""
                         continue
                 else: #case where it's only IS NOW (invalid)
-                    if(i+1 not in lexemes):
-                        lexemes[i+1] = []
-                        lexemes[i+1].append("IS NOW")
-                    else:
-                        lexemes[i+1].append("IS NOW")
-
-                    if(i+1 not in types):
-                        types[i+1] = []
-                        types[i+1].append("invalid keyword")
-                    else:
-                        types[i+1].append("invalid keyword")
-
-                    isNowAKeyword = ""
+                    return "SyntaxError: IS NOW is an invalid keyword"
 
             #catches VISIBLE
             visibleKeyword = re.search("^(VISIBLE)$", splitWords[j])
@@ -1403,19 +1376,7 @@ def findLexemes(lines, lexemes, types):
                         imYrKeyword = ""
                         continue
                 else: #case where it's only IM IN (invalid)
-                    if(i+1 not in lexemes):
-                        lexemes[i+1] = []
-                        lexemes[i+1].append("IM IN")
-                    else:
-                        lexemes[i+1].append("IM IN")
-
-                    if(i+1 not in types):
-                        types[i+1] = []
-                        types[i+1].append("invalid keyword")
-                    else:
-                        types[i+1].append("invalid keyword")
-
-                    imYrKeyword = ""
+                    return "SyntaxError: IM IN is an invalid keyword"
             elif(imYrKeyword == "IM OUTTA "):
                 if(splitWords[j] == "YR"):
                     imYrKeyword = imYrKeyword + splitWords[j]
@@ -1436,19 +1397,7 @@ def findLexemes(lines, lexemes, types):
                         imYrKeyword = ""
                         continue
                 else: #case where it's only IM OUTTA (invalid)
-                    if(i+1 not in lexemes):
-                        lexemes[i+1] = []
-                        lexemes[i+1].append("IM OUTTA")
-                    else:
-                        lexemes[i+1].append("IM OUTTA")
-
-                    if(i+1 not in types):
-                        types[i+1] = []
-                        types[i+1].append("invalid keyword")
-                    else:
-                        types[i+1].append("invalid keyword")
-
-                    imYrKeyword = ""
+                    return "SyntaxError: IM OUTTA is an invalid keyword"
 
             #catches UPPIN
             uppinKeyword = re.search("^(UPPIN)$", splitWords[j])
@@ -1604,19 +1553,7 @@ def findLexemes(lines, lexemes, types):
                 continue
 
             #every other case
-            if(i+1 not in lexemes):
-                lexemes[i+1] = []
-                lexemes[i+1].append(splitWords[j])
-            else:
-                lexemes[i+1].append(splitWords[j])
-
-            if(i+1 not in types):
-                types[i+1] = []
-                types[i+1].append("invalid keyword")
-            else:
-                types[i+1].append("invalid keyword")
-
-            continue
+            return "SyntaxError: " + splitWords[j] + " is an invalid keyword"
 
 # def printSymbolTable():
 #     space1 = 40
