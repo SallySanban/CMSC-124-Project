@@ -120,12 +120,12 @@ def run():
 
         syntaxError = syntax_analyzer.syntax(lexemes, types)
 
-        if("SyntaxError" in syntaxError):
+        if(syntaxError != None):
             messagebox.showinfo('Syntax Error', syntaxError)
         else:
             semanticError = semantics()
 
-            if("SemanticError" in semanticError):
+            if(("SemanticError" in semanticError) or "SyntaxError" in semanticError):
                 messagebox.showinfo('Semantic Error', semanticError)
             else:
                 makeTokens()
