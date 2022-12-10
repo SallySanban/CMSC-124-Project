@@ -1878,16 +1878,16 @@ def orlySyntax(lineNumber, lexemes, types):
 
 def visibleSyntax(lineNumber, lexemes, types):
     visibleIndex = lexemes[lineNumber].index("VISIBLE")
-    if(len(lexemes[lineNumber]) > 1):
-        if(types[lineNumber][visibleIndex+1] == "string delimiter"):
-            if(lexemes[lineNumber][visibleIndex-1] != "\""):
-                return "[Line " + str(lineNumber) + "] SyntaxError: Expected String Delimiter at: End of Line"
-        elif(lexemes[lineNumber][visibleIndex+1] == "SMOOSH"):
-            syntaxError = smooshSyntax(lineNumber, lexemes, types)
-            if(syntaxError != "OK"):
-                return syntaxError
-        else: return "[Line " + str(lineNumber) + "] SyntaxError: Must be expression"
-    else:return "[Line " + str(lineNumber) + "] SyntaxError: Expected expression"
+    # if(len(lexemes[lineNumber]) > 1):
+    #     if(types[lineNumber][visibleIndex+1] == "string delimiter"):
+    #         if(lexemes[lineNumber][visibleIndex-1] != "\""):
+    #             return "[Line " + str(lineNumber) + "] SyntaxError: Expected String Delimiter at: End of Line"
+    #     elif(lexemes[lineNumber][visibleIndex+1] == "SMOOSH"):
+    #         syntaxError = smooshSyntax(lineNumber, lexemes, types)
+    #         if(syntaxError != "OK"):
+    #             return syntaxError
+    #     else: return "[Line " + str(lineNumber) + "] SyntaxError: Must be expression"
+    # else:return "[Line " + str(lineNumber) + "] SyntaxError: Expected expression"
     return "OK"
 
 def gimmehSyntax(lineNumber, lexemes, types):

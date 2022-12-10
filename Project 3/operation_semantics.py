@@ -2078,24 +2078,33 @@ def booleanExpSemantics(lineNumber, symbolTable, lexemes, types):
   if lexemes[lineNumber].count("ANY OF") == 1:
     if lexemes[lineNumber].count("MKAY") > 1:
       return "[Line " + str(lineNumber) + "] SyntaxError: Have too many ANY OF delimiter MKAY "
-    if lexemes[lineNumber].count("MKAY") == 0:
-      return "[Line " + str(lineNumber) + "] SyntaxError: ANY OF delimiter MKAY not found"
+    
+    try:
+      x = lexemes[lineNumber].index("MKAY")
+      try:
+        if lexemes[lineNumber][x + 1]:
+          return "[Line " + str(lineNumber) + "] SyntaxError: No statements allowed after ALL OF or ANY OF delimiter"
+      except IndexError:
+        print("", end="")
+    except ValueError:
+        return "[Line " + str(lineNumber) + "] SyntaxError: Missing ANY OF delimiter"
     
   if lexemes[lineNumber].count("ALL OF") > 1:
     return "[Line " + str(lineNumber) + "] SyntaxError: ANY OF cannot be nested"
   if lexemes[lineNumber].count("ALL OF") == 1:
     if lexemes[lineNumber].count("MKAY") > 1:
       return "[Line " + str(lineNumber) + "] SyntaxError: Have too many ANY OF delimiter MKAY "
-    if lexemes[lineNumber].count("MKAY") == 0:
-      return "[Line " + str(lineNumber) + "] SyntaxError: ANY OF delimiter MKAY not found"
-  
-  try:
-    if lexemes[lineNumber][lexemes[lineNumber].index("MKAY") + 1]:
-      print("",end="")
-  except IndexError:
-    return "[Line " + str(lineNumber) + "] SyntaxError: No statements allowed after ALL OF or ANY OF delimiter"
-
-      
+    
+    try:
+      x = lexemes[lineNumber].index("MKAY")
+      try:
+        if lexemes[lineNumber][x + 1]:
+          return "[Line " + str(lineNumber) + "] SyntaxError: No statements allowed after ALL OF or ANY OF delimiter"
+      except IndexError:
+        print("", end="")
+    except ValueError:
+        return "[Line " + str(lineNumber) + "] SyntaxError: Missing ALL OF delimiter"
+         
 
   # * Gets the indices of boolean operations
   operationIndices = []

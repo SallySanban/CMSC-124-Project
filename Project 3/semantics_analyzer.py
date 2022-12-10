@@ -349,6 +349,8 @@ def iHasASemantics(lineNumber):
 def visibleSemantics(lineNumber):
     console.config(state=NORMAL)
     visibleLexeme = lexemes[lineNumber].index("VISIBLE")
+    
+    print(lexemes[lineNumber])
 
     # TODO: doesnt catch when more than one arity
     if(types[lineNumber][visibleLexeme + 1] == "identifier"):
