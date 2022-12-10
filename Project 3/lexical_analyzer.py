@@ -1,14 +1,15 @@
 import re
 
-filename = "Project 3/Test Files/project-examples/04_smoosh_assign.lol"
+#filename = "Project 3/Test Files/project-examples/01_variables.lol"
 
 #reads file and cleans each line in the file
-def readFile(filename):
-    file = open(filename)
+def readFile(listOfLines):
+    #file = open(filename)
     lines = []
 
     #reads the file and places each line in a list
-    for line in file.readlines():
+    #for line in file.readlines():
+    for line in listOfLines:
         if(line != "\n"):
             if(line[len(line)-1] == "\n"):
                 lines.append(line[0:len(line)-1])
@@ -24,7 +25,7 @@ def readFile(filename):
     return lines
 
 #finds lexemes in code and groups them 
-def findLexemes(lines):
+def findLexemes(lines, lexemes, types):
     stringFound = False
     singleCommentFound = False
     multiCommentFound = False
@@ -1617,29 +1618,29 @@ def findLexemes(lines):
 
             continue
 
-def printSymbolTable():
-    space1 = 40
-    space2 = 40
+# def printSymbolTable():
+#     space1 = 40
+#     space2 = 40
 
-    for i in lexemes.keys():
-        print("Line " + str(i))
-        for j in range(0, len(lexemes[i])):
-            print("Lexeme: " + lexemes[i][j], end=(" " * (space1 - len(lexemes[i][j]))))
-            print("Type: " + types[i][j], end=(" " * (space2 - len(types[i][j]))))
-            print("")
-        print("")
+#     for i in lexemes.keys():
+#         print("Line " + str(i))
+#         for j in range(0, len(lexemes[i])):
+#             print("Lexeme: " + lexemes[i][j], end=(" " * (space1 - len(lexemes[i][j]))))
+#             print("Type: " + types[i][j], end=(" " * (space2 - len(types[i][j]))))
+#             print("")
+#         print("")
 
-def getLexemes():
-    return lexemes
+# def getLexemes():
+#     return lexemes
 
-def getType():
-    return types
+# def getType():
+#     return types
 
-#MAIN CODE
-lexemes = {}
-types = {}
+# MAIN CODE
+# lexemes = {}
+# types = {}
 
-lines = readFile(filename)
-findLexemes(lines)
+# lines = readFile(filename)
+# findLexemes(lines, lexemes, types)
 
 #printSymbolTable()
