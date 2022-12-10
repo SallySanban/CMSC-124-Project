@@ -1768,7 +1768,7 @@ def itzSyntax(lineNumber, lexemes, types):
     #     if(syntaxError != "OK"):
     #         return syntaxError
     
-    # return "OK"
+    return "OK"
 
 def iHasASyntax(lineNumber, lexemes, types):
     if(len(lexemes[lineNumber]) == 1):
@@ -2024,42 +2024,42 @@ def syntax(lexemes, types):
             
             # ! START OF RIO DUCUSIN'S PART
             elif(lexemes[lineNumber][lexemeIndex] == "SUM OF"):
-                syntaxError = sumOfSyntax(lineNumber, lexemes, types)
+                # syntaxError = sumOfSyntax(lineNumber, lexemes, types)
 
-                if(syntaxError != "OK"):
-                    return syntaxError
+                # if(syntaxError != "OK"):
+                #     return syntaxError
 
                 lineNumber = nextLineNumber(lineNumber, lexemes, types)
                 continue
             elif(lexemes[lineNumber][lexemeIndex] == "DIFF OF"):
-                syntaxError = diffOfSyntax(lineNumber, lexemes, types)
+                # syntaxError = diffOfSyntax(lineNumber, lexemes, types)
 
-                if(syntaxError != "OK"):
-                    return syntaxError
+                # if(syntaxError != "OK"):
+                #     return syntaxError
 
                 lineNumber = nextLineNumber(lineNumber, lexemes, types)
                 continue
             elif(lexemes[lineNumber][lexemeIndex] == "PRODUKT OF"):
-                syntaxError = produktOfSyntax(lineNumber, lexemes, types)
+                # syntaxError = produktOfSyntax(lineNumber, lexemes, types)
 
-                if(syntaxError != "OK"):
-                    return syntaxError
+                # if(syntaxError != "OK"):
+                #     return syntaxError
 
                 lineNumber = nextLineNumber(lineNumber, lexemes, types)
                 continue
             elif(lexemes[lineNumber][lexemeIndex] == "QUOSHUNT OF"):
-                syntaxError = quoshuntOfSyntax(lineNumber, lexemes, types)
+                # syntaxError = quoshuntOfSyntax(lineNumber, lexemes, types)
 
-                if(syntaxError != "OK"):
-                    return syntaxError
+                # if(syntaxError != "OK"):
+                #     return syntaxError
 
                 lineNumber = nextLineNumber(lineNumber, lexemes, types)
                 continue
             elif(lexemes[lineNumber][lexemeIndex] == "MOD OF"):
-                syntaxError = modOfSyntax(lineNumber, lexemes, types)
+                # syntaxError = modOfSyntax(lineNumber, lexemes, types)
 
-                if(syntaxError != "OK"):
-                    return syntaxError
+                # if(syntaxError != "OK"):
+                #     return syntaxError
 
                 lineNumber = nextLineNumber(lineNumber, lexemes, types)
                 continue
