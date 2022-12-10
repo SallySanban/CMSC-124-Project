@@ -1,33 +1,26 @@
-import semantics_analyzer
-
-types = semantics_analyzer.getType()
-lexemes = lexical_analyzer.getLexemes()
-
-# TODO: ADD IDENTIFIER
-
-def arithmeticSemantics(lineNumber, variable, symbolTable):
+def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
   # * Gets the index of ITZ
   if("variable initialization keyword" in types[lineNumber]):
-      expressionIndex = lexemes[lineNumber].index("ITZ")
+    expressionIndex = lexemes[lineNumber].index("ITZ")
   #put other cases where the arithmetic expression might be
   elif("print keyword" in types[lineNumber]):
-      expressionIndex = lexemes[lineNumber].index("VISIBLE")
+    expressionIndex = lexemes[lineNumber].index("VISIBLE")
   else:
-      expressionIndex = -1 
+    expressionIndex = -1 
 
   # * Gets the indices of arithmetic operations
   operationIndices = []
   lexemeExpression = 0
   typeExpression = 0
   for index in range(len(lexemes[lineNumber])):
-      if lexemes[lineNumber][index] in ["SUM OF", "DIFF OF", "PRODUKT OF", "QUOSHUNT OF", "MOD OF", "BIGGR OF", "SMALLR OF"]:
-          operationIndices.append(index)
+    if lexemes[lineNumber][index] in ["SUM OF", "DIFF OF", "PRODUKT OF", "QUOSHUNT OF", "MOD OF", "BIGGR OF", "SMALLR OF"]:
+      operationIndices.append(index)
 
   # * Gets the indices of AN
   anIndices = []
   for index in range(len(lexemes[lineNumber])):
-      if lexemes[lineNumber][index] == "AN":
-          anIndices.append(index)
+    if lexemes[lineNumber][index] == "AN":
+        anIndices.append(index)
 
   for operator in ["SUM OF", "DIFF OF", "PRODUKT OF", "QUOSHUNT OF", "MOD OF", "BIGGR OF", "SMALLR OF"]:
     if lexemes[lineNumber][expressionIndex + 1] == operator:
@@ -62,15 +55,17 @@ def arithmeticSemantics(lineNumber, variable, symbolTable):
 
     if typeExpression[lastIndexOperator + 1] == "identifier":   # ! identifier (1st operand)
       if symbolTable.get(lexemeExpression[lastIndexOperator + 1]):
-        lexemeExpression[lastIndexOperator + 1] = symbolTable[lexemeExpression[lastIndexOperator + 1]][0]
-        typeExpression[lastIndexOperator + 1] = symbolTable[lexemeExpression[lastIndexOperator + 1]][1]
+        identifier = symbolTable[lexemeExpression[lastIndexOperator + 1]]
+        lexemeExpression[lastIndexOperator + 1] = identifier[0]
+        typeExpression[lastIndexOperator + 1] = identifier[1]
       else:
         return(f"[Line {lineNumber}] SemanticsError: Uninitialized variable")
     
     if typeExpression[lastIndexOperator + 3] == "identifier":   # ! identifier (2nd operand)
-      if symbolTable.get(lexemeExpression[lastIndexOperator + 1]):
-        lexemeExpression[lastIndexOperator + 3] = symbolTable[lexemeExpression[lastIndexOperator + 3]][0]
-        typeExpression[lastIndexOperator + 3] = symbolTable[lexemeExpression[lastIndexOperator + 3]][1]
+      if symbolTable.get(lexemeExpression[lastIndexOperator + 3]):
+        identifier = symbolTable[lexemeExpression[lastIndexOperator + 3]]
+        lexemeExpression[lastIndexOperator + 3] = identifier[0]
+        typeExpression[lastIndexOperator + 3] = identifier[1]
       else:
         return(f"[Line {lineNumber}] SemanticsError: Uninitialized variable")
 
@@ -1981,4 +1976,4 @@ def arithmeticSemantics(lineNumber, variable, symbolTable):
   else:
     tempVal = [float(lexemeExpression[0]), typeExpression[0]]
     
-  print(tempVal)
+  return tempVal

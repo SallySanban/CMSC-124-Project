@@ -8,9 +8,7 @@ import tkinter.filedialog
 import tkinter.scrolledtext as scrolledtext
 
 
-from operationSemantics.arithmeticSemantics import *
-
-
+import arithmetic_semantics as arith_sem
 
 types = {}
 lexemes = {}
@@ -168,7 +166,7 @@ def updateSymbolTable(lineNumber, value, variable):
     return "OK"
 
 def arithmeticExpressionSemantics(lineNumber, variable):
-    temp = arithmeticSemantics(lineNumber, variable, newSymbolTable)
+    temp = arith_sem.arithmeticExpSemantics(lineNumber, newSymbolTable, lexemes, types)
     
     # * Semantic Error
     if type(temp) != list:
@@ -1001,7 +999,7 @@ screen.configure(bg=BACKGROUND_COLOR)
 screen.resizable(False, False)
 
 style = ttk.Style()
-style.theme_use('vista')
+# style.theme_use('vista')
 
 fileButton = ttk.Button(
     screen,
