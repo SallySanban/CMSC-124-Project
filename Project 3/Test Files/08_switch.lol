@@ -34,8 +34,6 @@ HAI
 			GTFO
 		OMGWTF
 			VISIBLE "Invalid Input!"
-	OIC
-
-VISIBLE "Hello"
+		OIC
 
 KTHXBYE
