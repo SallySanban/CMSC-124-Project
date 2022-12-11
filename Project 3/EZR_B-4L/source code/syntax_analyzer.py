@@ -1943,7 +1943,7 @@ def wtfSyntax(lineNumber, lexemes, types):
                     if(syntaxError != "OK"):
                         return syntaxError
         except KeyError:
-            return "[Line " + str(lineNumber) + "] SyntaxError: expected OIC"
+            return "SyntaxError: expected OIC"
         
     return "OK"
 

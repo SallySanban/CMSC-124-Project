@@ -5,6 +5,7 @@ Zyril Tamargo<br>
 Johanna Eikou Teknomo
 
 # App Guide
+## Getting Started
 In order to start the program, you will need Visual Studio Code and Python 3.
 
 ![alt text](images/1.jpg)
@@ -28,15 +29,16 @@ The text editor can also be typed into and the newly written code will be interp
 ![alt text](images/6.jpg)
 
 ## Tokens and Symbol Table
-Once the run button on the lower right is clicked, the tokens and the symbol table of the code will be shown. The tokens indicate the lexemes in the code and its type, and the symbol table shows the list of variables, their values, and their types.
+Once the `Run` button on the lower right is clicked, the tokens and the symbol table of the code will be shown. The tokens indicate the lexemes in the code and its type, and the symbol table shows the list of variables, their values, and their types.
 
 ![alt text](images/7.jpg)
 ![alt text](images/8.jpg)
 
 ## Console
-Just like any normal interpreter, the console at the bottom will print the output of the code.
+Just like any normal interpreter, the console at the bottom will print the output of the code once the `Run` button is clicked. Any syntax or semantic errors will be shown through a pop up box.
 
 ![alt text](images/9.jpg)
+![alt text](images/11.jpg)
 
 ## Input
 Whenever you ask for user input, the input box below the console will be available to be typed in and you can press the `Enter` button to enter your input one at a time. Once there are no more inputs to be read, you will not be able to type in the input box or click on the `Enter` button.
