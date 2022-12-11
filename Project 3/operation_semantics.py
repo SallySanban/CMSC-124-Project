@@ -2,7 +2,7 @@ literals = ["NUMBR literal",
             "NUMBAR literal",
             "YARN literal",
             "TROOF literal",
-            "TYPE literal"
+            "NOOB"
             ]
 expressionKeywords = {
                         "arithmetic":
@@ -2717,14 +2717,17 @@ def comparisonExpSemantics(lineNumber, symbolTable, lexemes, types):
         expressionIndex = operationIndices[0] - 1
     else:
       expressionIndex = -1    
-    
-    # print(lexemes[lineNumber][expressionIndex])
+
     anIndices = []
     for index in range(len(lexemes[lineNumber])):
       if lexemes[lineNumber][index] == "AN":
         anIndices.append(index)
     
-    if len(anIndices) != len(operationIndices):
+
+    biggrOfCnt = lexemes[lineNumber].count("BIGGR OF")
+    smallrOfCnt = lexemes[lineNumber].count("SMALLR OF")
+    
+    if (len(anIndices) - biggrOfCnt - smallrOfCnt) != len(operationIndices):
       return(f"[Line {lineNumber}] SyntaxError: Invalid expression")
     
     
@@ -3183,11 +3186,11 @@ def comparisonExpSemantics(lineNumber, symbolTable, lexemes, types):
                             tempVal = ["FAIL", "TROOF literal"]
                     elif types[lineNumber][sizeIndex + 3] == "NUMBAR literal":
                         if (float(lexemes[lineNumber][sizeIndex + 1]) < float(lexemes[lineNumber][sizeIndex + 3])):
-                            tempVal = ["WIN", "TROOF literal"]
+                          tempVal = ["WIN", "TROOF literal"]
                         else:
-                            tempVal = ["FAIL", "TROOF literal"]
+                          tempVal = ["FAIL", "TROOF literal"]
                     else:
-                        return "[Line " + str(lineNumber) + "] SemanticError: Invalid operands for comparison operation"
+                      return "[Line " + str(lineNumber) + "] SemanticError: Invalid operands for comparison operation"
                 else:
                     return "[Line " + str(lineNumber) + "] SemanticError: Invalid operands for comparison operation"
     
@@ -3257,6 +3260,10 @@ def concatenationExpSemantics(lineNumber, symbolTable, lexemes, types):
 
 
     counter += 1
+    
+  tempVal = [tempVal, "YARN literal"]
+  
+  return tempVal
 
 def visibleExpSemantics(lineNumber, symbolTable, lexemes, types):
   # * Gets the index of VISIBLE
@@ -3334,9 +3341,22 @@ def visibleExpSemantics(lineNumber, symbolTable, lexemes, types):
     
     if len(operationIndices) == 0:
       break
+      
         
     # * Get index of first operation to solve starting from the last
-    lastIndexOperator = operationIndices[len(operationIndices) - 1]
+    print("*************")
+    print(operationIndices)
+    print(lexemeExpression)
+    print("*************")
+    if lexemeExpression[operationIndices[0]] in ["BOTH SAEM", "DIFFRINT", "SMOOSH"]:
+      lastIndexOperator = 0
+    else:
+      lastIndexOperator = operationIndices[len(operationIndices) - 1]
+    
+    print("*************")
+    print(lastIndexOperator)
+    print("*************")
+         
     
     if lexemeExpression[lastIndexOperator] in expressionKeywords["arithmetic"]:
       tempVal = arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types)
@@ -3394,7 +3414,6 @@ def visibleExpSemantics(lineNumber, symbolTable, lexemes, types):
       typeExpression[lastIndexOperator] = tempVal[1]
     
     elif lexemeExpression[lastIndexOperator] in expressionKeywords["comparison"]:
-      
       tempVal = comparisonExpSemantics(lineNumber, symbolTable, lexemes, types)
       
       if type(tempVal) != list:
@@ -3422,16 +3441,44 @@ def visibleExpSemantics(lineNumber, symbolTable, lexemes, types):
           lexemeExpression[lastIndexOperator] = tempVal[0]
           typeExpression[lastIndexOperator] = tempVal[1]
       
-      print("====")
-      print(tempVal)
-      print(lastIndexOperator)
-      print(lexemeExpression)
-      print(typeExpression)
-      print("====")
+      lexemeExpression = [0]
+      typeExpression = [0]
+      
       
       lexemeExpression[lastIndexOperator] = tempVal[0]
       typeExpression[lastIndexOperator] = tempVal[1]
+    
+    elif lexemeExpression[lastIndexOperator] in expressionKeywords["concatenation"]:
+      tempVal = concatenationExpSemantics(lineNumber, symbolTable, lexemes, types)
       
+      if type(tempVal) != list:
+        return tempVal
+      
+      # * Popping the elements from the lexeme and type list
+      if lexemeExpression[lastIndexOperator] not in ["ALL OF", "ANY OF", "SMOOSH", "NOT"]:
+        counter = 0
+        while counter != 3:
+          lexemeExpression.pop(lastIndexOperator)
+          typeExpression.pop(lastIndexOperator)
+          counter += 1
+      elif lexemeExpression[lastIndexOperator] == "NOT":
+        counter = 0
+        while counter != 1:
+          lexemeExpression.pop(lastIndexOperator)
+          typeExpression.pop(lastIndexOperator)
+          counter += 1
+      else:
+        try:
+          while len(lexemeExpression) != 1:
+            lexemeExpression.pop(lastIndexOperator)
+            typeExpression.pop(lastIndexOperator)
+        except IndexError:
+          lexemeExpression[lastIndexOperator] = tempVal[0]
+          typeExpression[lastIndexOperator] = tempVal[1]
+          
+      
+      lexemeExpression[lastIndexOperator] = tempVal[0]
+      typeExpression[lastIndexOperator] = tempVal[1]
   
   print(lexemeExpression)
   print(typeExpression)
@@ -3461,97 +3508,237 @@ def identifierExpSemantics(lineNumber, symbolTable, lexemes, types):
   identifierIndex = types[lineNumber].index("identifier")
   rIndex = -1
   maekIndex = -1
-  try:
-    if lexemes[lineNumber][identifierIndex + 1] == "R":
-      rIndex = identifierIndex + 1
-      
-      
-      # try:
-      #   if lexemes[lineNumber][identifierIndex + 2] == "MAEK":
-          
-      # except IndexError:
-      #   return "[Line " + str(lineNumber) + "] SyntaxError: Invalid assignment format"
-    else:
-      return "[Line " + str(lineNumber) + "] SyntaxError: Invalid assignment format"
-  except IndexError:
-    return symbolTable[lexemes[lineNumber][identifierIndex]]
+  
+  while True:
+    try:
+      if lexemes[lineNumber][identifierIndex + 1] == "R":
+        rIndex = identifierIndex + 1
+        
+        try:
+          if lexemes[lineNumber][identifierIndex + 2] == "MAEK":
+            try:
+              if types[lineNumber][identifierIndex + 3] == "identifier":
+                if symbolTable.get(lexemes[lineNumber][identifierIndex + 3]):
+                  identifier = symbolTable[lexemes[lineNumber][identifierIndex + 3]]
+                  
+                  try:
+                    print(lexemes[lineNumber][identifierIndex + 4])
+                    print(types[lineNumber][identifierIndex + 4])
+                    if lexemes[lineNumber][identifierIndex + 4] in ["NUMBR", "NUMBAR", "TROOF", "YARN", "NOOB"]:
+                      literal = lexemes[lineNumber][identifierIndex + 4]
+                      
+                      if identifier[1] == "NUMBR literal":
+                        if literal == "NUMBR literal":
+                          tempVal = [int(identifier[0]), literal]
+                          
+                          return tempVal
+                        elif literal == "NUMBAR literal":
+                          tempVal = [float(identifier[0]), literal]
+                          
+                          return tempVal
+                        elif literal == "TROOF literal":
+                          if identifier[0] == 0:
+                            tempVal = ["FAIL", literal]
+                          else:
+                            tempVal = ["WIN", literal]
+                            
+                          return tempVal
+                        elif literal == "YARN literal":
+                          tempVal = [str(identifier[0]), literal]
+                            
+                          return tempVal
+                        else:   # NOOB
+                          return "[Line " + str(lineNumber) + "] SemanticError: Cannot typecast identifier to NOOB"
+                      elif identifier[1] == "NUMBAR literal":
+                        if literal == "NUMBR literal":
+                          tempVal = [int(identifier[0]), literal]
+                          
+                          return tempVal
+                        elif literal == "NUMBAR literal":
+                          tempVal = [float(identifier[0]), literal]
+                          
+                          return tempVal
+                        elif literal == "TROOF literal":
+                          if identifier[0] == 0.0:
+                            tempVal = ["FAIL", literal]
+                          else:
+                            tempVal = ["WIN", literal]
+                            
+                          return tempVal
+                        elif literal == "YARN literal":
+                          tempVal = [str(identifier[0]), literal]
+                            
+                          return tempVal
+                        else:   # NOOB
+                          return "[Line " + str(lineNumber) + "] SemanticError: Cannot typecast identifier to NOOB"
+                      elif identifier[1] == "TROOF literal":
+                        if literal == "NUMBR literal":
+                          if identifier[0] == "WIN":
+                            tempVal = [int(1), literal]
+                          else:
+                            tempVal = [int(0), literal]
+                          
+                          return tempVal
+                        elif literal == "NUMBAR literal":
+                          if identifier[0] == "WIN":
+                            tempVal = [float(1), literal]
+                          else:
+                            tempVal = [float(0), literal]
+                          
+                          return tempVal
+                        elif literal == "TROOF literal":
+                          tempVal = [identifier[0], identifier[1]]
+                            
+                          return tempVal
+                        elif literal == "YARN literal":
+                          tempVal = [str(identifier[0]), literal]
+                            
+                          return tempVal
+                        else:   # NOOB
+                          return "[Line " + str(lineNumber) + "] SemanticError: Cannot typecast identifier to NOOB"
+                      elif identifier[1] == "YARN literal":
+                        if literal == "NUMBR literal":
+                          try:
+                            tempVal = [int(identifier[0]), literal]
+                          except ValueError:
+                            return "[Line " + str(lineNumber) + "] SemanticError: Cannot typecast identifier to NUMBR literal"
+                          
+                          return tempVal
+                        elif literal == "NUMBAR literal":
+                          try:
+                            tempVal = [float(identifier[0]), literal]
+                          except ValueError:
+                            return "[Line " + str(lineNumber) + "] SemanticError: Cannot typecast identifier to NUMBAR literal"
+                          
+                          return tempVal
+                        elif literal == "TROOF literal":
+                          if identifier[0] == "":
+                            tempVal = ["FAIL", literal]
+                          else:
+                            tempVal = ["WIN", literal]
+                            
+                          return tempVal
+                        elif literal == "YARN literal":
+                          tempVal = [str(identifier[0]), literal]
+                            
+                          return tempVal
+                        else:   # NOOB
+                          return "[Line " + str(lineNumber) + "] SemanticError: Cannot typecast identifier to NOOB"
+                      else: # NOOB
+                        if literal == "NUMBR literal":
+                          tempVal = [int(0), literal]
+                          
+                          return tempVal
+                        elif literal == "NUMBAR literal":
+                          tempVal = [float(0), literal]
+                          
+                          return tempVal
+                        elif literal == "TROOF literal":
+                          tempVal = ["FAIL", literal]
+                            
+                          return tempVal
+                        elif literal == "YARN literal":
+                          tempVal = [str(""), literal]
+                            
+                          return tempVal
+                        else:   # NOOB
+                          tempVal = [identifier[0], literal]
+                            
+                          return tempVal
+                    else:
+                      return "[Line " + str(lineNumber) + "] SemanticError: Invalid literal for typecasting"
+                  except IndexError:
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Invalid typecasting format"
+                else:
+                  return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized variable"
+              else:
+                return "[Line " + str(lineNumber) + "] SemanticError: Expected an identifier to be typecasted"
+            except IndexError:
+              return "[Line " + str(lineNumber) + "] SyntaxError: Invalid typecasting format"
+          else:
+            break
+        except IndexError:
+          break
+      else:
+        return "[Line " + str(lineNumber) + "] SyntaxError: Invalid assignment format"
+    except IndexError:
+      return symbolTable[lexemes[lineNumber][identifierIndex]]
 
   # * R exists
   if rIndex != -1:
     try:
-      maekIndex = lexemes[lineNumber].index("MAEK")
+      if types[lineNumber][rIndex + 1] in ["identifier", "NUMBR literal", "NUMBAR literal", "TROOF literal", "string delimiter"]:
+        if types[lineNumber][rIndex + 1] == "identifier":
+          if symbolTable.get(lexemes[lineNumber][rIndex + 1]):
+            return [symbolTable[lexemes[lineNumber][rIndex + 1]][0], symbolTable[lexemes[lineNumber][rIndex + 1]][1]]
+          else:
+            return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+        elif types[lineNumber][rIndex + 1] in ["NUMBR literal", "NUMBAR literal", "TROOF literal"]:
+          print(f"{lexemes[lineNumber][0]} = {lexemes[lineNumber][rIndex + 1]}")
+          print([lexemes[lineNumber][rIndex + 1], types[lineNumber][rIndex + 1]])
+          print("====")
+          return [lexemes[lineNumber][rIndex + 1], types[lineNumber][rIndex + 1]]
+        else:   # YARN literal
+          yarnIndex = types[lineNumber].index("YARN literal")
+          
+          try:
+            if types[lineNumber][yarnIndex - 1] == "string delimiter" or types[lineNumber][yarnIndex + 1] == "string delimiter":
+              return [lexemes[lineNumber][yarnIndex], "YARN literal"]
+          except IndexError:
+            return "[Line " + str(lineNumber) + "] SyntaxError: Invalid YARN literal format"
+            
       
-      if lexemes[lineNumber][maekIndex - 1] != "R" or lexemes[lineNumber][maekIndex + 1] not in literals:
-        return "[Line " + str(lineNumber) + "] SyntaxError: Invalid typecast format"
-    except ValueError:
-      try:
-        if types[lineNumber][rIndex + 1] in ["identifier", "NUMBR literal", "NUMBAR literal", "TROOF literal", "string delimiter"]:
-          if types[lineNumber][rIndex + 1] == "identifier":
-            if symbolTable.get(lexemes[lineNumber][rIndex + 1]):
-              return [symbolTable[lexemes[lineNumber][rIndex + 1]][0], symbolTable[lexemes[lineNumber][rIndex + 1]][1]]
-            else:
-              return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
-          elif types[lineNumber][rIndex + 1] in ["NUMBR literal", "NUMBAR literal", "TROOF literal"]:
-            print(f"{lexemes[lineNumber][0]} = {lexemes[lineNumber][rIndex + 1]}")
-            print([lexemes[lineNumber][rIndex + 1], types[lineNumber][rIndex + 1]])
-            print("====")
-            return [lexemes[lineNumber][rIndex + 1], types[lineNumber][rIndex + 1]]
-          else:   # YARN literal
-            yarnIndex = types[lineNumber].index("YARN literal")
-            
-            try:
-              if types[lineNumber][yarnIndex - 1] == "string delimiter" or types[lineNumber][yarnIndex + 1] == "string delimiter":
-                return [lexemes[lineNumber][yarnIndex], "YARN literal"]
-            except IndexError:
-              return "[Line " + str(lineNumber) + "] SyntaxError: Invalid YARN literal format"
-              
+      if lexemes[lineNumber][rIndex + 1] in expressionKeywords["arithmetic"] or lexemes[lineNumber][rIndex + 1] in expressionKeywords["boolean"] or lexemes[lineNumber][rIndex + 1] in expressionKeywords["comparison"] or lexemes[lineNumber][rIndex + 1] in expressionKeywords["concatenation"]:
+        operator = lexemes[lineNumber][rIndex + 1]
         
-        if lexemes[lineNumber][rIndex + 1] in expressionKeywords["arithmetic"] or lexemes[lineNumber][rIndex + 1] in expressionKeywords["boolean"] or lexemes[lineNumber][rIndex + 1] in expressionKeywords["comparison"] or lexemes[lineNumber][rIndex + 1] in expressionKeywords["concatenation"]:
-          operator = lexemes[lineNumber][rIndex + 1]
+        if operator in expressionKeywords["arithmetic"]:
+          temp = arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types)
+  
+          # * Semantic Error
+          if type(temp) != list:
+            return temp
           
-          if operator in expressionKeywords["arithmetic"]:
-            temp = arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types)
-    
-            # * Semantic Error
-            if type(temp) != list:
-              return temp
-            
-            tempVal = [temp[0], temp[1]]
-            
-            return tempVal
-          elif operator in expressionKeywords["boolean"]:
-            temp = booleanExpSemantics(lineNumber, symbolTable, lexemes, types)
-    
-            # * Semantic Error
-            if type(temp) != list:
-              return temp
-            
-            tempVal = [temp[0], temp[1]]
-            
-            return tempVal
-          elif operator in expressionKeywords["comparison"]:
-            temp = comparisonExpSemantics(lineNumber, symbolTable, lexemes, types)
-    
-            # * Semantic Error
-            if type(temp) != list:
-              return temp
-            
-            tempVal = [temp[0], temp[1]]
-            
-            return tempVal
-          elif operator in expressionKeywords["concatenation"]:
-            temp = concatenationExpSemantics(lineNumber, symbolTable, lexemes, types)
-    
-            # * Semantic Error
-            if type(temp) != list:
-              return temp
-            
-            tempVal = [temp[0], temp[1]]
-            
-            return tempVal
+          tempVal = [temp[0], temp[1]]
           
-      except IndexError:
-        return "[Line " + str(lineNumber) + "] SyntaxError: Invalid assignment format"
+          return tempVal
+        elif operator in expressionKeywords["boolean"]:
+          temp = booleanExpSemantics(lineNumber, symbolTable, lexemes, types)
+  
+          # * Semantic Error
+          if type(temp) != list:
+            return temp
+          
+          tempVal = [temp[0], temp[1]]
+          
+          return tempVal
+        elif operator in expressionKeywords["comparison"]:
+          temp = comparisonExpSemantics(lineNumber, symbolTable, lexemes, types)
+  
+          # * Semantic Error
+          if type(temp) != list:
+            return temp
+          
+          tempVal = [temp[0], temp[1]]
+          
+          return tempVal
+        elif operator in expressionKeywords["concatenation"]:
+          temp = concatenationExpSemantics(lineNumber, symbolTable, lexemes, types)
+
+          print("adsvdfsb")
+          print(temp)
+          print("adsvdfsb")
+
+          # * Semantic Error
+          if type(temp) != list:
+            return temp
+          
+          tempVal = [temp[0], temp[1]]
+          
+          return tempVal
+        
+    except IndexError:
+      return "[Line " + str(lineNumber) + "] SyntaxError: Invalid assignment format"
+      
     
     
     # * MAEK exists

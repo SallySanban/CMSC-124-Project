@@ -18,8 +18,6 @@ HAI
     VISIBLE x AN 52615 AN y AN 87 AN 6 AN "End!"
 
     VISIBLE 10 AN y
-    y IS NOW A NUMBAR
-    VISIBLE 10 AN y
 
     y R 0
     y R MAEK y TROOF
