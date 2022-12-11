@@ -481,7 +481,7 @@ def semantics():
             lineNumber = nextLineNumber(lineNumber)
             continue
         elif (types[lineNumber][lexemeIndex] == "identifier"):
-            if(lexemes[lineNumber+1][lexemeIndex] == "WTF?"):
+            if(lexemes[nextLineNumber(lineNumber)][lexemeIndex] == "WTF?"):
                 SemanticError = switchCaseSemantics(lineNumber, lexemes[lineNumber][lexemeIndex])      # Returns a line number
 
                 if (type(SemanticError) != int):

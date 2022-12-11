@@ -1856,7 +1856,7 @@ def orlySyntax(lineNumber, lexemes, types):
         while(orlyFound == True):
 
             if(lexemes[lineNumber][0] != "YA RLY"):
-                return "[Line " + str(lineNumber+1) + "] Expected YA RLY Keyword"
+                return "[Line " + str(nextLineNumber(lineNumber)) + "] Expected YA RLY Keyword"
             
             syntaxError = yaRlySyntax(lineNumber, lexemes, types)
             if(syntaxError != "OK"):
@@ -1900,11 +1900,31 @@ def wtfSyntax(lineNumber, lexemes, types):
 
     while(lexemes[lineNumber][0] != "OIC"):
         lineNumber = nextLineNumber(lineNumber, lexemes, types)
-        if(lexemes[lineNumber][0] == "OMG"):
-            syntaxError = omgSyntax(lineNumber, lexemes, types)
-            if(syntaxError != "OK"):
-                return syntaxError
-            while(lexemes[lineNumber][0] != "GTFO"):
+        try:
+            if(lexemes[lineNumber][0] == "OMG"):
+                syntaxError = omgSyntax(lineNumber, lexemes, types)
+                if(syntaxError != "OK"):
+                    return syntaxError
+                while(lexemes[lineNumber][0] != "GTFO"):
+                    lineNumber = nextLineNumber(lineNumber, lexemes, types)
+                    if(lexemes[lineNumber][0] == "VISIBLE"):
+                        syntaxError = visibleSyntax(lineNumber, lexemes, types)
+                        if(syntaxError != "OK"):
+                            return syntaxError
+                    elif(lexemes[lineNumber][0] == "GIMMEH"):
+                        syntaxError = gimmehSyntax(lineNumber, lexemes, types)
+                        if(syntaxError != "OK"):
+                            return syntaxError
+                    elif(lexemes[lineNumber][0] == "I HAS A"):
+                        syntaxError = iHasASyntax(lineNumber, lexemes, types)
+                        if(syntaxError != "OK"):
+                            return syntaxError
+                    elif(lexemes[lineNumber][0] == "BTW"):
+                        syntaxError = singleCommentSyntax(lineNumber, lexemes, types)
+                        if(syntaxError != "OK"):
+                            return syntaxError
+                lineNumber = nextLineNumber(lineNumber, lexemes, types)
+            elif(lexemes[lineNumber][0] == "OMGWTF"):
                 lineNumber = nextLineNumber(lineNumber, lexemes, types)
                 if(lexemes[lineNumber][0] == "VISIBLE"):
                     syntaxError = visibleSyntax(lineNumber, lexemes, types)
@@ -1922,37 +1942,15 @@ def wtfSyntax(lineNumber, lexemes, types):
                     syntaxError = singleCommentSyntax(lineNumber, lexemes, types)
                     if(syntaxError != "OK"):
                         return syntaxError
-            lineNumber = nextLineNumber(lineNumber, lexemes, types)
-        elif(lexemes[lineNumber][0] == "OMGWTF"):
-            lineNumber = nextLineNumber(lineNumber, lexemes, types)
-            if(lexemes[lineNumber][0] == "VISIBLE"):
-                syntaxError = visibleSyntax(lineNumber, lexemes, types)
-                if(syntaxError != "OK"):
-                    return syntaxError
-            elif(lexemes[lineNumber][0] == "GIMMEH"):
-                syntaxError = gimmehSyntax(lineNumber, lexemes, types)
-                if(syntaxError != "OK"):
-                    return syntaxError
-            elif(lexemes[lineNumber][0] == "I HAS A"):
-                syntaxError = iHasASyntax(lineNumber, lexemes, types)
-                if(syntaxError != "OK"):
-                    return syntaxError
-            elif(lexemes[lineNumber][0] == "BTW"):
-                syntaxError = singleCommentSyntax(lineNumber, lexemes, types)
-                if(syntaxError != "OK"):
-                    return syntaxError
-        if(lineNumber == None):
-            oicFound = False
-            break
-    oicFound = True
-    if(oicFound == False):
-        return "SyntaxError: expected OIC"
+        except KeyError:
+            return "[Line " + str(lineNumber) + "] SyntaxError: expected OIC"
+        
     return "OK"
 
 def omgSyntax(lineNumber, lexemes, types):
     omgIndex = lexemes[lineNumber].index("OMG")
-    if(len(lexemes[lineNumber]) == 2):
-        if(types[lineNumber][omgIndex + 1] not in literals or types[lineNumber][omgIndex + 1] == "TYPE literal"):
+    if(len(lexemes[lineNumber]) == 2 or (types[lineNumber][omgIndex + 1] == "string delimiter" and types[lineNumber][omgIndex + 2] == "YARN literal" and types[lineNumber][omgIndex + 3] == "string delimiter")):
+        if((types[lineNumber][omgIndex + 1] not in literals or types[lineNumber][omgIndex + 1] == "TYPE literal") and types[lineNumber][omgIndex + 1] != "identifier" and types[lineNumber][omgIndex + 1] != "string delimiter"):
             return "[Line " + str(lineNumber) + "] SyntaxError: unexpected block literal"
         else: 
             lineNumber = nextLineNumber(lineNumber, lexemes, types)
