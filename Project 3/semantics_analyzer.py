@@ -64,6 +64,8 @@ def makeTokens():
 
 def makeSymbolTable(symbolTable):
     global listOfSymbolTable, symbolTableTree
+    
+    print(f"Symbol table: {symbolTable}")
 
     refactoredSymbolTable = []
     for i in symbolTable.keys():
@@ -230,6 +232,20 @@ def concatenationExpressionSemantics(lineNumber, variable):
 
     return "OK"
         
+def identifierSemantics(lineNumber, variable):
+    temp = operation_semantics.identifierExpSemantics(lineNumber, newSymbolTable, lexemes, types)
+    
+    # * Semantic Error
+    if type(temp) != list:
+        return temp
+    
+    print(temp)
+
+    updateSymbolTable(lineNumber, [temp[0], temp[1]], variable)
+    print(newSymbolTable)
+
+    return "OK"
+        
 def switchCaseSemantics(lineNumber, variable):
     # ! FLOW
     # * First line is WTF?
@@ -293,27 +309,22 @@ def switchCaseSemantics(lineNumber, variable):
                         continue        # If not equal or NOOB type
                 else:
                     return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
-            elif(types[omgLineNumber[omg]][1] in literals or types[omgLineNumber[omg]][1] == "string delimiter"):
-                if(types[omgLineNumber[omg]][1] in literals):
-                    if lexemes[omgLineNumber[omg]][1] == newSymbolTable["IT"][0]:
-                        checkedLine = omgLineNumber[omg]
-
-                        for i in range(omgLineNumber[omg] + 1, gtfoLineNumber[omg]):
-                            if(lexemes[i][0] == "VISIBLE"):
-                                SemanticError = visibleSemantics(i)
-
-                                if(SemanticError != "OK"):
-                                    return SemanticError
-                            elif(lexemes[i][0] == "GIMMEH"):
-                                SemanticError = gimmehSemantics(i)
-
-                                if(SemanticError != "OK"):
-                                    return SemanticError
-                            elif(lexemes[i][0] == "I HAS A"):
-                                SemanticError = iHasASemantics(i)
-
-                                if(SemanticError != "OK"):
-                                    return SemanticError
+            elif types[omg][1] == "NUMBR literal":
+                if int(lexemes[omg][1]) == newSymbolTable["IT"][0]:
+                    checkedLine = omg
+                    break
+            elif types[omg][1] == "NUMBAR literal":
+                if float(lexemes[omg][1]) == newSymbolTable["IT"][0]:
+                    checkedLine = omg
+                    break
+            elif types[omg][1] == "string delimiter":       # YARN literal
+                if lexemes[omg][2] == newSymbolTable["IT"][0]:
+                    checkedLine = omg
+                    break
+            elif types[omg][1] == "TROOF literal":          # DOUBLE CHECK FOR TROOF LITERALS
+                if lexemes[omg][1] == "WIN":
+                    if newSymbolTable["IT"][0]:
+                        checkedLine = omg
                         break
                 elif(types[omgLineNumber[omg]][1] == "string delimiter"):
                     if lexemes[omgLineNumber[omg]][2] == newSymbolTable["IT"][0]:
@@ -409,8 +420,6 @@ def visibleSemantics(lineNumber):
     console.insert(END, str(newSymbolTable['IT'][0]) + "\n")
     console.config(state=DISABLED)
     
-    
-
     return "OK"
     
 def gimmehSemantics(lineNumber):
@@ -462,12 +471,15 @@ def semantics():
             lineNumber = nextLineNumber(SemanticError)
             continue
         elif (types[lineNumber][lexemeIndex] == "identifier"):
-            if newSymbolTable.get(lexemes[lineNumber][lexemeIndex]):
-                newSymbolTable["IT"] = [newSymbolTable[lexemes[lineNumber][lexemeIndex]][0], newSymbolTable[lexemes[lineNumber][lexemeIndex]][1]]
-                lineNumber = nextLineNumber(lineNumber)
-                continue
-            else:
-                return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+            identifier = lexemes[lineNumber][lexemeIndex]
+            semanticsError = identifierSemantics(lineNumber, identifier)
+
+            if (semanticsError != "OK"):
+                return semanticsError
+            
+            lineNumber = nextLineNumber(lineNumber)
+            continue
+        
 
         # * GO NEXT LINE
         else:

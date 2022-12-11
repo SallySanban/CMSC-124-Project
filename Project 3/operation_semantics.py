@@ -42,10 +42,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
         if lexemes[lineNumber][index] in expressionKeywords["arithmetic"]:
           operationIndices.append(index)
       
-      expressionIndex = operationIndices[0] - 1
-    else:
-      expressionIndex = 0
-      
+      expressionIndex = operationIndices[0] - 1     
       
   else:
     expressionIndex = -1 
@@ -62,7 +59,15 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
   anIndices = []
   for index in range(len(lexemes[lineNumber])):
     if lexemes[lineNumber][index] == "AN":
+      try:
+        if types[lineNumber][index - 1] not in ["identifier", "string delimiter", "NUMBR literal", "NUMBAR literal", "TROOF literal", "NOOB"]:
+          return "[Line " + str(lineNumber) + "] SyntaxError: Expected a valid identifier or literal"
+        if types[lineNumber][index + 1] not in ["identifier", "string delimiter", "NUMBR literal", "NUMBAR literal", "TROOF literal", "NOOB", "add operator", "subtract operator", "multiply operator", "divide operator", "max operator", "min operator"]:
+          return "[Line " + str(lineNumber) + "] SyntaxError: Expected a valid identifier or literal"
+        
         anIndices.append(index)
+      except IndexError:
+        return "[Line " + str(lineNumber) + "] SyntaxError: Expected an identifier after argument separator keyword"
 
   for operator in expressionKeywords["arithmetic"]:
     if lexemes[lineNumber][expressionIndex + 1] == operator:
@@ -2283,16 +2288,14 @@ def booleanExpSemantics(lineNumber, symbolTable, lexemes, types):
   elif("print keyword" in types[lineNumber]):
     expressionIndex = lexemes[lineNumber].index("VISIBLE")
     
-    operationIndices = []
-    if types[lineNumber][expressionIndex + 1] not in expressionKeywords["arithmetic"]:
+    if types[lineNumber][expressionIndex + 1] not in expressionKeywords["boolean"]:
+      operationIndices = []
       # Find the first operation to appear in string
       for index in range(len(lexemes[lineNumber])):
-        if lexemes[lineNumber][index] in expressionKeywords["arithmetic"]:
+        if lexemes[lineNumber][index] in expressionKeywords["boolean"]:
           operationIndices.append(index)
       
       expressionIndex = operationIndices[0] - 1
-    else:
-      expressionIndex = expressionIndex + 1
   else:
     expressionIndex = -1 
   
@@ -2342,7 +2345,8 @@ def booleanExpSemantics(lineNumber, symbolTable, lexemes, types):
   anIndices = []
   for index in range(len(lexemes[lineNumber])):
     if lexemes[lineNumber][index] == "AN":
-        anIndices.append(index)
+      anIndices.append(index)
+
 
   for operator in expressionKeywords["boolean"]:
     if lexemes[lineNumber][expressionIndex + 1] in ["BOTH OF", "EITHER OF", "WON OF"]:
@@ -2360,8 +2364,8 @@ def booleanExpSemantics(lineNumber, symbolTable, lexemes, types):
     elif lexemes[lineNumber][expressionIndex + 1] == "NOT":
       # print(anIndices)
       if len(anIndices) == 0:   # single operand
-        lexemeExpression = lexemes[lineNumber][(expressionIndex + 1):(expressionIndex + 2)]
-        typeExpression = types[lineNumber][(expressionIndex + 1):(expressionIndex + 2)]
+        lexemeExpression = lexemes[lineNumber][(expressionIndex + 1):(expressionIndex + 3)]
+        typeExpression = types[lineNumber][(expressionIndex + 1):(expressionIndex + 3)]
       elif lexemes[lineNumber][anIndices[len(anIndices) - 1] + 1] == "NOT":
         lexemeExpression = lexemes[lineNumber][(expressionIndex + 1):(anIndices[len(anIndices) - 1] + 2)]
         typeExpression = types[lineNumber][(expressionIndex + 1):(anIndices[len(anIndices) - 1] + 2)]
@@ -2382,16 +2386,52 @@ def booleanExpSemantics(lineNumber, symbolTable, lexemes, types):
           typeExpression.remove("string delimiter")
         except ValueError:
           break
-      break
+    
+    # print(lexemeExpression)
+  
+  identifierIndices = []
+  for k in range(len(typeExpression)):
+    if typeExpression[k] == "identifier":
+      identifierIndices.append(k)
+  
+  for k in identifierIndices:
+    if symbolTable.get(lexemeExpression[k]):
+      identifier = symbolTable[lexemeExpression[k]]
+      lexemeExpression[k] = identifier[0]
+      typeExpression[k] = identifier[1]
+    else:
+      return(f"[Line {lineNumber}] SemanticError: Uninitialized variable") 
+  
+  print("=======")
+  print(anIndices)
+  print(operationIndices)
+  print(lexemeExpression)
+  print("=======")
+  
+  
+  # # * Check if valid expression
+  # notCount = lexemeExpression.count("NOT")
+  # anyOfCount = lexemeExpression.count("ANY OF")
+  # allOfCount = lexemeExpression.count("ALL OF")
+  # if anyOfCount > 0 or allOfCount > 0:
+  #   if lexemeExpression[operationIndices[0]] not in ["ALL OF", "ANY OF"]:
+  #     if len(anIndices) != (len(operationIndices) - notCount):
+  #       return(f"[Line {lineNumber}] SyntaxError: Invalid expression")
+  #   else:
+  #     return(f"[Line {lineNumber}] SyntaxError: Invalid expression")
+  # else:
+  #   if len(anIndices) != (len(operationIndices) - notCount):
+  #     return(f"[Line {lineNumber}] SyntaxError: Invalid expression")
   
   # CHECKER
   # print(lexemeExpression)
+  
+  # print(lexemeExpression)
   # print(typeExpression)
-  # print(operationIndices)
-  # print(anIndices)
-  print(lexemeExpression)
+  # return
   
   while True:
+    print(lexemeExpression)
     # * Breaks the loop if lexemeExpression is equal to 1
     if (len(lexemeExpression) == 1):
       break
@@ -2405,65 +2445,137 @@ def booleanExpSemantics(lineNumber, symbolTable, lexemes, types):
     tempVal = 0
 
     # * Get index of first operation to solve starting from the last
-    lastIndexOperator = operationIndices[len(operationIndices) - 1]
+    lastIndexOperator = operationIndices[len(operationIndices) - 1]   
+    
+    if lastIndexOperator == 0:
+      if lexemeExpression[lastIndexOperator] in ["ALL OF", "ANY OF"]:
+        # * Gets the indices of AN
+        anIndices = []
+        for index in range(len(lexemeExpression)):
+          if lexemeExpression[index] == "AN":
+            anIndices.append(index)
+            
+        for index in range(len(anIndices)):
+          anIndex = anIndices[index]
+          # * Last index of AN
+          if anIndex == anIndices[-1]:
+            if typeExpression[anIndex - 1] == "identifier":
+              if symbolTable.get(lexemeExpression[anIndex - 1]):
+                identifier = symbolTable[lexemeExpression[anIndex - 1]]
+                lexemeExpression[anIndex - 1] = identifier[0]
+                typeExpression[anIndex - 1] = identifier[1]
+                
+                # * Checks if TROOF or NOOB type
+                if typeExpression[anIndex - 1] in ["TROOF literal", "NOOB"]:
+                  if lexemeExpression[anIndex - 1] == "NOOB":
+                    lexemeExpression[anIndex - 1] == False
+                    typeExpression[anIndex - 1] == "TROOF literal"
+                  else:
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Value can not be typecasted to TROOF literal"
+              else:
+                return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized variable"
+            elif lexemeExpression[lastIndexOperator + 1] not in ["WIN", "FAIL", "NOOB"]:
+              # print(f"[Line {lineNumber}] SyntaxError: Invalid statement")
+              return "[Line " + str(lineNumber) + "] SyntaxError: Invalid expression"
+            
+            try:
+              if typeExpression[anIndex + 1] == "identifier":
+                if symbolTable.get(lexemeExpression[anIndex + 1]):
+                  identifier = symbolTable[lexemeExpression[anIndex + 1]]
+                  lexemeExpression[anIndex + 1] = identifier[0]
+                  typeExpression[anIndex + 1] = identifier[1]
+                  
+                  # * Checks if TROOF or NOOB type
+                  if typeExpression[anIndex + 1] in ["TROOF literal", "NOOB"]:
+                    if lexemeExpression[anIndex + 1] == "NOOB":
+                      lexemeExpression[anIndex + 1] == False
+                      typeExpression[anIndex + 1] == "TROOF literal"
+                    else:
+                      return "[Line " + str(lineNumber) + "] SyntaxError: Value can not be typecasted to TROOF literal"
+                else:
+                  return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized variable"
+              elif lexemeExpression[lastIndexOperator + 1] not in ["WIN", "FAIL", "NOOB"]:
+                # print(f"[Line {lineNumber}] SyntaxError: Invalid statement")
+                return "[Line " + str(lineNumber) + "] SyntaxError: Invalid expression"
+            except:
+              return "[Line " + str(lineNumber) + "] SyntaxError: Invalid expression"
+            
+          # * Current index of AN
+          else:
+            if typeExpression[anIndex - 1] == "identifier":
+              if symbolTable.get(lexemeExpression[anIndex - 1]):
+                identifier = symbolTable[lexemeExpression[anIndex - 1]]
+                lexemeExpression[anIndex - 1] = identifier[0]
+                typeExpression[anIndex - 1] = identifier[1]
+                
+                # * Checks if TROOF or NOOB type
+                if typeExpression[anIndex - 1] in ["TROOF literal", "NOOB"]:
+                  if lexemeExpression[anIndex - 1] == "NOOB":
+                    lexemeExpression[anIndex - 1] == False
+                    typeExpression[anIndex - 1] == "TROOF literal"
+                  else:
+                    return "[Line " + str(lineNumber) + "] SyntaxError: Value can not be typecasted to TROOF literal"
+              else:
+                return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized variable"
+            elif lexemeExpression[lastIndexOperator + 1] not in ["WIN", "FAIL", "NOOB"]:
+              # print(f"[Line {lineNumber}] SyntaxError: Invalid statement")
+              return "[Line " + str(lineNumber) + "] SyntaxError: Invalid expression"
+  
+      else:
+        # * Breaks the lexeme expression and replaces the values
+        if lexemeExpression[lastIndexOperator] in ["BOTH OF", "EITHER OF", "WON OF"]:
+          if typeExpression[lastIndexOperator + 1] == "identifier":   # ! identifier (1st operand)
+            if symbolTable.get(lexemeExpression[lastIndexOperator + 1]):
+              identifier = symbolTable[lexemeExpression[lastIndexOperator + 1]]
+              lexemeExpression[lastIndexOperator + 1] = identifier[0]
+              typeExpression[lastIndexOperator + 1] = identifier[1]
+              
+              # * Checks if TROOF or NOOB type
+              if typeExpression[lastIndexOperator] in ["TROOF literal", "NOOB"]:
+                if lexemeExpression[lastIndexOperator + 1] == "NOOB":
+                  lexemeExpression[lastIndexOperator + 1] == False
+                  typeExpression[lastIndexOperator + 1] == "TROOF literal"
+                else:
+                  return "[Line " + str(lineNumber) + "] SyntaxError: Value can not be typecasted to TROOF literal"
+            else:
+              return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized variable"
+            
+            if symbolTable.get(lexemeExpression[lastIndexOperator + 3]):
+              identifier = symbolTable[lexemeExpression[lastIndexOperator + 3]]
+              lexemeExpression[lastIndexOperator + 3] = identifier[0]
+              typeExpression[lastIndexOperator + 3] = identifier[1]
+              
+              # * Checks if TROOF or NOOB type
+              if typeExpression[lastIndexOperator] in ["TROOF literal", "NOOB"]:
+                if lexemeExpression[lastIndexOperator + 3] == "NOOB":
+                  lexemeExpression[lastIndexOperator + 3] == False
+                  typeExpression[lastIndexOperator + 3] == "TROOF literal"
+                else:
+                  return "[Line " + str(lineNumber) + "] SyntaxError: Value can not be typecasted to TROOF literal"
+            else:
+              return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized variable"
+          elif lexemeExpression[lastIndexOperator + 1] not in ["WIN", "FAIL", "NOOB"]:
+            return "[Line " + str(lineNumber) + "] SyntaxError: Invalid expression"
+        elif lexemeExpression[lastIndexOperator] == "NOT":
+          if typeExpression[lastIndexOperator + 1] == "identifier":   # ! identifier (1st operand)
+            if symbolTable.get(lexemeExpression[lastIndexOperator + 1]):
+              identifier = symbolTable[lexemeExpression[lastIndexOperator + 1]]
+              lexemeExpression[lastIndexOperator + 1] = identifier[0]
+              typeExpression[lastIndexOperator + 1] = identifier[1]
+              
+              # * Checks if TROOF or NOOB type
+              if typeExpression[lastIndexOperator] in ["TROOF literal", "NOOB"]:
+                if lexemeExpression[lastIndexOperator + 1] == "NOOB":
+                  lexemeExpression[lastIndexOperator + 1] == False
+                  typeExpression[lastIndexOperator + 1] == "TROOF literal"
+                else:
+                  return "[Line " + str(lineNumber) + "] SyntaxError: Value can not be typecasted to TROOF literal"
+            else:
+              return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized variable"
+          elif lexemeExpression[lastIndexOperator + 1] not in ["WIN", "FAIL", "NOOB"]:
+            # print(f"[Line {lineNumber}] SyntaxError: Invalid statement")
+            return "[Line " + str(lineNumber) + "] SyntaxError: Invalid expression"
 
-    # * Breaks the lexeme expression and replaces the values
-    if lexemeExpression[lastIndexOperator] in ["BOTH OF", "EITHER OF", "WON OF"]:
-      if typeExpression[lastIndexOperator + 1] == "identifier":   # ! identifier (1st operand)
-        if symbolTable.get(lexemeExpression[lastIndexOperator + 1]):
-          identifier = symbolTable[lexemeExpression[lastIndexOperator + 1]]
-          lexemeExpression[lastIndexOperator + 1] = identifier[0]
-          typeExpression[lastIndexOperator + 1] = identifier[1]
-          
-          # * Checks if TROOF or NOOB type
-          if typeExpression[lastIndexOperator] in ["TROOF literal", "NOOB"]:
-            if lexemeExpression[lastIndexOperator + 1] == "NOOB":
-              lexemeExpression[lastIndexOperator + 1] == False
-              typeExpression[lastIndexOperator + 1] == "TROOF literal"
-            else:
-              return "[Line " + str(lineNumber) + "] SyntaxError: Value can not be typecasted to TROOF literal"
-        else:
-          return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized variable"
-        
-        if symbolTable.get(lexemeExpression[lastIndexOperator + 3]):
-          identifier = symbolTable[lexemeExpression[lastIndexOperator + 3]]
-          lexemeExpression[lastIndexOperator + 3] = identifier[0]
-          typeExpression[lastIndexOperator + 3] = identifier[1]
-          
-          # * Checks if TROOF or NOOB type
-          if typeExpression[lastIndexOperator] in ["TROOF literal", "NOOB"]:
-            if lexemeExpression[lastIndexOperator + 3] == "NOOB":
-              lexemeExpression[lastIndexOperator + 3] == False
-              typeExpression[lastIndexOperator + 3] == "TROOF literal"
-            else:
-              return "[Line " + str(lineNumber) + "] SyntaxError: Value can not be typecasted to TROOF literal"
-        else:
-          return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized variable"
-      elif lexemeExpression[lastIndexOperator + 1] not in ["WIN", "FAIL", "NOOB"]:
-        # print(f"[Line {lineNumber}] SyntaxError: Invalid statement")
-        return "[Line " + str(lineNumber) + "] SyntaxError: Invalid expression"
-    elif lexemeExpression[lastIndexOperator] == "NOT":
-      if typeExpression[lastIndexOperator + 1] == "identifier":   # ! identifier (1st operand)
-        if symbolTable.get(lexemeExpression[lastIndexOperator + 1]):
-          identifier = symbolTable[lexemeExpression[lastIndexOperator + 1]]
-          lexemeExpression[lastIndexOperator + 1] = identifier[0]
-          typeExpression[lastIndexOperator + 1] = identifier[1]
-          
-          # * Checks if TROOF or NOOB type
-          if typeExpression[lastIndexOperator] in ["TROOF literal", "NOOB"]:
-            if lexemeExpression[lastIndexOperator + 1] == "NOOB":
-              lexemeExpression[lastIndexOperator + 1] == False
-              typeExpression[lastIndexOperator + 1] == "TROOF literal"
-            else:
-              return "[Line " + str(lineNumber) + "] SyntaxError: Value can not be typecasted to TROOF literal"
-        else:
-          return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized variable"
-      elif lexemeExpression[lastIndexOperator + 1] not in ["WIN", "FAIL", "NOOB"]:
-        # print(f"[Line {lineNumber}] SyntaxError: Invalid statement")
-        return "[Line " + str(lineNumber) + "] SyntaxError: Invalid expression"
-      
-
-    print(lexemeExpression)
     # * Checks the current operator
     if lexemeExpression[lastIndexOperator] == "BOTH OF":    # * AND
       if lexemeExpression[lastIndexOperator + 1] == "WIN":    # ! WIN (1st operand)
@@ -2523,13 +2635,24 @@ def booleanExpSemantics(lineNumber, symbolTable, lexemes, types):
             tempVal = "WIN"
           else:
             tempVal = "FAIL"
+      
+      # * Popping the elements from the lexeme and type list
+      counter = 0
+      while counter != 4:
+        lexemeExpression.pop(lastIndexOperator)
+        typeExpression.pop(lastIndexOperator)
+        counter += 1
+
+      # * Appending the new elements from the lexeme and type list
+      lexemeExpression.insert(lastIndexOperator, str(tempVal))
+      typeExpression.insert(lastIndexOperator, "TROOF literal")
     elif lexemeExpression[lastIndexOperator] == "NOT":   # * NOT
       if lexemeExpression[lastIndexOperator + 1] == "WIN":    # ! WIN operand
         tempVal = "FAIL"
       else:                                                  
         tempVal = "WIN"
     
-    # * Popping the elements from the lexeme and type list
+      # * Popping the elements from the lexeme and type list
       counter = 0
       while counter != 2:
         lexemeExpression.pop(lastIndexOperator)
@@ -2549,9 +2672,8 @@ def booleanExpSemantics(lineNumber, symbolTable, lexemes, types):
         typeExpression = ["TROOF literal"]
       elif lexemeExpression.count("FAIL") == literalCount:
         lexemeExpression = ["FAIL"]
-        typeExpression = ["TROOF literal"]
-      
-      break
+        typeExpression = ["TROOF literal"]    
+      break    
     elif lexemeExpression[lastIndexOperator] == "ANY OF":   # * ANY OF (infinite arity)
       literalCount = typeExpression.count("TROOF literal")
       if lexemeExpression.count("WIN") > 0 and lexemeExpression.count("FAIL") > 0:
@@ -2563,47 +2685,46 @@ def booleanExpSemantics(lineNumber, symbolTable, lexemes, types):
       elif lexemeExpression.count("FAIL") == literalCount:
         lexemeExpression = ["FAIL"]
         typeExpression = ["TROOF literal"]
-        
       break
-  
   
   if lexemeExpression[0] == "WIN":
     tempVal = ["WIN", typeExpression[0]]
   else:
     tempVal = ["FAIL", typeExpression[0]]
     
-  print(lexemeExpression)
-  print(typeExpression)
+  # print(lexemeExpression)
+  # print(typeExpression)
+  # print(tempVal)
   print(tempVal)
-  
   return tempVal
 
 def comparisonExpSemantics(lineNumber, symbolTable, lexemes, types):
-   # * Gets the index of ITZ
+    # * Gets the index of ITZ
     if("variable initialization keyword" in types[lineNumber]):
-        expressionIndex = lexemes[lineNumber].index("ITZ")
+      expressionIndex = lexemes[lineNumber].index("ITZ")
     #put other cases where the arithmetic expression might be
     elif("print keyword" in types[lineNumber]):
-        expressionIndex = lexemes[lineNumber].index("VISIBLE")
+      expressionIndex = lexemes[lineNumber].index("VISIBLE")
+      
+      operationIndices = []
+      if types[lineNumber][expressionIndex + 1] not in expressionKeywords["comparison"]:
+        # Find the first operation to appear in string
+        for index in range(len(lexemes[lineNumber])):
+          if lexemes[lineNumber][index] in expressionKeywords["comparison"]:
+            operationIndices.append(index)
         
-        operationIndices = []
-        if types[lineNumber][expressionIndex + 1] not in expressionKeywords["arithmetic"]:
-          # Find the first operation to appear in string
-          for index in range(len(lexemes[lineNumber])):
-            if lexemes[lineNumber][index] in expressionKeywords["arithmetic"]:
-              operationIndices.append(index)
-          
-          expressionIndex = operationIndices[0] - 1
-        else:
-          expressionIndex = expressionIndex + 1
+        expressionIndex = operationIndices[0] - 1
     else:
-        expressionIndex = -1    
+      expressionIndex = -1    
     
     # print(lexemes[lineNumber][expressionIndex])
     anIndices = []
     for index in range(len(lexemes[lineNumber])):
-        if lexemes[lineNumber][index] == "AN":
-            anIndices.append(index)
+      if lexemes[lineNumber][index] == "AN":
+        anIndices.append(index)
+    
+    if len(anIndices) != len(operationIndices):
+      return(f"[Line {lineNumber}] SyntaxError: Invalid expression")
     
     
     if (len(anIndices) == 1):      # (x == y OR x != y)
@@ -3070,69 +3191,69 @@ def comparisonExpSemantics(lineNumber, symbolTable, lexemes, types):
                     return "[Line " + str(lineNumber) + "] SemanticError: Invalid operands for comparison operation"
 
 def concatenationExpSemantics(lineNumber, symbolTable, lexemes, types):
-    # ! NO OPERATIONS AS OPERANDS YET
-   # * Gets the index of ITZ
-    if("variable initialization keyword" in types[lineNumber]):
-        expressionIndex = lexemes[lineNumber].index("ITZ")
-    #put other cases where the arithmetic expression might be
-    elif("print keyword" in types[lineNumber]):
-        expressionIndex = lexemes[lineNumber].index("VISIBLE")
-    else:
-        expressionIndex = -1    
-    
-    #print(lexemes[lineNumber][expressionIndex])
-    anIndices = []
-    for index in range(len(lexemes[lineNumber])):
-        if lexemes[lineNumber][index] == "AN":
-            anIndices.append(index)
-    
-    counter = 0
-    tempVal = ''
-    while True:
-        if (counter == len(anIndices) - 1):
-            if (types[lineNumber][anIndices[counter] - 1] == "identifier"):
-                if (symbolTable.get(lexemes[lineNumber][anIndices[counter] - 1])):
-                    tempVal += str(symbolTable[lexemes[lineNumber][anIndices[counter] - 1]][0])
-                else:
-                    return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
-            elif (types[lineNumber][anIndices[counter] - 1] == "string delimiter"):     # YARN literal
-                if (types[lineNumber][anIndices[counter] - 3] == "string delimiter"):   # another delimiter
-                    tempVal += lexemes[lineNumber][anIndices[counter] - 2]
-                else:
-                    return "[Line " + str(lineNumber) + "] SyntaxError: Invalid syntax of YARN literal"     # ! TAKE NOTE
-            else:
-                tempVal += str(lexemes[lineNumber][anIndices[counter] - 1])
-            
-            if (types[lineNumber][anIndices[counter] + 1] == "identifier"):
-                if (symbolTable.get(lexemes[lineNumber][anIndices[counter] + 1])):
-                    tempVal += str(symbolTable[lexemes[lineNumber][anIndices[counter] + 1]][0])
-                else:
-                    return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
-            elif (types[lineNumber][anIndices[counter] + 1] == "string delimiter"):     # YARN literal
-                if (types[lineNumber][anIndices[counter] + 3] == "string delimiter"):   # another delimiter
-                    tempVal += lexemes[lineNumber][anIndices[counter] + 2]
-                else:
-                    return "[Line " + str(lineNumber) + "] SyntaxError: Invalid syntax of YARN literal"     # ! TAKE NOTE
-            else:
-                tempVal += str(lexemes[lineNumber][anIndices[counter] + 1])
-
-            break
-        
-        if (types[lineNumber][anIndices[counter] - 1] == "identifier"):
-            if (symbolTable.get(lexemes[lineNumber][anIndices[counter] - 1])):
-                tempVal += str(symbolTable[lexemes[lineNumber][anIndices[counter] - 1]][0])
-            else:
-                return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
-        elif (types[lineNumber][anIndices[counter] - 1] == "string delimiter"):     # YARN literal
-                if (types[lineNumber][anIndices[counter] - 3] == "string delimiter"):   # another delimiter
-                    tempVal += lexemes[lineNumber][anIndices[counter] - 2]
-                else:
-                    return "[Line " + str(lineNumber) + "] SyntaxError: Invalid syntax of YARN literal"     # ! TAKE NOTE
+  # ! NO OPERATIONS AS OPERANDS YET
+  # * Gets the index of ITZ
+  if("variable initialization keyword" in types[lineNumber]):
+    expressionIndex = lexemes[lineNumber].index("ITZ")
+  #put other cases where the arithmetic expression might be
+  elif("print keyword" in types[lineNumber]):
+    expressionIndex = lexemes[lineNumber].index("VISIBLE")
+  else:
+    expressionIndex = -1    
+  
+  #print(lexemes[lineNumber][expressionIndex])
+  anIndices = []
+  for index in range(len(lexemes[lineNumber])):
+    if lexemes[lineNumber][index] == "AN":
+        anIndices.append(index)
+  
+  counter = 0
+  tempVal = ''
+  while True:
+    if (counter == len(anIndices) - 1):
+      if (types[lineNumber][anIndices[counter] - 1] == "identifier"):
+        if (symbolTable.get(lexemes[lineNumber][anIndices[counter] - 1])):
+          tempVal += str(symbolTable[lexemes[lineNumber][anIndices[counter] - 1]][0])
         else:
-            tempVal += str(lexemes[lineNumber][anIndices[counter] - 1])
+          return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+      elif (types[lineNumber][anIndices[counter] - 1] == "string delimiter"):     # YARN literal
+        if (types[lineNumber][anIndices[counter] - 3] == "string delimiter"):   # another delimiter
+          tempVal += lexemes[lineNumber][anIndices[counter] - 2]
+        else:
+          return "[Line " + str(lineNumber) + "] SyntaxError: Invalid syntax of YARN literal"     # ! TAKE NOTE
+      else:
+        tempVal += str(lexemes[lineNumber][anIndices[counter] - 1])
+      
+      if (types[lineNumber][anIndices[counter] + 1] == "identifier"):
+        if (symbolTable.get(lexemes[lineNumber][anIndices[counter] + 1])):
+          tempVal += str(symbolTable[lexemes[lineNumber][anIndices[counter] + 1]][0])
+        else:
+          return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+      elif (types[lineNumber][anIndices[counter] + 1] == "string delimiter"):     # YARN literal
+        if (types[lineNumber][anIndices[counter] + 3] == "string delimiter"):   # another delimiter
+          tempVal += lexemes[lineNumber][anIndices[counter] + 2]
+        else:
+          return "[Line " + str(lineNumber) + "] SyntaxError: Invalid syntax of YARN literal"     # ! TAKE NOTE
+      else:
+        tempVal += str(lexemes[lineNumber][anIndices[counter] + 1])
+
+      break
+    
+    if (types[lineNumber][anIndices[counter] - 1] == "identifier"):
+      if (symbolTable.get(lexemes[lineNumber][anIndices[counter] - 1])):
+        tempVal += str(symbolTable[lexemes[lineNumber][anIndices[counter] - 1]][0])
+      else:
+        return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+    elif (types[lineNumber][anIndices[counter] - 1] == "string delimiter"):     # YARN literal
+      if (types[lineNumber][anIndices[counter] - 3] == "string delimiter"):   # another delimiter
+        tempVal += lexemes[lineNumber][anIndices[counter] - 2]
+      else:
+        return "[Line " + str(lineNumber) + "] SyntaxError: Invalid syntax of YARN literal"     # ! TAKE NOTE
+    else:
+      tempVal += str(lexemes[lineNumber][anIndices[counter] - 1])
 
 
-        counter += 1
+    counter += 1
 
 def visibleExpSemantics(lineNumber, symbolTable, lexemes, types):
   # * Gets the index of VISIBLE
@@ -3236,6 +3357,39 @@ def visibleExpSemantics(lineNumber, symbolTable, lexemes, types):
       
       lexemeExpression[lastIndexOperator] = tempVal[0]
       typeExpression[lastIndexOperator] = tempVal[1]
+      
+    elif lexemeExpression[lastIndexOperator] in expressionKeywords["boolean"]:
+      tempVal = booleanExpSemantics(lineNumber, symbolTable, lexemes, types)
+      
+      if type(tempVal) != list:
+        return tempVal
+      
+      # * Popping the elements from the lexeme and type list
+      if lexemeExpression[lastIndexOperator] not in ["ALL OF", "ANY OF", "SMOOSH", "NOT"]:
+        counter = 0
+        while counter != 3:
+          lexemeExpression.pop(lastIndexOperator)
+          typeExpression.pop(lastIndexOperator)
+          counter += 1
+      elif lexemeExpression[lastIndexOperator] == "NOT":
+        counter = 0
+        while counter != 1:
+          lexemeExpression.pop(lastIndexOperator)
+          typeExpression.pop(lastIndexOperator)
+          counter += 1
+      else:
+        try:
+          while len(lexemeExpression) != 1:
+            lexemeExpression.pop(lastIndexOperator)
+            typeExpression.pop(lastIndexOperator)
+        except IndexError:
+          lexemeExpression[lastIndexOperator] = tempVal[0]
+          typeExpression[lastIndexOperator] = tempVal[1]
+          
+      
+      lexemeExpression[lastIndexOperator] = tempVal[0]
+      typeExpression[lastIndexOperator] = tempVal[1]
+      
   
   # * Converts the list to a whole string
   for index in range(len(lexemeExpression)):
@@ -3249,15 +3403,113 @@ def visibleExpSemantics(lineNumber, symbolTable, lexemes, types):
   
   tempVal = [tempVal, "YARN literal"]
   
-  print(lexemeExpression)
-  print(typeExpression)
   # print(operationIndices)
   # print(lexemes[lineNumber])
   # print(types[lineNumber])
   
   return tempVal
    
+def identifierExpSemantics(lineNumber, symbolTable, lexemes, types):
+  identifierIndex = types[lineNumber].index("identifier")
+  rIndex = -1
+  maekIndex = -1
+  try:
+    if lexemes[lineNumber][identifierIndex + 1] == "R":
+      rIndex = identifierIndex + 1
+      
+      
+      # try:
+      #   if lexemes[lineNumber][identifierIndex + 2] == "MAEK":
+          
+      # except IndexError:
+      #   return "[Line " + str(lineNumber) + "] SyntaxError: Invalid assignment format"
+    else:
+      return "[Line " + str(lineNumber) + "] SyntaxError: Invalid assignment format"
+  except IndexError:
+    return symbolTable[lexemes[lineNumber][identifierIndex]]
+
+  # * R exists
+  if rIndex != -1:
+    try:
+      maekIndex = lexemes[lineNumber].index("MAEK")
+      
+      if lexemes[lineNumber][maekIndex - 1] != "R" or lexemes[lineNumber][maekIndex + 1] not in literals:
+        return "[Line " + str(lineNumber) + "] SyntaxError: Invalid typecast format"
+    except ValueError:
+      try:
+        if types[lineNumber][rIndex + 1] in ["identifier", "NUMBR literal", "NUMBAR literal", "TROOF literal", "string delimiter"]:
+          if types[lineNumber][rIndex + 1] == "identifier":
+            if symbolTable.get(lexemes[lineNumber][rIndex + 1]):
+              return [symbolTable[lexemes[lineNumber][rIndex + 1]][0], symbolTable[lexemes[lineNumber][rIndex + 1]][1]]
+            else:
+              return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
+          elif types[lineNumber][rIndex + 1] in ["NUMBR literal", "NUMBAR literal", "TROOF literal"]:
+            print(f"{lexemes[lineNumber][0]} = {lexemes[lineNumber][rIndex + 1]}")
+            print([lexemes[lineNumber][rIndex + 1], types[lineNumber][rIndex + 1]])
+            print("====")
+            return [lexemes[lineNumber][rIndex + 1], types[lineNumber][rIndex + 1]]
+          else:   # YARN literal
+            yarnIndex = types[lineNumber].index("YARN literal")
+            
+            try:
+              if types[lineNumber][yarnIndex - 1] == "string delimiter" or types[lineNumber][yarnIndex + 1] == "string delimiter":
+                return [lexemes[lineNumber][yarnIndex], "YARN literal"]
+            except IndexError:
+              return "[Line " + str(lineNumber) + "] SyntaxError: Invalid YARN literal format"
+              
+        
+        if lexemes[lineNumber][rIndex + 1] in expressionKeywords["arithmetic"] or lexemes[lineNumber][rIndex + 1] in expressionKeywords["boolean"] or lexemes[lineNumber][rIndex + 1] in expressionKeywords["comparison"] or lexemes[lineNumber][rIndex + 1] in expressionKeywords["concatenation"]:
+          operator = lexemes[lineNumber][rIndex + 1]
+          
+          if operator in expressionKeywords["arithmetic"]:
+            temp = arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types)
     
+            # * Semantic Error
+            if type(temp) != list:
+              return temp
+            
+            tempVal = [temp[0], temp[1]]
+            
+            return tempVal
+          elif operator in expressionKeywords["boolean"]:
+            temp = booleanExpSemantics(lineNumber, symbolTable, lexemes, types)
+    
+            # * Semantic Error
+            if type(temp) != list:
+              return temp
+            
+            tempVal = [temp[0], temp[1]]
+            
+            return tempVal
+          elif operator in expressionKeywords["comparison"]:
+            temp = comparisonExpSemantics(lineNumber, symbolTable, lexemes, types)
+    
+            # * Semantic Error
+            if type(temp) != list:
+              return temp
+            
+            tempVal = [temp[0], temp[1]]
+            
+            return tempVal
+          elif operator in expressionKeywords["concatenation"]:
+            temp = concatenationExpSemantics(lineNumber, symbolTable, lexemes, types)
+    
+            # * Semantic Error
+            if type(temp) != list:
+              return temp
+            
+            tempVal = [temp[0], temp[1]]
+            
+            return tempVal
+          
+      except IndexError:
+        return "[Line " + str(lineNumber) + "] SyntaxError: Invalid assignment format"
+    
+    
+    # * MAEK exists
+    # if maekIndex != -1:
+    # * MAEK does not exist
+    # else:
 
     
   
