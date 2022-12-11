@@ -1,4 +1,18 @@
-# CMSC-124-Project
+# CMSC 124 Project
+**B-4L** - Group EZR<br>
+Rio John Jr. Ducusin<br>
+Zyril Tamargo<br>
+Johanna Eikou Teknomo
+
+# App Guide
+![alt text](images/1.jpg)
+
+In order to start the program, run the semantics_analyzer.py file. You will then see the following GUI pop up.
+
+![alt text](images/2.jpg)
+
+
+
 # References
 - https://stackoverflow.com/questions/5286093/display-listbox-with-columns-using-tkinter
 - https://www.tutorialspoint.com/how-to-display-a-listbox-with-columns-using-tkinter

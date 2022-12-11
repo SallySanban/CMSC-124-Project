@@ -84,17 +84,21 @@ def openFile():
 
     filename = tkinter.filedialog.askopenfilename()
 
-    file = open(filename)
+    if(filename != ""):
+        file = open(filename)
 
-    for i in file.readlines():
-        textEditor.insert(END, i)
+        for i in file.readlines():
+            textEditor.insert(END, i)
 
 def getInput():
     inputBox.config(state=NORMAL)
     enterButton.config(state=NORMAL)
     enterButton.wait_variable(enterClicked)
 
-    return inputBox.get()
+    if(inputBox.get() != ""):
+        return inputBox.get()
+    else:
+        return None
     
 def saveInput():
     enterClicked.set("button pressed")
@@ -430,16 +434,25 @@ def visibleSemantics(lineNumber):
 def gimmehSemantics(lineNumber):
     gimmehLexeme = lexemes[lineNumber].index("GIMMEH")
 
-    SemanticError = updateSymbolTable(lineNumber, [getInput(), "YARN literal"], lexemes[lineNumber][gimmehLexeme + 1])
+    userInput = getInput()
 
-    inputBox.delete(0, END)
-    inputBox.config(state=DISABLED)
-    enterButton.config(state=DISABLED)
+    if(userInput != None):
+        SemanticError = updateSymbolTable(lineNumber, [userInput, "YARN literal"], lexemes[lineNumber][gimmehLexeme + 1])
 
-    if(SemanticError != "OK"):
-        return SemanticError
+        inputBox.delete(0, END)
+        inputBox.config(state=DISABLED)
+        enterButton.config(state=DISABLED)
 
-    return "OK"
+        if(SemanticError != "OK"):
+            return SemanticError
+
+        return "OK"
+    else:
+        inputBox.delete(0, END)
+        inputBox.config(state=DISABLED)
+        enterButton.config(state=DISABLED)
+
+        return "SemanticError: Please enter input"
 
 def semantics():
     lineNumber = list(lexemes.keys())[0]
@@ -511,15 +524,28 @@ screen.resizable(False, False)
 style = ttk.Style()
 # style.theme_use('vista')
 
+# textEditor = scrolledtext.ScrolledText(screen, undo=True, height=20, width=52)
+# textEditor.place(x=20, y=40)
+
+textContainer = Frame(screen, borderwidth=1, width=54, height=20)
+textEditor = tk.Text(width=54, height=20, wrap="none", borderwidth=0, highlightthickness=0)
+scrollBarTextEditorY = tk.Scrollbar(screen, orient="vertical", command=textEditor.yview)
+scrollBarTextEditorX = tk.Scrollbar(screen, orient="horizontal", command=textEditor.xview)
+scrollBarTextEditorY.pack(side = RIGHT, fill = Y)
+scrollBarTextEditorX.pack(side = BOTTOM, fill = X)
+textEditor.configure(xscrollcommand=scrollBarTextEditorX.set) #yscrollcommand=scrollBarTextEditorY.set)
+# scrollBarTextEditorY.grid(row=5, column=3, sticky="nse", padx=20, pady=45)
+# scrollBarTextEditorX.grid(row=5, column=2, sticky="ews", padx=20, pady=45)
+# textEditor.grid(row=5, column=2, sticky="nsew", padx=20, pady=45)
+textEditor.place(x=20, y=43)
+
+
 fileButton = ttk.Button(
     screen,
     text='Open File',
     command=lambda:openFile()
 )
 fileButton.place(x=20, y=15)
-
-textEditor = scrolledtext.ScrolledText(screen, undo=True, height=20, width=52)
-textEditor.place(x=20, y=40)
 
 
 tokensLabel = ttk.Label(screen, text="Tokens", background=BACKGROUND_COLOR)
@@ -552,7 +578,7 @@ runButton = ttk.Button(
     text='Run',
     command=lambda:run()
 )
-runButton.place(x=1100, y=715)
+runButton.place(x=1095, y=700)
 
 tokensTree = ttk.Treeview(listOfTokens, column=("c1", "c2"), show='headings', height=15)
 
