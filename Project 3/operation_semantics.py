@@ -2717,14 +2717,17 @@ def comparisonExpSemantics(lineNumber, symbolTable, lexemes, types):
         expressionIndex = operationIndices[0] - 1
     else:
       expressionIndex = -1    
-    
-    # print(lexemes[lineNumber][expressionIndex])
+
     anIndices = []
     for index in range(len(lexemes[lineNumber])):
       if lexemes[lineNumber][index] == "AN":
         anIndices.append(index)
     
-    if len(anIndices) != len(operationIndices):
+
+    biggrOfCnt = lexemes[lineNumber].count("BIGGR OF")
+    smallrOfCnt = lexemes[lineNumber].count("SMALLR OF")
+    
+    if (len(anIndices) - biggrOfCnt - smallrOfCnt) != len(operationIndices):
       return(f"[Line {lineNumber}] SyntaxError: Invalid expression")
     
     
@@ -3183,11 +3186,11 @@ def comparisonExpSemantics(lineNumber, symbolTable, lexemes, types):
                             tempVal = ["FAIL", "TROOF literal"]
                     elif types[lineNumber][sizeIndex + 3] == "NUMBAR literal":
                         if (float(lexemes[lineNumber][sizeIndex + 1]) < float(lexemes[lineNumber][sizeIndex + 3])):
-                            tempVal = ["WIN", "TROOF literal"]
+                          tempVal = ["WIN", "TROOF literal"]
                         else:
-                            tempVal = ["FAIL", "TROOF literal"]
+                          tempVal = ["FAIL", "TROOF literal"]
                     else:
-                        return "[Line " + str(lineNumber) + "] SemanticError: Invalid operands for comparison operation"
+                      return "[Line " + str(lineNumber) + "] SemanticError: Invalid operands for comparison operation"
                 else:
                     return "[Line " + str(lineNumber) + "] SemanticError: Invalid operands for comparison operation"
     
@@ -3334,9 +3337,22 @@ def visibleExpSemantics(lineNumber, symbolTable, lexemes, types):
     
     if len(operationIndices) == 0:
       break
+      
         
     # * Get index of first operation to solve starting from the last
-    lastIndexOperator = operationIndices[len(operationIndices) - 1]
+    print("*************")
+    print(operationIndices)
+    print(lexemeExpression)
+    print("*************")
+    if lexemeExpression[operationIndices[0]] in ["BOTH SAEM", "DIFFRINT"]:
+      lastIndexOperator = 0
+    else:
+      lastIndexOperator = operationIndices[len(operationIndices) - 1]
+    
+    print("*************")
+    print(lastIndexOperator)
+    print("*************")
+         
     
     if lexemeExpression[lastIndexOperator] in expressionKeywords["arithmetic"]:
       tempVal = arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types)
@@ -3394,7 +3410,6 @@ def visibleExpSemantics(lineNumber, symbolTable, lexemes, types):
       typeExpression[lastIndexOperator] = tempVal[1]
     
     elif lexemeExpression[lastIndexOperator] in expressionKeywords["comparison"]:
-      
       tempVal = comparisonExpSemantics(lineNumber, symbolTable, lexemes, types)
       
       if type(tempVal) != list:
@@ -3422,16 +3437,13 @@ def visibleExpSemantics(lineNumber, symbolTable, lexemes, types):
           lexemeExpression[lastIndexOperator] = tempVal[0]
           typeExpression[lastIndexOperator] = tempVal[1]
       
-      print("====")
-      print(tempVal)
-      print(lastIndexOperator)
-      print(lexemeExpression)
-      print(typeExpression)
-      print("====")
+      lexemeExpression = [0]
+      typeExpression = [0]
+      
       
       lexemeExpression[lastIndexOperator] = tempVal[0]
       typeExpression[lastIndexOperator] = tempVal[1]
-      
+    
   
   print(lexemeExpression)
   print(typeExpression)
