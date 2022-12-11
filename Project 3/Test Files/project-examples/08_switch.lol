@@ -22,19 +22,20 @@ HAI
 		OMG 2
 			VISIBLE "Enter bill cost: "
 			GIMMEH input
-			VISIBLE "Tip: " 
-			VISIBLE PRODUCKT OF input AN 0.1
+			VISIBLE "Tip: " PRODUKT OF input AN 0.1
 			GTFO
 		OMG 3
 			VISIBLE "Enter width: "
 			GIMMEH input
-			VISIBLE "Square Area: " 
-			VISIBLE PRODUCKT OF input AN input
+			VISIBLE "Square Area: " PRODUCKT OF input AN input
 			GTFO
 		OMG 0
 			VISIBLE "Goodbye"
+			GTFO
 		OMGWTF
 			VISIBLE "Invalid Input!"
 	OIC
+
+VISIBLE "Hello"
 
 KTHXBYE

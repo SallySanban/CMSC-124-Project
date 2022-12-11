@@ -121,18 +121,18 @@ def run():
         if(lexicalError != None):
             messagebox.showinfo('Lexical Error', lexicalError)
         else:
-            # syntaxError = syntax_analyzer.syntax(lexemes, types)
+            syntaxError = syntax_analyzer.syntax(lexemes, types)
 
-            # if(syntaxError != None):
-            #     messagebox.showinfo('Syntax Error', syntaxError)
-            # else:
-            semanticError = semantics()
-
-            if(("SemanticError" in semanticError) or "SyntaxError" in semanticError):
-                messagebox.showinfo('Semantic Error', semanticError)
+            if(syntaxError != None):
+                messagebox.showinfo('Syntax Error', syntaxError)
             else:
-                makeTokens()
-                makeSymbolTable(semanticError)
+                semanticError = semantics()
+
+                if("SemanticError" in semanticError or "SyntaxError" in semanticError):
+                    messagebox.showinfo('Semantic Error', semanticError)
+                else:
+                    makeTokens()
+                    makeSymbolTable(semanticError)
     else:
         textEditor.insert(END, "Please open a file or type some code")
 
@@ -253,36 +253,57 @@ def switchCaseSemantics(lineNumber, variable):
     # * Execution stops when there is an GTFO or OIC
 
     omgLineNumber = []
+    gtfoLineNumber = []
     omgWtfLineNumber = -1
 
     # * Gets the line number of the OMG and OMGWTF
     while lexemes[lineNumber][0] != "OIC":
         if lexemes[lineNumber][0] == "OMG":
             omgLineNumber.append(lineNumber)
+        elif(lexemes[lineNumber][0] == "GTFO"):
+            gtfoLineNumber.append(lineNumber)
         elif lexemes[lineNumber][0] == "OMGWTF":
             omgWtfLineNumber = lineNumber
-        
+
         lineNumber = nextLineNumber(lineNumber)
     
+    oicLineNumber = lineNumber
     lineNumber = omgLineNumber[0] - 1       # Returns back the line number to where WTF? is
+    
+    if(len(gtfoLineNumber) != len(omgLineNumber)):
+        return "[Line " + str(lineNumber) + "] SyntaxError: Missing GTFO"
+
+    # print(omgLineNumber)            # Checker
+    # print(omgWtfLineNumber)
+    # print(lineNumber)
 
     # * Checks if the IT value is equal to the cases in OMG
     checkedLine = -1
-    for omg in omgLineNumber:
-        if types[omg][1] in ["identifier", "NUMBR literal", "NUMBAR literal", "TROOF literal", "string literal"]:
-            if types[omg][1] == "identifier":
-                if newSymbolTable.get(lexemes[omg]):
-                    if newSymbolTable[lexemes[omg]][0] == newSymbolTable["IT"][0] and newSymbolTable[lexemes[omg]][1] == "NUMBR literal" and newSymbolTable["IT"][1] == "NUMBR literal":
-                        checkedLine = omg
-                        break
-                    elif newSymbolTable[lexemes[omg]][0] == newSymbolTable["IT"][0] and newSymbolTable[lexemes[omg]][1] == "NUMBAR literal" and newSymbolTable["IT"][1] == "NUMBAR literal":
-                        checkedLine = omg
-                        break
-                    elif newSymbolTable[lexemes[omg]][0] == newSymbolTable["IT"][0] and newSymbolTable[lexemes[omg]][1] == "YARN literal" and newSymbolTable["IT"][1] == "YARN literal":
-                        checkedLine = omg
-                        break
-                    elif newSymbolTable[lexemes[omg]][0] == newSymbolTable["IT"][0] and newSymbolTable[lexemes[omg]][1] == "TROOF literal" and newSymbolTable["IT"][1] == "TROOF literal":
-                        checkedLine = omg
+    for omg in range(0, len(omgLineNumber)):
+        if types[omgLineNumber[omg]][1] in ["identifier", "NUMBR literal", "NUMBAR literal", "TROOF literal", "string delimiter"]:
+            if types[omgLineNumber[omg]][1] == "identifier":
+                print(lexemes[omgLineNumber[omg]][1])
+                if newSymbolTable.get(lexemes[omgLineNumber[omg]][1]):
+                    print(newSymbolTable)
+                    if str(newSymbolTable[lexemes[omgLineNumber[omg]][1]][0]) == newSymbolTable["IT"][0]:
+                        checkedLine = omgLineNumber[omg]
+                        
+                        for i in range(omgLineNumber[omg] + 1, gtfoLineNumber[omg]):
+                            if(lexemes[i][0] == "VISIBLE"):
+                                SemanticError = visibleSemantics(i)
+
+                                if(SemanticError != "OK"):
+                                    return SemanticError
+                            elif(lexemes[i][0] == "GIMMEH"):
+                                SemanticError = gimmehSemantics(i)
+
+                                if(SemanticError != "OK"):
+                                    return SemanticError
+                            elif(lexemes[i][0] == "I HAS A"):
+                                SemanticError = iHasASemantics(i)
+
+                                if(SemanticError != "OK"):
+                                    return SemanticError
                         break
                     else:
                         continue        # If not equal or NOOB type
@@ -305,25 +326,52 @@ def switchCaseSemantics(lineNumber, variable):
                     if newSymbolTable["IT"][0]:
                         checkedLine = omg
                         break
-                    else:
-                        continue
-                else:
-                    if not newSymbolTable["IT"][0]:
-                        checkedLine = omg
+                elif(types[omgLineNumber[omg]][1] == "string delimiter"):
+                    if lexemes[omgLineNumber[omg]][2] == newSymbolTable["IT"][0]:
+                        checkedLine = omgLineNumber[omg]
+
+                        for i in range(omgLineNumber[omg] + 1, gtfoLineNumber[omg]):
+                            if(lexemes[i][0] == "VISIBLE"):
+                                SemanticError = visibleSemantics(i)
+
+                                if(SemanticError != "OK"):
+                                    return SemanticError
+                            elif(lexemes[i][0] == "GIMMEH"):
+                                SemanticError = gimmehSemantics(i)
+
+                                if(SemanticError != "OK"):
+                                    return SemanticError
+                            elif(lexemes[i][0] == "I HAS A"):
+                                SemanticError = iHasASemantics(i)
+
+                                if(SemanticError != "OK"):
+                                    return SemanticError
                         break
-                    else:
-                        continue
-        else:
-            continue
-    
+            else:
+                return "[Line " + str(lineNumber) + "] SyntaxError: Invalid case"
+
     if checkedLine == -1:       # GO TO DEFAULT CASE
         if omgWtfLineNumber == -1:      # No default case
-            print("hahah")
+            return "[Line " + str(lineNumber) + "] SyntaxError: Missing default case"
         else:       # Go to default case
-            print("hahah")
-        print("")       
-    else:
-        print("hahah")
+            for i in range(omgWtfLineNumber, oicLineNumber):
+                if(lexemes[i][0] == "VISIBLE"):
+                    SemanticError = visibleSemantics(i)
+
+                    if(SemanticError != "OK"):
+                        return SemanticError
+                elif(lexemes[i][0] == "GIMMEH"):
+                    SemanticError = gimmehSemantics(i)
+
+                    if(SemanticError != "OK"):
+                        return SemanticError
+                elif(lexemes[i][0] == "I HAS A"):
+                    SemanticError = iHasASemantics(i)
+
+                    if(SemanticError != "OK"):
+                        return SemanticError
+
+    return oicLineNumber
 
 def iHasASemantics(lineNumber):
     if("variable initialization keyword" in types[lineNumber]): #variable has value
@@ -332,30 +380,30 @@ def iHasASemantics(lineNumber):
         # TODO: doesnt accept if assigns to variable
 
         if(types[lineNumber][itzLexeme + 1] in literals): #checks if value is literal
-            semanticsError = updateSymbolTable(lineNumber, itzLexeme + 1, lexemes[lineNumber][itzLexeme - 1])
+            SemanticError = updateSymbolTable(lineNumber, itzLexeme + 1, lexemes[lineNumber][itzLexeme - 1])
 
-            if(semanticsError != "OK"):
-                return semanticsError
+            if(SemanticError != "OK"):
+                return SemanticError
 
         elif(types[lineNumber][itzLexeme + 1] == "string delimiter" and types[lineNumber][itzLexeme + 2] == "YARN literal" and types[lineNumber][itzLexeme + 3] == "string delimiter"): #checks if string
-            semanticsError = updateSymbolTable(lineNumber, itzLexeme + 2, lexemes[lineNumber][itzLexeme - 1])
+            SemanticError = updateSymbolTable(lineNumber, itzLexeme + 2, lexemes[lineNumber][itzLexeme - 1])
 
-            if(semanticsError != "OK"):
-                return semanticsError
+            if(SemanticError != "OK"):
+                return SemanticError
 
         elif(lexemes[lineNumber][itzLexeme + 1] in expressionKeywords["arithmetic"] or lexemes[lineNumber][itzLexeme + 1] in expressionKeywords["boolean"] or lexemes[lineNumber][itzLexeme + 1] in expressionKeywords["comparison"] or lexemes[lineNumber][itzLexeme + 1] in expressionKeywords["concatenation"]): #if expression
-            semanticsError = arithmeticExpressionSemantics(lineNumber, lexemes[lineNumber][itzLexeme - 1])
+            SemanticError = arithmeticExpressionSemantics(lineNumber, lexemes[lineNumber][itzLexeme - 1])
 
-            if(semanticsError != "OK"):
-                return semanticsError
+            if(SemanticError != "OK"):
+                return SemanticError
 
     else:   #variable has no value
         iHasALexeme = lexemes[lineNumber].index("I HAS A")
 
-        semanticsError = updateSymbolTable(lineNumber, "NOOB", lexemes[lineNumber][iHasALexeme + 1])
+        SemanticError = updateSymbolTable(lineNumber, "NOOB", lexemes[lineNumber][iHasALexeme + 1])
 
-        if(semanticsError != "OK"):
-            return semanticsError
+        if(SemanticError != "OK"):
+            return SemanticError
 
     return "OK"
 
@@ -377,14 +425,14 @@ def visibleSemantics(lineNumber):
 def gimmehSemantics(lineNumber):
     gimmehLexeme = lexemes[lineNumber].index("GIMMEH")
 
-    semanticsError = updateSymbolTable(lineNumber, [getInput(), "YARN literal"], lexemes[lineNumber][gimmehLexeme + 1])
+    SemanticError = updateSymbolTable(lineNumber, [getInput(), "YARN literal"], lexemes[lineNumber][gimmehLexeme + 1])
 
     inputBox.delete(0, END)
     inputBox.config(state=DISABLED)
     enterButton.config(state=DISABLED)
 
-    if(semanticsError != "OK"):
-        return semanticsError
+    if(SemanticError != "OK"):
+        return SemanticError
 
     return "OK"
 
@@ -394,18 +442,18 @@ def semantics():
 
     while(lineNumber):
         if(lexemes[lineNumber][lexemeIndex] == "I HAS A"):
-            semanticsError = iHasASemantics(lineNumber)
+            SemanticError = iHasASemantics(lineNumber)
 
-            if(semanticsError != "OK"):
-                return semanticsError
+            if(SemanticError != "OK"):
+                return SemanticError
             
             lineNumber = nextLineNumber(lineNumber)
             continue
         elif(lexemes[lineNumber][lexemeIndex] == "VISIBLE"):
-            semanticsError = visibleSemantics(lineNumber)
+            SemanticError = visibleSemantics(lineNumber)
 
-            if(semanticsError != "OK"):
-                return semanticsError
+            if(SemanticError != "OK"):
+                return SemanticError
 
             lineNumber = nextLineNumber(lineNumber)
             continue
@@ -415,12 +463,12 @@ def semantics():
             lineNumber = nextLineNumber(lineNumber)
             continue
         elif(lexemes[lineNumber][lexemeIndex] == "WTF?"):
-            semanticsError = switchCaseSemantics(lineNumber, "IT")      # Returns a line number
+            SemanticError = switchCaseSemantics(lineNumber, "IT")      # Returns a line number
 
-            if (type(semanticsError) != int):
-                return semanticsError
+            if (type(SemanticError) != int):
+                return SemanticError
 
-            lineNumber = nextLineNumber(semanticsError)
+            lineNumber = nextLineNumber(SemanticError)
             continue
         elif (types[lineNumber][lexemeIndex] == "identifier"):
             identifier = lexemes[lineNumber][lexemeIndex]

@@ -173,7 +173,7 @@ def findLexemes(lines, lexemes, types):
             if(stringFound == True):
                 string = string + splitWords[j] + " "
 
-                if('\"' == splitWords[j][len(splitWords[j])-1] or j == len(splitWords)-1):
+                if('\"' == splitWords[j][len(splitWords[j])-1]):
                     stringFound = False
 
                     if(string != ""):
@@ -198,6 +198,34 @@ def findLexemes(lines, lexemes, types):
                             types[i+1].append("string delimiter")
                     
                     string = ""
+                elif(j == len(splitWords)-1):
+                    if('\"' != splitWords[j][len(splitWords[j])-1]):
+                        return "SyntaxError: " + splitWords[j] + " is an invalid keyword"
+                    elif('\"' != splitWords[j][len(splitWords[j])-1]):
+                        stringFound = False
+
+                        if(string != ""):
+                            if(i+1 not in lexemes):
+                                lexemes[i+1] = []
+                                lexemes[i+1].append("\"")
+                                lexemes[i+1].append(string.strip()[1:len(string.strip())-1])
+                                lexemes[i+1].append("\"")
+                            else:
+                                lexemes[i+1].append("\"")
+                                lexemes[i+1].append(string.strip()[1:len(string.strip())-1])
+                                lexemes[i+1].append("\"")
+
+                            if(i+1 not in types):
+                                types[i+1] = []
+                                types[i+1].append("string delimiter")
+                                types[i+1].append("YARN literal")
+                                types[i+1].append("string delimiter")
+                            else:
+                                types[i+1].append("string delimiter")
+                                types[i+1].append("YARN literal")
+                                types[i+1].append("string delimiter")
+                        
+                        string = ""
 
                 continue
 

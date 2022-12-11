@@ -1865,7 +1865,7 @@ def orlySyntax(lineNumber, lexemes, types):
     return "OK"
 
 def visibleSyntax(lineNumber, lexemes, types):
-    visibleIndex = lexemes[lineNumber].index("VISIBLE")
+    #visibleIndex = lexemes[lineNumber].index("VISIBLE")
     # if(len(lexemes[lineNumber]) > 1):
     #     if(types[lineNumber][visibleIndex+1] == "string delimiter"):
     #         if(lexemes[lineNumber][visibleIndex-1] != "\""):
@@ -2131,9 +2131,9 @@ def syntax(lexemes, types):
                 lineNumber = nextLineNumber(lineNumber, lexemes, types)
                 continue
             elif("VISIBLE" in lexemes[lineNumber]):
-                syntaxError = visibleSyntax(lineNumber, lexemes, types)
-                if(syntaxError != "OK"):
-                    return syntaxError
+                # syntaxError = visibleSyntax(lineNumber, lexemes, types)
+                # if(syntaxError != "OK"):
+                #     return syntaxError
                 lineNumber = nextLineNumber(lineNumber, lexemes, types)
                 continue
             
@@ -2150,16 +2150,13 @@ def syntax(lexemes, types):
                     return syntaxError
                 lineNumber = nextLineNumber(lineNumber, lexemes, types)
                 continue
-            # elif(lexemes[lineNumber][0] == "O RLY?"):
-            #     orlyFound = True
-            #     syntaxError = orlySyntax(lineNumber, lexemes, types)
 
-            #     if(isinstance(syntaxError, int)):
-            #         lineNumber = syntaxError
-            #         continue
-            #     else:
-            #         print(syntaxError)
-            #         break
+            elif(types[lineNumber][0] == "identifier"):
+                if(lexemes[lineNumber+1][lexemeIndex] != "WTF?"):
+                    return "[Line " + str(lineNumber) + "] SyntaxError: invalid syntax"
+
+                lineNumber = nextLineNumber(lineNumber, lexemes, types)
+                continue
 
                 # elif(lexemes[lineNumber][lexemeIndex] == "YA RLY"):
                 #     syntaxError = sumOfSyntax(lineNumber, lexemes, types)
@@ -2315,6 +2312,8 @@ def syntax(lexemes, types):
                     continue
                 else:
                     break
+            else:
+                break
 
         
                 
