@@ -1895,12 +1895,32 @@ def wtfSyntax(lineNumber, lexemes, types):
             if(syntaxError != "OK"):
                 return syntaxError
         else: return "[Line " + str(lineNumber) + "] SyntaxError: unexpected token"
-    lineNumber = nextLineNumber(lineNumber, lexemes, types)
-    if(lexemes[lineNumber][0] == "OMG"):
-        omgIndex = lexemes[lineNumber].index("OMG")
-        print(types[lineNumber][omgIndex + 1])
-        if(types[lineNumber][omgIndex + 1] not in literals or types[lineNumber][omgIndex + 1] == "TYPE literal"):
-            return "[Line " + str(lineNumber) + "] SyntaxError: Cases must be of type literal"
+    while(lexemes[lineNumber][0] != "OIC"):
+        lineNumber = nextLineNumber(lineNumber, lexemes, types)
+        if(lexemes[lineNumber][0] == "OMG"):
+            omgIndex = lexemes[lineNumber].index("OMG")
+            if(types[lineNumber][omgIndex + 1] not in literals or types[lineNumber][omgIndex + 1] == "TYPE literal"):
+                return "[Line " + str(lineNumber) + "] SyntaxError: Cases must be a literal"
+            else:
+                while(lexemes[lineNumber][0] != "GTFO"):
+                    if(lexemes[lineNumber][0] == "VISIBLE"):
+                        lineNumber = nextLineNumber(lineNumber, lexemes, types)
+                        continue
+                    elif(lexemes[lineNumber][0] == "GIMMEH"):
+                        syntaxError = gimmehSyntax(lineNumber, lexemes, types)
+                        if(syntaxError != "OK"):
+                            return syntaxError
+                            
+                        lineNumber = nextLineNumber(lineNumber, lexemes, types)
+                        continue
+                    elif(lexemes[lineNumber][0] == "I HAS A"):
+                        syntaxError = iHasASyntax(lineNumber, lexemes, types)
+                        if(syntaxError != "OK"):
+                            return syntaxError
+                        lineNumber = nextLineNumber(lineNumber, lexemes, types)
+                        continue
+                break
+    
     return "OK"
 
 def isNowASyntax(lineNumber, lexemes, types):

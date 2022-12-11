@@ -513,7 +513,6 @@ fileButton = ttk.Button(
 fileButton.place(x=20, y=15)
 
 textEditor = scrolledtext.ScrolledText(screen, undo=True, height=20, width=52)
-# textEditor = Text(screen, height=20, width=54, state=DISABLED)
 textEditor.place(x=20, y=40)
 
 
