@@ -64,6 +64,8 @@ def makeTokens():
 
 def makeSymbolTable(symbolTable):
     global listOfSymbolTable, symbolTableTree
+    
+    print(f"Symbol table: {symbolTable}")
 
     refactoredSymbolTable = []
     for i in symbolTable.keys():
@@ -230,6 +232,20 @@ def concatenationExpressionSemantics(lineNumber, variable):
 
     return "OK"
         
+def identifierSemantics(lineNumber, variable):
+    temp = operation_semantics.identifierExpSemantics(lineNumber, newSymbolTable, lexemes, types)
+    
+    # * Semantic Error
+    if type(temp) != list:
+        return temp
+    
+    print(temp)
+
+    updateSymbolTable(lineNumber, [temp[0], temp[1]], variable)
+    print(newSymbolTable)
+
+    return "OK"
+        
 def switchCaseSemantics(lineNumber, variable):
     # ! FLOW
     # * First line is WTF?
@@ -271,7 +287,7 @@ def switchCaseSemantics(lineNumber, variable):
                     else:
                         continue        # If not equal or NOOB type
                 else:
-                    return "[Line " + str(lineNumber) + "] SemanticsError: Uninitialized identifier"
+                    return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
             elif types[omg][1] == "NUMBR literal":
                 if int(lexemes[omg][1]) == newSymbolTable["IT"][0]:
                     checkedLine = omg
@@ -356,8 +372,6 @@ def visibleSemantics(lineNumber):
     console.insert(END, str(newSymbolTable['IT'][0]) + "\n")
     console.config(state=DISABLED)
     
-    
-
     return "OK"
     
 def gimmehSemantics(lineNumber):
@@ -409,11 +423,15 @@ def semantics():
             lineNumber = nextLineNumber(semanticsError)
             continue
         elif (types[lineNumber][lexemeIndex] == "identifier"):
-            if newSymbolTable.get(lexemes[lineNumber][lexemeIndex]):
-                newSymbolTable["IT"] = [newSymbolTable[lexemes[lineNumber][lexemeIndex]][0], newSymbolTable[lexemes[lineNumber][lexemeIndex]][1]]
-                continue
-            else:
-                return "[Line " + str(lineNumber) + "] SemanticsError: Uninitialized identifier"
+            identifier = lexemes[lineNumber][lexemeIndex]
+            semanticsError = identifierSemantics(lineNumber, identifier)
+
+            if (semanticsError != "OK"):
+                return semanticsError
+            
+            lineNumber = nextLineNumber(lineNumber)
+            continue
+        
 
         # * GO NEXT LINE
         else:
