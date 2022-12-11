@@ -85,6 +85,7 @@ def arithmeticExpSemantics(lineNumber, symbolTable, lexemes, types):
       break
 
   if len(anIndices) != len(operationIndices):
+    print()
     return(f"[Line {lineNumber}] SyntaxError: Invalid expression")
   
 
@@ -3189,6 +3190,8 @@ def comparisonExpSemantics(lineNumber, symbolTable, lexemes, types):
                         return "[Line " + str(lineNumber) + "] SemanticError: Invalid operands for comparison operation"
                 else:
                     return "[Line " + str(lineNumber) + "] SemanticError: Invalid operands for comparison operation"
+    
+    return tempVal
 
 def concatenationExpSemantics(lineNumber, symbolTable, lexemes, types):
   # ! NO OPERATIONS AS OPERANDS YET
@@ -3389,6 +3392,51 @@ def visibleExpSemantics(lineNumber, symbolTable, lexemes, types):
       
       lexemeExpression[lastIndexOperator] = tempVal[0]
       typeExpression[lastIndexOperator] = tempVal[1]
+    
+    elif lexemeExpression[lastIndexOperator] in expressionKeywords["comparison"]:
+      
+      tempVal = comparisonExpSemantics(lineNumber, symbolTable, lexemes, types)
+      
+      if type(tempVal) != list:
+        return tempVal
+      
+      # * Popping the elements from the lexeme and type list
+      if lexemeExpression[lastIndexOperator] not in ["ALL OF", "ANY OF", "SMOOSH", "NOT"]:
+        counter = 0
+        while counter != 3:
+          lexemeExpression.pop(lastIndexOperator)
+          typeExpression.pop(lastIndexOperator)
+          counter += 1
+      elif lexemeExpression[lastIndexOperator] == "NOT":
+        counter = 0
+        while counter != 1:
+          lexemeExpression.pop(lastIndexOperator)
+          typeExpression.pop(lastIndexOperator)
+          counter += 1
+      else:
+        try:
+          while len(lexemeExpression) != 1:
+            lexemeExpression.pop(lastIndexOperator)
+            typeExpression.pop(lastIndexOperator)
+        except IndexError:
+          lexemeExpression[lastIndexOperator] = tempVal[0]
+          typeExpression[lastIndexOperator] = tempVal[1]
+      
+      print("====")
+      print(tempVal)
+      print(lastIndexOperator)
+      print(lexemeExpression)
+      print(typeExpression)
+      print("====")
+      
+      lexemeExpression[lastIndexOperator] = tempVal[0]
+      typeExpression[lastIndexOperator] = tempVal[1]
+      
+  
+  print(lexemeExpression)
+  print(typeExpression)
+  
+  
       
   
   # * Converts the list to a whole string
@@ -3403,9 +3451,9 @@ def visibleExpSemantics(lineNumber, symbolTable, lexemes, types):
   
   tempVal = [tempVal, "YARN literal"]
   
-  # print(operationIndices)
-  # print(lexemes[lineNumber])
-  # print(types[lineNumber])
+  print(operationIndices)
+  print(lexemes[lineNumber])
+  print(types[lineNumber])
   
   return tempVal
    

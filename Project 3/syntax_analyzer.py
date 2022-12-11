@@ -56,6 +56,9 @@ literals = ["NUMBR literal",
             "TROOF literal",
             "TYPE literal"
             ]
+commentFound = False
+startBoolOperator = ""
+sameBoolOperator = 0
 
 def nextLineNumber(lineNumber, lexemes, types):
     found = False
@@ -1957,10 +1960,9 @@ def syntax(lexemes, types):
 
     codeStarted = False
     codeEnded = False
-    commentFound = False
-    startBoolOperator = ""
-    sameBoolOperator = 0
-
+    
+    global commentFound
+    
     while(True):
         if(codeStarted == False):
             if(lexemes[lineNumber][lexemeIndex] != "HAI"):
@@ -2155,16 +2157,16 @@ def syntax(lexemes, types):
 
             # START OF ZYRIL TAMARGO'S PART
             elif("MAEK" in lexemes[lineNumber]):
-                syntaxError = maekSyntax(lineNumber, lexemes, types)
-                if(syntaxError != "OK"):
-                    return syntaxError
+                # syntaxError = maekSyntax(lineNumber, lexemes, types)
+                # if(syntaxError != "OK"):
+                #     return syntaxError
                 lineNumber = nextLineNumber(lineNumber, lexemes, types)
                 continue
 
             elif("R" in lexemes[lineNumber]):
-                syntaxError = rSyntax(lineNumber, lexemes, types)
-                if(syntaxError != "OK"):
-                    return syntaxError
+                # syntaxError = rSyntax(lineNumber, lexemes, types)
+                # if(syntaxError != "OK"):
+                #     return syntaxError
                 lineNumber = nextLineNumber(lineNumber, lexemes, types)
                 continue
             elif("VISIBLE" in lexemes[lineNumber]):
@@ -2175,9 +2177,9 @@ def syntax(lexemes, types):
                 continue
             
             elif("GIMMEH" in lexemes[lineNumber]):
-                syntaxError = gimmehSyntax(lineNumber, lexemes, types)
-                if(syntaxError != "OK"):
-                    return syntaxError
+                # syntaxError = gimmehSyntax(lineNumber, lexemes, types)
+                # if(syntaxError != "OK"):
+                #     return syntaxError
                 lineNumber = nextLineNumber(lineNumber, lexemes, types)
                 continue
 
@@ -2189,8 +2191,8 @@ def syntax(lexemes, types):
                 continue
 
             elif(types[lineNumber][0] == "identifier"):
-                if(lexemes[lineNumber+1][lexemeIndex] != "WTF?"):
-                    return "[Line " + str(lineNumber) + "] SyntaxError: invalid syntax"
+                # if(lexemes[lineNumber+1][lexemeIndex] != "WTF?"):
+                #     return "[Line " + str(lineNumber) + "] SyntaxError: invalid syntax"
 
                 lineNumber = nextLineNumber(lineNumber, lexemes, types)
                 continue
