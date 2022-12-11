@@ -13,8 +13,8 @@ HAI
 	GIMMEH choice
 
 	choice
-	WTF?
-		OMG 1
+	WTF? 
+		OMG YARN
 			VISIBLE "Enter birth year: "
 			GIMMEH input
 			VISIBLE DIFF OF 2022 AN input

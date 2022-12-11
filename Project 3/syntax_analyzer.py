@@ -1886,6 +1886,23 @@ def gimmehSyntax(lineNumber, lexemes, types):
     else:return "[Line " + str(lineNumber) + "] SyntaxError: Expected identifier"
     return "OK"
 
+def wtfSyntax(lineNumber, lexemes, types):
+    wtfIndex = lexemes[lineNumber].index("WTF?")
+
+    if(len(lexemes[lineNumber]) > 1):
+        if(lexemes[lineNumber][wtfIndex + 1] == "BTW"):
+            syntaxError = singleCommentSyntax(lineNumber, lexemes, types)
+            if(syntaxError != "OK"):
+                return syntaxError
+        else: return "[Line " + str(lineNumber) + "] SyntaxError: unexpected token"
+    lineNumber = nextLineNumber(lineNumber, lexemes, types)
+    if(lexemes[lineNumber][0] == "OMG"):
+        omgIndex = lexemes[lineNumber].index("OMG")
+        print(types[lineNumber][omgIndex + 1])
+        if(types[lineNumber][omgIndex + 1] not in literals or types[lineNumber][omgIndex + 1] == "TYPE literal"):
+            return "[Line " + str(lineNumber) + "] SyntaxError: Cases must be of type literal"
+    return "OK"
+
 def isNowASyntax(lineNumber, lexemes, types):
     isNowAIndex = lexemes[lineNumber].index("IS NOW A")
     if(len(lexemes[lineNumber]) == 3):
@@ -2191,15 +2208,14 @@ def syntax(lexemes, types):
                 #     lineNumber = nextLineNumber(lineNumber, lexemes, types)
                 #     continue
 
-                # elif(lexemes[lineNumber][lexemeIndex] == "WTF?"):
-                #     syntaxError = sumOfSyntax(lineNumber, lexemes, types)
+            elif(lexemes[lineNumber][lexemeIndex] == "WTF?"):
+                syntaxError = wtfSyntax(lineNumber, lexemes, types)
 
-                #     if(syntaxError != "OK"):
-                #         print(syntaxError)
-                #         break
+                if(syntaxError != "OK"):
+                    return syntaxError
 
-                #     lineNumber = nextLineNumber(lineNumber, lexemes, types)
-                #     continue
+                lineNumber = nextLineNumber(lineNumber, lexemes, types)
+                continue
 
                 # elif(lexemes[lineNumber][lexemeIndex] == "OMG"):
                 #     syntaxError = sumOfSyntax(lineNumber, lexemes, types)
