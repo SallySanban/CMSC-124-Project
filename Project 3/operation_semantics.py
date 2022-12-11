@@ -3307,6 +3307,11 @@ def visibleExpSemantics(lineNumber, symbolTable, lexemes, types):
       break
     
   # * Converts the identifiers to their respective values
+  
+  for index in range(len(lexemeExpression)):
+    if lexemeExpression[index] == "AN":
+      lexemeExpression[index] = " "
+  
   identifierIndices = []
   for index in range(len(typeExpression)):
     if typeExpression[index] == "identifier":
@@ -3533,44 +3538,44 @@ def identifierExpSemantics(lineNumber, symbolTable, lexemes, types):
                       literal = lexemes[lineNumber][identifierIndex + 4]
                       if identifier[1] == "NUMBR literal":
                         if literal == "NUMBR":
-                          tempVal = [int(identifier[0]), literal]
+                          tempVal = [int(identifier[0]), "NUMBR literal"]
                           
                           return tempVal
                         elif literal == "NUMBAR":
-                          tempVal = [float(identifier[0]), literal]
+                          tempVal = [float(identifier[0]), "NUMBAR literal"]
                           
                           return tempVal
                         elif literal == "TROOF":
                           if int(identifier[0]) == 0:
-                            tempVal = ["FAIL", literal]
+                            tempVal = ["FAIL", "TROOF literal"]
                           else:
-                            tempVal = ["WIN", literal]
+                            tempVal = ["WIN", "TROOF literal"]
                             
                           return tempVal
                         elif literal == "YARN":
-                          tempVal = [str(identifier[0]), literal]
+                          tempVal = [str(identifier[0]), "YARN literal"]
                             
                           return tempVal
                         else:   # NOOB
                           return "[Line " + str(lineNumber) + "] SemanticError: Cannot typecast identifier to NOOB"
                       elif identifier[1] == "NUMBAR literal":
                         if literal == "NUMBR":
-                          tempVal = [int(identifier[0]), literal]
+                          tempVal = [int(identifier[0]), "NUMBR literal"]
                           
                           return tempVal
                         elif literal == "NUMBAR":
-                          tempVal = [float(identifier[0]), literal]
+                          tempVal = [float(identifier[0]), "NUMBAR literal"]
                           
                           return tempVal
                         elif literal == "TROOF":
                           if float(identifier[0]) == 0.0:
-                            tempVal = ["FAIL", literal]
+                            tempVal = ["FAIL", "TROOF literal"]
                           else:
-                            tempVal = ["WIN", literal]
+                            tempVal = ["WIN", "TROOF literal"]
                             
                           return tempVal
                         elif literal == "YARN":
-                          tempVal = [str(identifier[0]), literal]
+                          tempVal = [str(identifier[0]), "YARN literal"]
                             
                           return tempVal
                         else:   # NOOB
@@ -3578,16 +3583,16 @@ def identifierExpSemantics(lineNumber, symbolTable, lexemes, types):
                       elif identifier[1] == "TROOF literal":
                         if literal == "NUMBR":
                           if identifier[0] == "WIN":
-                            tempVal = [int(1), literal]
+                            tempVal = [int(1), "NUMBR literal"]
                           else:
-                            tempVal = [int(0), literal]
+                            tempVal = [int(0), "NUMBR literal"]
                           
                           return tempVal
                         elif literal == "NUMBAR":
                           if identifier[0] == "WIN":
-                            tempVal = [float(1), literal]
+                            tempVal = [float(1), "NUMBAR literal"]
                           else:
-                            tempVal = [float(0), literal]
+                            tempVal = [float(0), "NUMBAR literal"]
                           
                           return tempVal
                         elif literal == "TROOF":
@@ -3595,7 +3600,7 @@ def identifierExpSemantics(lineNumber, symbolTable, lexemes, types):
                             
                           return tempVal
                         elif literal == "YARN":
-                          tempVal = [str(identifier[0]), literal]
+                          tempVal = [str(identifier[0]), "YARN literal"]
                             
                           return tempVal
                         else:   # NOOB
@@ -3603,27 +3608,27 @@ def identifierExpSemantics(lineNumber, symbolTable, lexemes, types):
                       elif identifier[1] == "YARN literal":
                         if literal == "NUMBR":
                           try:
-                            tempVal = [int(identifier[0]), literal]
+                            tempVal = [int(identifier[0]), "NUMBR literal"]
                           except ValueError:
                             return "[Line " + str(lineNumber) + "] SemanticError: Cannot typecast identifier to NUMBR literal"
                           
                           return tempVal
                         elif literal == "NUMBAR":
                           try:
-                            tempVal = [float(identifier[0]), literal]
+                            tempVal = [float(identifier[0]), "NUMBAR literal"]
                           except ValueError:
                             return "[Line " + str(lineNumber) + "] SemanticError: Cannot typecast identifier to NUMBAR literal"
                           
                           return tempVal
                         elif literal == "TROOF":
                           if identifier[0] == "":
-                            tempVal = ["FAIL", literal]
+                            tempVal = ["FAIL", "TROOF literal"]
                           else:
-                            tempVal = ["WIN", literal]
+                            tempVal = ["WIN", "TROOF literal"]
                             
                           return tempVal
                         elif literal == "YARN":
-                          tempVal = [str(identifier[0]), literal]
+                          tempVal = [str(identifier[0]), "YARN literal"]
                             
                           return tempVal
                         else:   # NOOB
@@ -3785,6 +3790,151 @@ def identifierExpSemantics(lineNumber, symbolTable, lexemes, types):
             break
         except IndexError:
           break
+      elif lexemes[lineNumber][identifierIndex + 1] == "IS NOW A":
+        if symbolTable.get(lexemes[lineNumber][identifierIndex]):
+          identifier = symbolTable[lexemes[lineNumber][identifierIndex]]
+          
+          try:
+            if lexemes[lineNumber][identifierIndex + 3] != "BTW":
+                return "[Line " + str(lineNumber) + "] SyntaxError: Cannot have statements after operation"
+          except IndexError:
+          
+            try:
+              print("-------")
+              print(lexemes[lineNumber][identifierIndex + 2])
+              print(types[lineNumber][identifierIndex + 2])
+              print(identifier[0])
+              print(identifier[1])
+              print("-------")
+              
+              if types[lineNumber][identifierIndex + 2] in ["TYPE literal"]:
+                literal = lexemes[lineNumber][identifierIndex + 2]
+
+                if identifier[1] == "NUMBR literal":
+                  if literal == "NUMBR":
+                    tempVal = [int(identifier[0]), "NUMBR literal"]
+                    
+                    return tempVal
+                  elif literal == "NUMBAR":
+                    tempVal = [float(identifier[0]), "NUMBAR literal"]
+                    
+                    return tempVal
+                  elif literal == "TROOF":
+                    if int(identifier[0]) == 0:
+                      tempVal = ["FAIL", "TROOF literal"]
+                    else:
+                      tempVal = ["WIN", "TROOF literal"]
+                      
+                    return tempVal
+                  elif literal == "YARN":
+                    tempVal = [str(identifier[0]), "YARN literal"]
+                      
+                    return tempVal
+                  else:   # NOOB
+                    return "[Line " + str(lineNumber) + "] SemanticError: Cannot typecast identifier to NOOB"
+                elif identifier[1] == "NUMBAR literal":
+                  if literal == "NUMBR":
+                    tempVal = [int(identifier[0]), "NUMBR literal"]
+                    
+                    return tempVal
+                  elif literal == "NUMBAR":
+                    tempVal = [float(identifier[0]), "NUMBAR literal"]
+                    
+                    return tempVal
+                  elif literal == "TROOF":
+                    if float(identifier[0]) == 0.0:
+                      tempVal = ["FAIL", "TROOF literal"]
+                    else:
+                      tempVal = ["WIN", "TROOF literal"]
+                      
+                    return tempVal
+                  elif literal == "YARN":
+                    tempVal = [str(identifier[0]), "YARN literal"]
+                      
+                    return tempVal
+                  else:   # NOOB
+                    return "[Line " + str(lineNumber) + "] SemanticError: Cannot typecast identifier to NOOB"
+                elif identifier[1] == "TROOF literal":
+                  if literal == "NUMBR":
+                    if identifier[0] == "WIN":
+                      tempVal = [int(1), "NUMBR literal"]
+                    else:
+                      tempVal = [int(0), "NUMBR literal"]
+                    
+                    return tempVal
+                  elif literal == "NUMBAR":
+                    if identifier[0] == "WIN":
+                      tempVal = [float(1), "NUMBAR literal"]
+                    else:
+                      tempVal = [float(0), "NUMBAR literal"]
+                    
+                    return tempVal
+                  elif literal == "TROOF":
+                    tempVal = [identifier[0], identifier[1]]
+                      
+                    return tempVal
+                  elif literal == "YARN":
+                    tempVal = [str(identifier[0]), "YARN literal"]
+                      
+                    return tempVal
+                  else:   # NOOB
+                    return "[Line " + str(lineNumber) + "] SemanticError: Cannot typecast identifier to NOOB"
+                elif identifier[1] == "YARN literal":
+                  if literal == "NUMBR":
+                    try:
+                      tempVal = [int(identifier[0]), "NUMBR literal"]
+                    except ValueError:
+                      return "[Line " + str(lineNumber) + "] SemanticError: Cannot typecast identifier to NUMBR literal"
+                    
+                    return tempVal
+                  elif literal == "NUMBAR":
+                    try:
+                      tempVal = [float(identifier[0]), "NUMBAR literal"]
+                    except ValueError:
+                      return "[Line " + str(lineNumber) + "] SemanticError: Cannot typecast identifier to NUMBAR literal"
+                    
+                    return tempVal
+                  elif literal == "TROOF":
+                    if identifier[0] == "":
+                      tempVal = ["FAIL", "TROOF literal"]
+                    else:
+                      tempVal = ["WIN", "TROOF literal"]
+                      
+                    return tempVal
+                  elif literal == "YARN":
+                    tempVal = [str(identifier[0]), "YARN literal"]
+                      
+                    return tempVal
+                  else:   # NOOB
+                    return "[Line " + str(lineNumber) + "] SemanticError: Cannot typecast identifier to NOOB"
+                else: # NOOB
+                  if literal == "NUMBR literal":
+                    tempVal = [int(0), "NUMBR literal"]
+                    
+                    return tempVal
+                  elif literal == "NUMBAR literal":
+                    tempVal = [float(0), "NUMBAR literal"]
+                    
+                    return tempVal
+                  elif literal == "TROOF literal":
+                    tempVal = ["FAIL", "TROOF literal"]
+                      
+                    return tempVal
+                  elif literal == "YARN literal":
+                    tempVal = [str(""), "YARN literal"]
+                      
+                    return tempVal
+                  else:   # NOOB
+                    tempVal = [identifier[0], "NOOB"]
+                      
+                    return tempVal
+              else:
+                return "[Line " + str(lineNumber) + "] SemanticError: Invalid literal for typecasting"
+            except IndexError:
+              print("hahhaha")
+              return "[Line " + str(lineNumber) + "] SyntaxError: Invalid typecasting format"
+        else:
+          return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized variable"
       else:
         return "[Line " + str(lineNumber) + "] SyntaxError: Invalid assignment format"
     except IndexError:
