@@ -517,7 +517,7 @@ def getTypes():
 #MAIN
 screen = Tk()
 screen.title('LOLCODE Interpreter')
-screen.geometry("1200x750")
+screen.geometry("1210x750")
 screen.configure(bg=BACKGROUND_COLOR)
 screen.resizable(False, False)
 
@@ -578,7 +578,7 @@ runButton = ttk.Button(
     text='Run',
     command=lambda:run()
 )
-runButton.place(x=1095, y=700)
+runButton.place(x=1100, y=700)
 
 tokensTree = ttk.Treeview(listOfTokens, column=("c1", "c2"), show='headings', height=15)
 
