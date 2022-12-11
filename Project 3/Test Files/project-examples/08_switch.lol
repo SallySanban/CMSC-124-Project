@@ -13,7 +13,7 @@ HAI
 	GIMMEH choice
 
 	choice
-	WTF?
+	WTF? 
 		OMG 1
 			VISIBLE "Enter birth year: "
 			GIMMEH input
