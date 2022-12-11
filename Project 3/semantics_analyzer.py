@@ -266,18 +266,28 @@ def switchCaseSemantics(lineNumber, variable):
     for omg in range(0, len(omgLineNumber)):
         if types[omgLineNumber[omg]][1] in ["identifier", "NUMBR literal", "NUMBAR literal", "TROOF literal", "string delimiter"]:
             if types[omgLineNumber[omg]][1] == "identifier":
-                if newSymbolTable.get(lexemes[omgLineNumber[omg]]):
-                    if newSymbolTable[lexemes[omgLineNumber[omg]]][0] == newSymbolTable["IT"][0] and newSymbolTable[lexemes[omg]][1] == "NUMBR literal" and newSymbolTable["IT"][1] == "NUMBR literal":
+                print(lexemes[omgLineNumber[omg]][1])
+                if newSymbolTable.get(lexemes[omgLineNumber[omg]][1]):
+                    print(newSymbolTable)
+                    if str(newSymbolTable[lexemes[omgLineNumber[omg]][1]][0]) == newSymbolTable["IT"][0]:
                         checkedLine = omgLineNumber[omg]
-                        break
-                    elif newSymbolTable[lexemes[omgLineNumber[omg]]][0] == newSymbolTable["IT"][0] and newSymbolTable[lexemes[omg]][1] == "NUMBAR literal" and newSymbolTable["IT"][1] == "NUMBAR literal":
-                        checkedLine = omgLineNumber[omg]
-                        break
-                    elif newSymbolTable[lexemes[omgLineNumber[omg]]][0] == newSymbolTable["IT"][0] and newSymbolTable[lexemes[omg]][1] == "YARN literal" and newSymbolTable["IT"][1] == "YARN literal":
-                        checkedLine = omgLineNumber[omg]
-                        break
-                    elif newSymbolTable[lexemes[omgLineNumber[omg]]][0] == newSymbolTable["IT"][0] and newSymbolTable[lexemes[omg]][1] == "TROOF literal" and newSymbolTable["IT"][1] == "TROOF literal":
-                        checkedLine = omgLineNumber[omg]
+                        
+                        for i in range(omgLineNumber[omg] + 1, gtfoLineNumber[omg]):
+                            if(lexemes[i][0] == "VISIBLE"):
+                                SemanticError = visibleSemantics(i)
+
+                                if(SemanticError != "OK"):
+                                    return SemanticError
+                            elif(lexemes[i][0] == "GIMMEH"):
+                                SemanticError = gimmehSemantics(i)
+
+                                if(SemanticError != "OK"):
+                                    return SemanticError
+                            elif(lexemes[i][0] == "I HAS A"):
+                                SemanticError = iHasASemantics(i)
+
+                                if(SemanticError != "OK"):
+                                    return SemanticError
                         break
                     else:
                         continue        # If not equal or NOOB type
