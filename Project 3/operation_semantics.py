@@ -3522,6 +3522,8 @@ def identifierExpSemantics(lineNumber, symbolTable, lexemes, types):
                   identifier = symbolTable[lexemes[lineNumber][identifierIndex + 3]]
                   
                   try:
+                    print(lexemes[lineNumber][identifierIndex + 4])
+                    print(types[lineNumber][identifierIndex + 4])
                     if lexemes[lineNumber][identifierIndex + 4] in ["NUMBR", "NUMBAR", "TROOF", "YARN", "NOOB"]:
                       literal = lexemes[lineNumber][identifierIndex + 4]
                       
