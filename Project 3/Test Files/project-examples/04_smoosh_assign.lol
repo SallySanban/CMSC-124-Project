@@ -20,6 +20,7 @@ HAI
     VISIBLE 10 AN y
 
     y R 0
+    y IS NOW A NUMBR
     y R MAEK y TROOF
     VISIBLE y
 KTHXBYE
