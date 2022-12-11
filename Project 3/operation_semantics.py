@@ -3307,6 +3307,11 @@ def visibleExpSemantics(lineNumber, symbolTable, lexemes, types):
       break
     
   # * Converts the identifiers to their respective values
+  
+  for index in range(len(lexemeExpression)):
+    if lexemeExpression[index] == "AN":
+      lexemeExpression[index] = " "
+  
   identifierIndices = []
   for index in range(len(typeExpression)):
     if typeExpression[index] == "identifier":
