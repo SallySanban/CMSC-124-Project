@@ -533,7 +533,7 @@ scrollBarTextEditorY = tk.Scrollbar(screen, orient="vertical", command=textEdito
 scrollBarTextEditorX = tk.Scrollbar(screen, orient="horizontal", command=textEditor.xview)
 scrollBarTextEditorY.pack(side = RIGHT, fill = Y)
 scrollBarTextEditorX.pack(side = BOTTOM, fill = X)
-textEditor.configure(xscrollcommand=scrollBarTextEditorX.set) #yscrollcommand=scrollBarTextEditorY.set)
+textEditor.configure(xscrollcommand=scrollBarTextEditorX.set, yscrollcommand=scrollBarTextEditorY.set)
 # scrollBarTextEditorY.grid(row=5, column=3, sticky="nse", padx=20, pady=45)
 # scrollBarTextEditorX.grid(row=5, column=2, sticky="ews", padx=20, pady=45)
 # textEditor.grid(row=5, column=2, sticky="nsew", padx=20, pady=45)
