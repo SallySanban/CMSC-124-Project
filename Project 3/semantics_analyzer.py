@@ -237,6 +237,7 @@ def switchCaseSemantics(lineNumber, variable):
     # * Execution stops when there is an GTFO or OIC
 
     omgLineNumber = []
+    gtfoLineNumber = []
     omgWtfLineNumber = -1
 
     # * Gets the line number of the OMG and OMGWTF
@@ -245,6 +246,8 @@ def switchCaseSemantics(lineNumber, variable):
             omgLineNumber.append(lineNumber)
         elif lexemes[lineNumber][0] == "OMGWTF":
             omgWtfLineNumber = lineNumber
+        elif lexemes[lineNumber][0] == "GTFO":
+            gtfoLineNumber.append(lineNumber)
         
         lineNumber = nextLineNumber(lineNumber)
     
@@ -253,6 +256,8 @@ def switchCaseSemantics(lineNumber, variable):
     # * Checks if the IT value is equal to the cases in OMG
     checkedLine = -1
     for omg in omgLineNumber:
+        # print(type(lexemes[omg][1]))
+        # print(type(newSymbolTable["IT"][0]))
         if types[omg][1] in ["identifier", "NUMBR literal", "NUMBAR literal", "TROOF literal", "string literal"]:
             if types[omg][1] == "identifier":
                 if newSymbolTable.get(lexemes[omg]):
@@ -273,7 +278,7 @@ def switchCaseSemantics(lineNumber, variable):
                 else:
                     return "[Line " + str(lineNumber) + "] SemanticsError: Uninitialized identifier"
             elif types[omg][1] == "NUMBR literal":
-                if int(lexemes[omg][1]) == newSymbolTable["IT"][0]:
+                if int(lexemes[omg][1]) == int(newSymbolTable["IT"][0]):
                     checkedLine = omg
                     break
             elif types[omg][1] == "NUMBAR literal":
@@ -297,17 +302,30 @@ def switchCaseSemantics(lineNumber, variable):
                         break
                     else:
                         continue
+        elif(len(omgLineNumber) != len(gtfoLineNumber)):
+            return "[Line " + str(lineNumber) + "] SyntaxcError: GTFO not found"
         else:
             continue
     
     if checkedLine == -1:       # GO TO DEFAULT CASE
         if omgWtfLineNumber == -1:      # No default case
-            print("hahah")
+            print("here")
         else:       # Go to default case
-            print("hahah")
+            print("there")
         print("")       
     else:
-        print("hahah")
+        while(lexemes[omg+1][lexemeIndex] != "GTFO"):
+            #print(lexemes[omg][lexemeIndex])
+            if(lexemes[omg+1][lexemeIndex] == "VISIBLE"):
+                semanticsError = visibleSemantics(omg+1)
+                if(semanticsError != "OK"):
+                    return semanticsError
+                omg = nextLineNumber(omg)
+            elif(lexemes[omg+1][lexemeIndex] == "GIMMEH"):
+                semanticsError = gimmehSemantics(omg+1)
+                if(semanticsError != "OK"):
+                    return semanticsError
+                omg = nextLineNumber(omg)
 
 def iHasASemantics(lineNumber):
     if("variable initialization keyword" in types[lineNumber]): #variable has value
@@ -403,11 +421,14 @@ def semantics():
         elif(lexemes[lineNumber][lexemeIndex] == "WTF?"):
             semanticsError = switchCaseSemantics(lineNumber, "IT")      # Returns a line number
 
+        # print(type(lineNumber))
             if (type(semanticsError) != int):
-                return semanticsError
-
+                print(semanticsError)
+                break
+            
             lineNumber = nextLineNumber(semanticsError)
             continue
+    
         elif (types[lineNumber][lexemeIndex] == "identifier"):
             if newSymbolTable.get(lexemes[lineNumber][lexemeIndex]):
                 newSymbolTable["IT"] = [newSymbolTable[lexemes[lineNumber][lexemeIndex]][0], newSymbolTable[lexemes[lineNumber][lexemeIndex]][1]]
@@ -514,3 +535,5 @@ symbolTableTree.heading("# 3", text="Type")
 screen.mainloop()
         
         
+
+
