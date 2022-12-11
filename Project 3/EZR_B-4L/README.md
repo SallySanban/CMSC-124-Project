@@ -56,8 +56,6 @@ Whenever you ask for user input, the input box below the console will be availab
 - https://stackoverflow.com/questions/53937400/how-to-get-the-text-out-of-a-scrolledtext-widget
 - https://stackoverflow.com/questions/17746817/how-to-read-the-inputline-by-line-from-a-multiline-tkinter-textbox-in-python
 - https://stackoverflow.com/questions/41639671/pop-up-message-box-in-pygame
-- https://stackoverflow.com/questions/18458734/how-do-i-plot-list-of-tuples-in-python
-- https://www.w3schools.com/python/matplotlib_scatter.asp
 - https://www.geeksforgeeks.org/scrollable-frames-in-tkinter/#:~:text=A%20scrollbar%20is%20a%20widget,left%20to%20right%20using%20scrollbars.
 - https://stackoverflow.com/questions/3842155/is-there-a-way-to-make-the-tkinter-text-widget-read-only
 - https://www.pythontutorial.net/tkinter/tkinter-theme/
@@ -68,4 +66,3 @@ Whenever you ask for user input, the input box below the console will be availab
 - https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/control-variables.html
 - https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/ttk-Label.html
 - https://stackoverflow.com/questions/16046743/how-to-change-tkinter-button-state-from-disabled-to-normal
-- https://matplotlib.org/stable/users/explain/interactive.html
