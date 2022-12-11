@@ -13,7 +13,7 @@ HAI
 	GIMMEH choice
 
 	choice
-	WTF? 
+	WTF?
 		OMG 1
 			VISIBLE "Enter birth year: "
 			GIMMEH input
@@ -22,7 +22,7 @@ HAI
 		OMG 2
 			VISIBLE "Enter bill cost: "
 			GIMMEH input
-			VISIBLE "Tip: " PRODUKT OF input AN 0.1
+			VISIBLE "Tip: " PRODUCKT OF input AN 0.1
 			GTFO
 		OMG 3
 			VISIBLE "Enter width: "
@@ -34,6 +34,6 @@ HAI
 			GTFO
 		OMGWTF
 			VISIBLE "Invalid Input!"
-		OIC
+	OIC
 
 KTHXBYE
