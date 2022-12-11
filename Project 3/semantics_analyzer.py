@@ -305,48 +305,33 @@ def switchCaseSemantics(lineNumber, variable):
                                 if(SemanticError != "OK"):
                                     return SemanticError
                         break
+                    elif(types[omgLineNumber[omg]][1] == "string delimiter"):
+                        if lexemes[omgLineNumber[omg]][2] == newSymbolTable["IT"][0]:
+                            checkedLine = omgLineNumber[omg]
+
+                            for i in range(omgLineNumber[omg] + 1, gtfoLineNumber[omg]):
+                                if(lexemes[i][0] == "VISIBLE"):
+                                    SemanticError = visibleSemantics(i)
+
+                                    if(SemanticError != "OK"):
+                                        return SemanticError
+                                elif(lexemes[i][0] == "GIMMEH"):
+                                    SemanticError = gimmehSemantics(i)
+
+                                    if(SemanticError != "OK"):
+                                        return SemanticError
+                                elif(lexemes[i][0] == "I HAS A"):
+                                    SemanticError = iHasASemantics(i)
+
+                                    if(SemanticError != "OK"):
+                                        return SemanticError
+                            break
                     else:
                         continue        # If not equal or NOOB type
                 else:
                     return "[Line " + str(lineNumber) + "] SemanticError: Uninitialized identifier"
-            elif types[omg][1] == "NUMBR literal":
-                if int(lexemes[omg][1]) == newSymbolTable["IT"][0]:
-                    checkedLine = omg
-                    break
-            elif types[omg][1] == "NUMBAR literal":
-                if float(lexemes[omg][1]) == newSymbolTable["IT"][0]:
-                    checkedLine = omg
-                    break
-            elif types[omg][1] == "string delimiter":       # YARN literal
-                if lexemes[omg][2] == newSymbolTable["IT"][0]:
-                    checkedLine = omg
-                    break
-            elif types[omg][1] == "TROOF literal":          # DOUBLE CHECK FOR TROOF LITERALS
-                if lexemes[omg][1] == "WIN":
-                    if newSymbolTable["IT"][0]:
-                        checkedLine = omg
-                        break
-                elif(types[omgLineNumber[omg]][1] == "string delimiter"):
-                    if lexemes[omgLineNumber[omg]][2] == newSymbolTable["IT"][0]:
-                        checkedLine = omgLineNumber[omg]
-
-                        for i in range(omgLineNumber[omg] + 1, gtfoLineNumber[omg]):
-                            if(lexemes[i][0] == "VISIBLE"):
-                                SemanticError = visibleSemantics(i)
-
-                                if(SemanticError != "OK"):
-                                    return SemanticError
-                            elif(lexemes[i][0] == "GIMMEH"):
-                                SemanticError = gimmehSemantics(i)
-
-                                if(SemanticError != "OK"):
-                                    return SemanticError
-                            elif(lexemes[i][0] == "I HAS A"):
-                                SemanticError = iHasASemantics(i)
-
-                                if(SemanticError != "OK"):
-                                    return SemanticError
-                        break
+            
+                
             else:
                 return "[Line " + str(lineNumber) + "] SyntaxError: Invalid case"
 
